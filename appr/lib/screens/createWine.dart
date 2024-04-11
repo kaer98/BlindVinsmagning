@@ -31,6 +31,7 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                         color: Theme.of(context).colorScheme.onBackground),
                     decoration: const InputDecoration(labelText: "Name"),
+                    
                   ),
                   TextFormField(
                     textAlignVertical: TextAlignVertical.bottom,

@@ -1,3 +1,5 @@
+
+import 'package:appr/data/dropdownform_wset2.dart';
 import 'package:flutter/material.dart';
 
 class WineTastingScreen extends StatefulWidget {
@@ -7,6 +9,30 @@ class WineTastingScreen extends StatefulWidget {
   State<WineTastingScreen> createState() => _WineTastingScreenState();
 }
 
+int selectedValue = 1;
+List<DropdownMenuItem> items = [
+  const DropdownMenuItem(
+    value: 1,
+    child: Text("1"),
+  ),
+  const DropdownMenuItem(
+    value: 2,
+    child: Text("2"),
+  ),
+  const DropdownMenuItem(
+    value: 3,
+    child: Text("3"),
+  ),
+  const DropdownMenuItem(
+    value: 4,
+    child: Text("4"),
+  ),
+  const DropdownMenuItem(
+    value: 5,
+    child: Text("5"),
+  ),
+];
+
 class _WineTastingScreenState extends State<WineTastingScreen> {
   @override
   Widget build(BuildContext context) {
@@ -14,8 +40,46 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
       appBar: AppBar(
         title: const Text('Wine Tasting'),
       ),
-      body: const Center(
-        child: Text('Wine Tasting Screen'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text("Vin nummer"),
+              const SizedBox(width: 10,),
+              DropdownButton(
+                items: items,
+                value: selectedValue,
+                onChanged: ((value) {
+                  setState(() {
+                    selectedValue = value as int;
+                  });
+                }),
+                alignment: Alignment.center,
+              ),
+            ],
+          ),
+          const Text("antal vine: 5"),
+          const Flexible(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: WSET2FORM(),
+            ),
+          ),
+          TextFormField(
+            minLines: 2,
+            maxLines: 5,
+            textAlignVertical: TextAlignVertical.bottom,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: Theme.of(context).colorScheme.onBackground),
+            decoration: const InputDecoration(
+                labelText: "Notes", filled: true, fillColor: Colors.grey),
+          ),
+        ],
       ),
     );
   }
