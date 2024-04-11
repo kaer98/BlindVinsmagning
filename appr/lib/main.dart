@@ -1,4 +1,5 @@
 import 'package:appr/screens/createWine.dart';
+import 'package:appr/screens/create_tasting_screen.dart';
 import 'package:appr/screens/wine_tasting_screen.dart';
 import 'package:flutter/material.dart';
 import "package:google_fonts/google_fonts.dart";
@@ -22,6 +23,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: theme, home: const WineTastingScreen());
+    return MaterialApp(theme: theme, home: const CreateTastingScreen());
   }
 }
