@@ -1,27 +1,10 @@
-enum Vis {
-  blind,
-  semi,
-  open,
-}
+import 'package:appr/models/evaluation.dart';
 
-extension VisExtension on Vis{
-   String? get visb {
-  switch (this) {
-  case Vis.blind:
-   return "blind";
-  case Vis.semi:
-   return "semi";
-  case Vis.open:
-   return "open";
-  default:
-   return null;
-}
-}
-}
+enum Visenum { blind, semi, open }
 
 class Winetast {
-
-String wine, visb, host, participents, evaluation; 
+String wine, host, participents, evaluation;
+Visenum? vis; 
 DateTime date;
 bool status;
 
@@ -29,8 +12,8 @@ bool status;
 
  Winetast({
    required this.wine,
-   required this.visb,
    required this.date,
+   required this.vis,
    required this.host,
    required this.participents,
    required this.evaluation,
