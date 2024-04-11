@@ -1,10 +1,26 @@
+import 'package:appr/screens/createWine.dart';
 import 'package:flutter/material.dart';
-import 'package:appr/models/wsetEval.dart';
-import 'package:appr/models/wine.dart';
+import "package:google_fonts/google_fonts.dart";
 
+
+final theme = ThemeData(
+  useMaterial3: true,
+  colorScheme: ColorScheme.fromSeed(
+    brightness: Brightness.dark,
+    seedColor: const Color.fromARGB(255, 97, 189, 196),
+  ),
+  textTheme: GoogleFonts.latoTextTheme() , );
+  
 
 void main() {
-  runApp(const Text("s"));
-  
+  runApp( const App());
 }
 
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(theme: theme, home: const CreateWineScreen());
+  }
+}
