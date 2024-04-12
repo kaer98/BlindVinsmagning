@@ -89,9 +89,11 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                 if (value.isEmpty) {
                   _amountOfWines = 0;
                   return;
-                }
+                }if(int.tryParse(value) != null){
                 _amountOfWines = int.parse(value);
                 setState(() {});
+                }
+                
               },
             ),
           ),
