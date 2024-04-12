@@ -79,6 +79,12 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             decoration: const InputDecoration(
                 labelText: "Notes", filled: true, fillColor: Colors.grey),
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text("Save"),
+          ),
         ],
       ),
     );
