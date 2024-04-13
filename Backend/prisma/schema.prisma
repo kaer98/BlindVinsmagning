@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  birthday DateTime
+  isMale  Boolean
+  name    String
+}
+
+
+
+model Wine {
+  id        Int      @id @default(autoincrement())
+  country   String
+  region    String
+  prodYear  DateTime @db.Date
+  producer  String
+  alcohol   Decimal
+  type      String
+  grape     String
+  price     Decimal
+  currentcy String
+  
+}

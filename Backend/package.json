@@ -7,9 +7,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "node backend/server.js",
-    "server-dev": "nodemon backend/server.js"
+    "server-dev": "nodemon backend/index.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.12.1",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
@@ -25,6 +26,7 @@
     "daisyui": "^4.10.1",
     "nodemon": "^3.1.0",
     "postcss": "^8.4.38",
+    "prisma": "^5.12.1",
     "tailwindcss": "^3.4.3"
   }
 }
