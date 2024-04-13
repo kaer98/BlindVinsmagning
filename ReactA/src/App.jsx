@@ -3,7 +3,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./pages/Login";
 import Main from "./pages/Main";
 import JoinSession from "./pages/JoinSession";
+import CreateTaste from "./pages/CreateTaste";
 import NotFoundPage from "./otherPages/NotFoundPage";
+import "./css/App.css";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
   {
     path: "/join",
     element: <JoinSession />,
+  },
+  {
+    path: "/createtaste",
+    element: <CreateTaste />,
+  },
+  {
+    path: "/profil",
+    element: <CreateTaste />,
   },
 ]);
 

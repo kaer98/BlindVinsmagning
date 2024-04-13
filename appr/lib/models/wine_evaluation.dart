@@ -1,12 +1,12 @@
 import 'package:appr/models/evaluation.dart';
 import 'package:appr/models/wine.dart';
 
-class Winetaste {
+class WineEvaluation {
 String user;
 Wine wine; 
 Evaluation evaluation;
 
- Winetaste({
+ WineEvaluation({
    required this.wine,
    required this.evaluation,
    required this.user,
