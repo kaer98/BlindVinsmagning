@@ -1,6 +1,6 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client';
-import { getUserById, getUsers } from "../controllers/users.controller.js";
+import { createUser, deleteAllUsers, deleteUserById, getUserById, getUsers } from "../controllers/users.controller.js";
 
 
 const prisma = new PrismaClient();
@@ -14,43 +14,21 @@ CRUD operationer til brugerne.
 
 const router = express.Router();
 
-//Route: /api/users
+//GET Route: /api/users (Henter alle brugere)
 router.get("/", getUsers);
 
-//Route: /api/users/:id
+//GET Route: /api/users/:id (Henter én bruger, ud fra ID)
 router.get("/:id", getUserById);
 
-//Der skal tilføjes adgangskode / hashing.
+//POST Route: /api/users  (Opretter en ny bruger)
+router.post("/", createUser);
 
-//Route: /api/users 
-router.post("/", async (request, response) => {
+//DELETE Route: /api/users (Sletter alle brugere i databasen)
+router.delete("/", deleteAllUsers);
 
-    try {
-        const { name, birthday, isMale } = request.body;
+//DELETE Route: /api/users/:id (Sletter én enkelt bruger i databasen)
+router.delete("/:id", deleteUserById);
 
-        const newUser = await prisma.user.create({
-            data: {
-                name,
-                birthday: new Date(birthday),
-                isMale
-            }
-        });
-
-        response.json(newUser);
-
-    } catch (error) {
-        console.error("Fejl under oprettelse af bruger", error);
-        response.status(500).send("Fejl under oprettelse af bruger");
-    }
-
-
-
-
-
-});
-
-
-router.delete("/");
 router.put("/");
 
 

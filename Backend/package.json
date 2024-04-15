@@ -20,7 +20,8 @@
     "mysql2": "^3.9.4",
     "prisma-multischema": "^1.1.4",
     "sequelize": "^6.37.2",
-    "socket.io": "^4.7.5"
+    "socket.io": "^4.7.5",
+    "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.19",

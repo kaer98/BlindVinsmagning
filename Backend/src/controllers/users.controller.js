@@ -11,6 +11,7 @@ Mangler i Users:
 */
 
 
+
 const prisma = new PrismaClient();
 
 
@@ -19,34 +20,38 @@ export const getUsers = async (request, response) => {
     try {
         const allUsers = await prisma.user.findMany({
             select: {
-                name: true,
-                isMale: true,
-                birthday: false,
+                id: true,
+                fullName: true,
+                gender: true,
+                birthday: true,
+                username: true, //true betyder at den sender data.
+                password: false //false betyder at den ikke sender det valgte data som respons (adgangskode her)
+                
             }
 
         });
 
-        let filteredUsers = [];
+        // let filteredUsers = [];
 
-        allUsers.forEach(user => {
+        // allUsers.forEach(user => {
 
-            let gender = "";
-            if (user.isMale === false) {
-                gender = "Female";
-            }
-            else if (user.isMale === true) {
-                gender = "Male";
-            }
+        //     let gender = "";
+        //     if (user.isMale === false) {
+        //         gender = "Female";
+        //     }
+        //     else if (user.isMale === true) {
+        //         gender = "Male";
+        //     }
 
-            filteredUsers.push({name: user.name, gender: gender});
-        });
+        // filteredUsers.push({ name: user.name, gender: gender });
+        // });
 
 
 
-        response.json(filteredUsers);
+        response.json(allUsers);
     } catch (error) {
-        console.error("Fejl ved indlæsning af brugere:", error);
-        response.status(500).send("Fejl ved indlæsning af brugere");
+        console.error('ERROR: Getting User (getUsers)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
     }
 }
 
@@ -60,56 +65,106 @@ export const getUserById = async (request, response) => {
         const user = await prisma.user.findFirst({
             where: {
                 id: userId
+            },
+
+            select: {
+                id: true,
+                fullName: true,
+                gender: true,
+                birthday: true,
+                username: true, //true betyder at den sender data.
+                password: false //false betyder at den ikke sender det valgte data som respons (adgangskode her)
+                
             }
         });
 
         if (user) {
-            response.json(user);
+            response.send(user);
         } else {
-            response.status(404).send("Bruger ikke findet");
+            response.status(404).send("Bruger ikke fundet");
         }
     } catch (error) {
-        console.error("Fejl ved indlæsning af bruger:", error);
-        response.status(500).send("Fejl ved indlæsning af brugere");
+        console.error('ERROR: Getting User By Id (getUserById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
     }
 
 }
 
-//POST Request: Oprettelse af smagning (Kun for administratorer)
+//POST Request: Oprettelse af bruger (Dog er denne kun for administrator. Alm brugere vil bruge /api/auth routen)
 export const createUser = async (request, response) => {
-
     try {
-        const { name, birthday, isMale } = request.body;
+        const { fullName, birthday, gender, username, password } = request.body;
 
+        // Validering af Request Body
+        if (!fullName || !birthday || !gender || !username || !password ) {
+            return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+        }
+
+        // Oprettelse af ny bruger
         const newUser = await prisma.user.create({
             data: {
-                name,
+                fullName,
                 birthday: new Date(birthday),
-                isMale
+                gender,
+                username,
+                password
+
             }
         });
 
+        // Den oprettede bruger sendes tilbage som respons til klienten.
         response.json(newUser);
+    } catch (error) {
+        // Interne fejl.
+        console.error('ERROR: Creating User (createUser)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+};
+
+//DELETE Request: Sletning af Bruger (Kun for administratorer)
+export const deleteAllUsers = async (request, response) => {
+    try {
+        const deleteResult = await prisma.user.deleteMany({});
+        if (deleteResult.count > 0) {
+            response.status(200).json({ message: "All users deleted" });
+        } else {
+            response.status(404).json({ message: "No users found to delete" });
+        }
+    } catch (error) {
+        console.error('ERROR: Deleting All Users (deleteAllUsers)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+}
+
+//DELETE Request: Sletning af én bruger (Kun for administratorer)
+export const deleteUserById = async (request, response) => {
+
+    try {
+
+        const userId = parseInt(request.params.id);
+
+        const userToDelete = await prisma.user.findFirst({
+            where: {
+                id: userId,
+            }
+
+        });
+
+        if (!userToDelete) {
+            response.status(404).json({ message: `Fejl: Bruger med ID: '${userId}' eksisterer ikke` });
+
+        }
+        else if (userToDelete) {
+            response.status(201).json({ message: `Sucessfully deleted user '${userToDelete.name}' with Id: ${userToDelete.id}` }); qq
+        }
 
     } catch (error) {
-        console.error("Fejl under oprettelse af bruger", error);
-        response.status(500).send("Fejl under oprettelse af bruger");
+        console.error('ERROR: Deleting User By Id (deleteUserById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
     }
-
-
-
-
-
 }
 
-//DELETE Request: Sletning af smagning (Kun for administratorer)
-export const deleteUser = async (request, response) => {
-
-
-}
-
-//PUT Request: Rediger data i smagning
+//PUT Request: Rediger data i smagning (Ikke udviklet endnu)
 export const editUser = async (request, response) => {
-
 
 }

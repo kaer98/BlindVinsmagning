@@ -7,13 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 //User / Brugermodel
 model User {
-  id       Int      @id @default(autoincrement())
-  isMale   Boolean
+  id       Int        @id @default(autoincrement())
+  gender   GenderEnum
   birthday DateTime
-  name     String
+  fullName String
+  username String     @unique
+  password String
 }
 
 //Vinmodel
@@ -30,46 +31,52 @@ model Wine {
   currentcy String
 }
 
+//Gender Enum
+enum GenderEnum {
+  MALE
+  FEMALE
+}
+
 //Palate Enums
 enum AlcoholEnum {
-Low
-Medium
-High
+  Low
+  Medium
+  High
 }
 
 enum AcidityEnum {
-Low
-Medium
-High
-
+  Low
+  Medium
+  High
 }
+
 enum SweetnessEnum {
-Dry
-OffDry
-Medium
-Sweet
+  Dry
+  OffDry
+  Medium
+  Sweet
 }
 
 enum TanninEnum {
-Low
-Medium
-High
+  Low
+  Medium
+  High
 }
 
 enum BodyEnum {
-Light
-Medium
-Full
+  Light
+  Medium
+  Full
 }
 
 enum FlavourIntensityEnum {
-Light
-Medium
-Pronounced
+  Light
+  Medium
+  Pronounced
 }
 
 enum FinishEnum {
-Short
-Medium
-Long
+  Short
+  Medium
+  Long
 }
