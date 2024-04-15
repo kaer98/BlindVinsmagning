@@ -18,10 +18,6 @@ if (process.env.IN_DOCKER == undefined) {
 //Oprettelse af Express appen
 const app = express();
 
-
-//Env Variables fungerer ikke på nuværende tidspunkt, skal fixes
-const PORT = process.env.PORT;
-
 //Middleware - Etc
 app.use(express.json()); // Til at parse inkommende requests med JSON Payloads. Fra request body.
 
@@ -30,7 +26,7 @@ app.use("/api/tastings", tastingRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(PORT, () => {
+app.listen(3000, () => {
 
   //MySQL DB forbindelse
   console.log(`(Listening on port ${PORT})...`);
