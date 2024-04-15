@@ -2,16 +2,14 @@
 
 ## Build Docker Image
 
-`npm install` gets stuck when not using `--network=host`.
-
 ```console
-docker build --network=host -t wine-bakend .
+docker build -t wine-backend .
 ```
 
 ## Start Container
 
 ```console
-docker run -d --name wine-backend -p 3000:3000 backend
+docker run -d --name backend -p 3000:3000 wine-backend
 ```
 
 ## Environment Variables
