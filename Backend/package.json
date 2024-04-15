@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "node backend/server.js",
-    "server-dev": "nodemon backend/index.ts"
+    "server": "node src/index.js",
+    "server-dev": "nodemon src/index.js"
   },
   "dependencies": {
     "@prisma/client": "^5.12.1",
