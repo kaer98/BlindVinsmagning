@@ -11,7 +11,7 @@ docker build --network=host -t wine-bakend .
 ## Start Container
 
 ```console
-docker run -d --name wine-backend -p 3001:3001 backend
+docker run -d --name wine-backend -p 3000:3000 backend
 ```
 
 ## Environment Variables
