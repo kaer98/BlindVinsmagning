@@ -8,6 +8,8 @@ Controller for tasting routen
 export const getTastings = async (request, response) => {
 
 
+    
+
 }
 
 //POST Request: Oprettelse af smagning (Kun for administratorer)

@@ -7,15 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+//User / Brugermodel
 model User {
-  id      Int      @id @default(autoincrement())
+  id       Int      @id @default(autoincrement())
+  isMale   Boolean
   birthday DateTime
-  isMale  Boolean
-  name    String
+  name     String
 }
 
-
-
+//Vinmodel
 model Wine {
   id        Int      @id @default(autoincrement())
   country   String
@@ -27,5 +28,48 @@ model Wine {
   grape     String
   price     Decimal
   currentcy String
-  
+}
+
+//Palate Enums
+enum AlcoholEnum {
+Low
+Medium
+High
+}
+
+enum AcidityEnum {
+Low
+Medium
+High
+
+}
+enum SweetnessEnum {
+Dry
+OffDry
+Medium
+Sweet
+}
+
+enum TanninEnum {
+Low
+Medium
+High
+}
+
+enum BodyEnum {
+Light
+Medium
+Full
+}
+
+enum FlavourIntensityEnum {
+Light
+Medium
+Pronounced
+}
+
+enum FinishEnum {
+Short
+Medium
+Long
 }
