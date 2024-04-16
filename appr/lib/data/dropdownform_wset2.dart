@@ -25,6 +25,7 @@ class WSET2FORM extends StatelessWidget {
       shrinkWrap: true,
       children: [
         DropdownButtonFormField(
+          
           decoration: const InputDecoration(
             labelText: 'Aroma Intensity',
           ),
@@ -33,6 +34,7 @@ class WSET2FORM extends StatelessWidget {
           onChanged: ((value) {}),
           alignment: Alignment.center,
           isExpanded: true,
+          
         ),
         DropdownButtonFormField(
           decoration: const InputDecoration(

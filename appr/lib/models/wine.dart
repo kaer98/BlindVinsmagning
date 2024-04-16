@@ -1,10 +1,12 @@
 import 'dart:ffi';
 
+import 'package:flutter/rendering.dart';
+
 class Wine {
   String name, country, region, type, producer, grape, currency;
   int id;
   DateTime prodYear;
-  Float price, alcohol;
+  double price, alcohol;
 
   Wine({
     required this.id,
@@ -19,4 +21,9 @@ class Wine {
     required this.price,
     required this.alcohol,
   });
+  
+  @override
+  String toString() {
+    return "Wine: $name, $country, $region, $type, $producer, $grape, $currency, $prodYear, $price, $alcohol";
+  }
 }
