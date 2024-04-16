@@ -26,35 +26,9 @@ app.use("/api/tastings", tastingRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(3000, () => {
+const PORT = 3000;
 
+app.listen(PORT, () => {
   //MySQL DB forbindelse
-  console.log(`(Listening on port ${PORT})...`);
+  console.log(`(Listening on port ${PORT}})...`);
 });
-
-
-
-
-app.get("/test", async (request, response) => {
-  try {
-    const newUser = await prisma.user.create({
-      data: {
-        birthday: new Date("2023-02-12"),
-        isMale: true,
-        name: "ADIL"
-      }
-    });
-
-    response.json(newUser);
-  } catch (error) {
-    console.error("Error creating user:", error);
-    response.status(500).send("Error creating user");
-  }
-});
-
-
-
-
-
-
-

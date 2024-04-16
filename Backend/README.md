@@ -2,16 +2,23 @@
 
 ## Build Docker Image
 
-`npm install` gets stuck when not using `--network=host`.
-
 ```console
-docker build --network=host -t wine-bakend .
+docker build --no-cache -t wine-backend .
 ```
 
 ## Start Container
 
 ```console
-docker run -d --name wine-backend -p 3000:3000 backend
+docker run -d --name backend \
+    -e DATABASE_URL="mysql://connection-string-here" \
+    -e JWT_SECRET="verysecret" \
+    -p 3000:3000 wine-backend
+```
+
+## Start Container Shell
+
+```console
+docker run -it --entrypoint /bin/bash wine-backend
 ```
 
 ## Environment Variables

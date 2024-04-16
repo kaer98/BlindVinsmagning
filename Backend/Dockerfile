@@ -1,13 +1,15 @@
-FROM node:20.10.0-slim
+FROM node:20.10-slim
 
 COPY . /backend
 
 WORKDIR /backend
 
-RUN npm install
+RUN yarn install
+
+RUN npx prisma generate
 
 WORKDIR /backend/src
 
 EXPOSE 3000
 
-CMD [ "node", "index"]
+CMD ["npm", "run", "server"]
