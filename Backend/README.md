@@ -3,7 +3,7 @@
 ## Build Docker Image
 
 ```console
-docker build -t wine-backend .
+docker build --no-cache -t wine-backend .
 ```
 
 ## Start Container
@@ -11,6 +11,7 @@ docker build -t wine-backend .
 ```console
 docker run -d --name backend \
     -e DATABASE_URL="mysql://connection-string-here" \
+    -e JWT_SECRET="verysecret" \
     -p 3000:3000 wine-backend
 ```
 
