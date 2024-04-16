@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import "package:appj1/widgets/gradient_container.dart";
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MaterialApp(
+    home: Scaffold(
+        body: GradientContainer(
+                Color.fromARGB(255, 142, 10, 10),
+                Color.fromARGB(255, 174, 58, 95),
+              ),
+      ),
+    
+  ));
 }
 
 class MyApp extends StatelessWidget {

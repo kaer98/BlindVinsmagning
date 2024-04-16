@@ -1,6 +1,6 @@
-import 'package:appr/models/user.dart';
-import 'package:appr/models/wine.dart';
-import 'package:appr/models/wine_evaluation.dart';
+import 'package:appj1/models/user.dart';
+import 'package:appj1/models/wine.dart';
+import 'package:appj1/models/wine_evaluation.dart';
 
 enum VisibilityEnum { blind, semi, open }
 
