@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appr/main.dart';
+import 'package:appr/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +16,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final formatter = DateFormat("dd-MM-yyyy");
-var _emailController = TextEditingController();
- var _nameController = TextEditingController();
+  var _emailController = TextEditingController();
+  var _nameController = TextEditingController();
 
   DateTime? _selectedDate;
   void _precentDatePicker() async {
@@ -32,7 +33,7 @@ var _emailController = TextEditingController();
     });
   }
 
-  void  getProfile() async{
+  void getProfile() async {
     var appState = context.read<MyAppState>();
     var url = Uri.parse("https://vin.jazper.dk/api/users/${appState.userId}");
     var response = await http.get(url, headers: {"Cookie": appState.cookie!});
@@ -47,7 +48,7 @@ var _emailController = TextEditingController();
     }
   }
 
-@override
+  @override
   void initState() {
     getProfile();
     super.initState();
@@ -91,12 +92,28 @@ var _emailController = TextEditingController();
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 90, 8),
             child: TextFormField(
-                decoration: const InputDecoration(label: Text("email")),
-                controller: _emailController,),
+              decoration: const InputDecoration(label: Text("email")),
+              controller: _emailController,
+            ),
           ),
-          ElevatedButton(onPressed: (){}, child: const Text("Save")),
-          ElevatedButton(onPressed: (){}, child: const Text("Cancel")),
-          
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return HistoryScreen(
+                    history: false,
+                  );
+                }));
+              },
+              child: Text("Plans")),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return HistoryScreen(history: true,);
+                }));
+              },
+              child: Text("History")),
+          ElevatedButton(onPressed: () {}, child: const Text("Save")),
+          ElevatedButton(onPressed: () {}, child: const Text("Cancel")),
         ],
       ),
     );

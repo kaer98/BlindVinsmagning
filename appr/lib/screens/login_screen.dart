@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:appr/main.dart';
 import 'package:appr/screens/main_menu.dart';
+import 'package:appr/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -62,6 +63,17 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return const StartScreen();
+              }),
+            );
+          },
+        ),
       ),
       body: Center(
         child: Column(

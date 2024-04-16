@@ -1,4 +1,5 @@
 import 'package:appr/screens/login_screen.dart';
+import 'package:appr/screens/main_menu.dart';
 import 'package:appr/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -7,35 +8,57 @@ class StartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const LoginScreen();
+    return Scaffold(
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+      
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const LoginScreen();
+                      },
+                    ),
+                  );
                 },
+                child: const Text('Login'),
               ),
-            );
-          },
-          child: const Text('Login'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const RegisterScreen();
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const RegisterScreen();
+                      },
+                    ),
+                  );
                 },
+                child: const Text('Register'),
               ),
-            );
-          },
-          child: const Text('Register'),
-        ),
-      ],
+              ElevatedButton(onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const MainMenu();
+                      },
+                    ),
+                  );
+                }, child: const Text("Anonym"))
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

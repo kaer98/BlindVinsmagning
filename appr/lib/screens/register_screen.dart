@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:appr/main.dart';
 import 'package:appr/screens/main_menu.dart';
+import 'package:appr/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
@@ -21,7 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   final formatter = DateFormat("dd-MM-yyyy");
-  var gender;
+  var _gender;
   var _username;
   var _password;
   var _confirmPassword;
@@ -71,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             body: json.encode({
               "fullName": _fullName,
               "birthday": _selectedDate.toString(),
-              "gender":gender,
+              "gender":_gender,
               "username": _username,
               "password": _password,
               "confirmPassword": _confirmPassword,
@@ -97,6 +98,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Register'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) {
+                return const StartScreen();
+              }),
+            );
+          },
+        ),
       ),
       body: ListView(
         children: [
@@ -147,6 +159,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       : null,
                 ),
                 TextFormField(
+                  obscureText: true,
                   textAlignVertical: TextAlignVertical.bottom,
                   decoration: const InputDecoration(labelText: "Password"),
                   onSaved: (value) => _password = value,
@@ -159,6 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 TextFormField(
                   textAlignVertical: TextAlignVertical.bottom,
+                  obscureText: true,
                   decoration:
                       const InputDecoration(labelText: "Confirm Password"),
                   onSaved: (value) => _confirmPassword = value,
@@ -173,11 +187,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   items: _getDropDownMenuItems(
                       Gender.values.map((e) => e.name).toList()),
                   onChanged: ((value) {
-                    gender = value;
+                    _gender = value;
                   }),
                   isExpanded: true,
                   validator: (value) =>
                       value == null ? "Please select gender" : null,
+                ),
+                SizedBox(
+                  height: 50,
                 ),
                 ElevatedButton(
                   onPressed: () {
