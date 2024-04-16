@@ -1,6 +1,13 @@
 body {
 }
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
 button {
   background-color: lightseagreen;
   cursor: pointer;
@@ -15,4 +22,12 @@ button {
   color: white;
   font-size: 16px;
   font-weight: 600;
+}
+
+.mar {
+  margin: 30px 0px;
+}
+
+.martop {
+  margin-top: 30px;
 }

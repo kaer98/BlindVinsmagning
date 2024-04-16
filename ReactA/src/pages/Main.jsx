@@ -1,10 +1,9 @@
 import styles from "../css/main.module.css";
-import "../css/App.css";
 import { Link } from "react-router-dom";
 
 export default function Main() {
   return (
-    <div className={styles.mainContainer}>
+    <div className="container">
       <div className={styles.main}>
         <div className={styles.text}>Main Page</div>
         <Link to="/join">
