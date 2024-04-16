@@ -1,5 +1,5 @@
-import 'package:appr/models/evaluation.dart';
-import 'package:appr/models/wine.dart';
+import 'package:appj1/models/evaluation.dart';
+import 'package:appj1/models/wine.dart';
 
 class WineEvaluation {
 String user;
