@@ -91,7 +91,8 @@ export const createTasting = async (request, response) => {
                 title,
                 visibility,
                 date: new Date(date),
-                hostId: request.user.id
+                hostId: request.user.id,
+                
                 
 
              
