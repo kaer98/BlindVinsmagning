@@ -14,12 +14,37 @@ class CreateTastingScreen extends StatefulWidget {
 }
 
 class _CreateTastingScreenState extends State<CreateTastingScreen> {
-  int _amountOfWines = 0;
-  List<Wine> _wineList = [];
+  int _amountOfWines = 1;
+  final List<Wine> _wineList = [
+    Wine(
+        id: 1,
+        name: "s",
+        country: "country",
+        region: "region",
+        type: "type",
+        producer: "1",
+        grape: "grape",
+        currency: "currency",
+        prodYear: DateTime.now(),
+        price: 22.2,
+        alcohol: 22.2),
+    Wine(
+        id: 2,
+        name: "2",
+        country: "country",
+        region: "region",
+        type: "type",
+        producer: "producer",
+        grape: "grape",
+        currency: "currency",
+        prodYear: DateTime.now(),
+        price: 1,
+        alcohol: 1)
+  ];
   var _selectedWines = [];
   DateTime? _selectedDate;
-  
-
+  final wineController = TextEditingController();
+  Map<String, TextEditingController> _wineControllers = {};
 
   void _openCreateWineOverLay() {
     showModalBottomSheet(
@@ -89,11 +114,11 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                 if (value.isEmpty) {
                   _amountOfWines = 0;
                   return;
-                }if(int.tryParse(value) != null){
-                _amountOfWines = int.parse(value);
-                setState(() {});
                 }
-                
+                if (int.tryParse(value) != null) {
+                  _amountOfWines = int.parse(value);
+                  setState(() {});
+                }
               },
             ),
           ),
@@ -104,8 +129,9 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                 return ListTile(
                   title: ListPickerField(
                     label: "wine number ${index + 1}",
-                    items: _wineList.map((e) => e.name).toList(),
-                    controller: TextEditingController(),
+                    items: _wineList.map((e) => e.toString()).toList(),
+                    controller: _wineControllers.putIfAbsent(
+                        index.toString(), () => TextEditingController()),
                   ),
                 );
               },
@@ -152,15 +178,19 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                 onPressed: _precentDatePicker,
                 icon: const Icon(
                   Icons.date_range,
-                  
                 ),
               ),
             ],
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              for (var ctl in _wineControllers.values) {
+                print(ctl.text);
+                print(ctl.value);
+
+              }
+            },
             child: const Text("Opret Smagning"),
-            
           ),
         ],
       ),

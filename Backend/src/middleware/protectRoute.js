@@ -24,7 +24,7 @@ const protectRoute = async (request, response, next) => {
         const token = request.cookies.jwt;
 
         // Verificering af JWT Token med JWT Secret key.
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "BUqC1n1xRU2D1iVbWyfLgA=="); //Denne kan opdateres senere (Under produktion)
+        const decoded = jwt.verify(token, process.env.JWT_SECRET); //Denne kan opdateres senere (Under produktion)
 
         
 

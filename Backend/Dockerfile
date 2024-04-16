@@ -1,13 +1,8 @@
-FROM node:20.10.0-slim
+FROM node:20.10-slim
 
 COPY . /backend
 
 WORKDIR /backend
-
-RUN echo | ls
-
-RUN apt update &&\
-    apt install openssl -y
 
 RUN yarn install
 
