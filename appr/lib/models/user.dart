@@ -1,9 +1,11 @@
+enum Gender {MALE,FEMALE}
+
 class User{
-  String name;
+  String fullName;
+  Gender gender;
   DateTime birthDate;
-  bool ismale;
+  String username;
 
-  User({required this.name, required this.birthDate, required this.ismale});
-
+  User({required this.fullName, required this.gender, required this.birthDate, required this.username});
 
 }

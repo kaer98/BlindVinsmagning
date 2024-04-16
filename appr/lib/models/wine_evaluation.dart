@@ -1,8 +1,9 @@
 import 'package:appr/models/evaluation.dart';
+import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
 
 class WineEvaluation {
-String user;
+User user;
 Wine wine; 
 Evaluation evaluation;
 

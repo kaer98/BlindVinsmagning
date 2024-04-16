@@ -1,29 +1,33 @@
-import 'package:appr/screens/login_screen.dart';
-import 'package:appr/screens/main_menu.dart';
+import 'package:appr/screens/history_screen.dart';
+import 'package:appr/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'package:provider/provider.dart';
-import "dart:io";
 
 final theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
     brightness: Brightness.light,
     seedColor: const Color.fromARGB(255, 97, 189, 196),
+    background: Colors.white,
   ),
   textTheme: GoogleFonts.latoTextTheme(),
+  canvasColor: ColorScheme.light().background,
+  scaffoldBackgroundColor: ColorScheme.light().background,
+  
 );
 
 final darkTheme = ThemeData().copyWith(
   colorScheme: ColorScheme.fromSeed(
     brightness: Brightness.dark,
     seedColor: const Color.fromARGB(255, 21, 43, 44),
+    
   ),
   scaffoldBackgroundColor: Colors.black, // Set the background color to black
   textTheme: GoogleFonts.latoTextTheme()
       .apply(bodyColor: const ColorScheme.dark().onBackground),
   canvasColor: Colors.black,
-  dialogBackgroundColor: Color.fromARGB(255, 79, 75, 95),
+  dialogBackgroundColor: const Color.fromARGB(255, 79, 75, 95),
 );
 
 void main() {
@@ -38,7 +42,7 @@ class App extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => MyAppState(),
         child: MaterialApp(
-            theme: theme, darkTheme: darkTheme, home: const LoginScreen()));
+            theme: theme, darkTheme: darkTheme, home: const StartScreen()));
   }
 }
 
