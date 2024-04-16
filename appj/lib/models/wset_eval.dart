@@ -1,4 +1,5 @@
-import 'package:appr/models/evaluation.dart';
+import 'package:appj1/models/evaluation.dart';
+import 'package:appj1/models/evaluation.dart';
 
 enum PAlcoholEnum { low, medium, high }
 

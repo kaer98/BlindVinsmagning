@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Main from "./pages/Main";
 import JoinSession from "./pages/JoinSession";
 import CreateTaste from "./pages/CreateTaste";
+import Currently from "./pages/Currently";
 import NotFoundPage from "./otherPages/NotFoundPage";
 import "./css/App.css";
 
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/profil",
     element: <CreateTaste />,
+  },
+  {
+    path: "/current",
+    element: <Currently />,
   },
 ]);
 
