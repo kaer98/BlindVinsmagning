@@ -54,6 +54,7 @@ model Wine {
 
 model WineEvaluation {
   id             Int     @id @default(autoincrement())
+  title          String? @db.VarChar(255)
   wineId         Int?
   userId         Int?
   evaluationName String? @db.VarChar(255)
@@ -121,7 +122,6 @@ enum WSET_nIntensity {
 enum GenderEnum {
   MALE
   FEMALE
-  
 }
 
 enum WSET_sweetness {

@@ -1,33 +1,14 @@
-/*
-  Warnings:
+-- CreateTable
+CREATE TABLE `User` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `fullName` VARCHAR(255) NULL,
+    `birthday` DATE NULL,
+    `gender` ENUM('MALE', 'FEMALE') NULL,
+    `username` VARCHAR(255) NULL,
+    `password` VARCHAR(255) NULL,
 
-  - You are about to drop the column `currentcy` on the `Wine` table. All the data in the column will be lost.
-  - You are about to alter the column `alcohol` on the `Wine` table. The data in that column could be lost. The data in that column will be cast from `Decimal(65,30)` to `Decimal(5,2)`.
-  - You are about to alter the column `price` on the `Wine` table. The data in that column could be lost. The data in that column will be cast from `Decimal(65,30)` to `Decimal(10,2)`.
-
-*/
--- DropIndex
-DROP INDEX `User_username_key` ON `User`;
-
--- AlterTable
-ALTER TABLE `User` MODIFY `gender` ENUM('MALE', 'FEMALE') NULL,
-    MODIFY `birthday` DATE NULL,
-    MODIFY `fullName` VARCHAR(255) NULL,
-    MODIFY `username` VARCHAR(255) NULL,
-    MODIFY `password` VARCHAR(255) NULL;
-
--- AlterTable
-ALTER TABLE `Wine` DROP COLUMN `currentcy`,
-    ADD COLUMN `currency` VARCHAR(3) NULL,
-    ADD COLUMN `name` VARCHAR(255) NULL,
-    MODIFY `country` VARCHAR(255) NULL,
-    MODIFY `region` VARCHAR(255) NULL,
-    MODIFY `prodYear` DATE NULL,
-    MODIFY `producer` VARCHAR(255) NULL,
-    MODIFY `alcohol` DECIMAL(5, 2) NULL,
-    MODIFY `type` VARCHAR(255) NULL,
-    MODIFY `grape` VARCHAR(255) NULL,
-    MODIFY `price` DECIMAL(10, 2) NULL;
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `WSET` (
@@ -49,8 +30,26 @@ CREATE TABLE `WSET` (
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
+CREATE TABLE `Wine` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(255) NULL,
+    `country` VARCHAR(255) NULL,
+    `region` VARCHAR(255) NULL,
+    `prodYear` DATE NULL,
+    `producer` VARCHAR(255) NULL,
+    `alcohol` DECIMAL(5, 2) NULL,
+    `type` VARCHAR(255) NULL,
+    `grape` VARCHAR(255) NULL,
+    `price` DECIMAL(10, 2) NULL,
+    `currency` VARCHAR(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
 CREATE TABLE `WineEvaluation` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `title` VARCHAR(255) NULL,
     `wineId` INTEGER NULL,
     `userId` INTEGER NULL,
     `evaluationName` VARCHAR(255) NULL,
