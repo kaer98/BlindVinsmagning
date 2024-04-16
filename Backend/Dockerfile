@@ -1,14 +1,19 @@
-FROM node:20.10-slim
+FROM node:20.10-alpine as builder
 
 COPY . /backend
 
 WORKDIR /backend
 
-RUN yarn install
+RUN yarn install --production
 
+# Remove this line when prisma is no longer used
 RUN npx prisma generate
 
-WORKDIR /backend/src
+FROM node:20.10-alpine as release
+
+WORKDIR /backend
+
+COPY --from=builder /backend /backend
 
 EXPOSE 3000
 
