@@ -7,76 +7,169 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-//User / Brugermodel
 model User {
-  id       Int        @id @default(autoincrement())
-  gender   GenderEnum
-  birthday DateTime
-  fullName String
-  username String     @unique
-  password String
+  id                       Int                        @id @default(autoincrement())
+  fullName                 String?                    @db.VarChar(255)
+  birthday                 DateTime?                  @db.Date
+  gender                   GenderEnum?
+  username                 String?                    @db.VarChar(255)
+  password                 String?                    @db.VarChar(255)
+  WineEvaluation           WineEvaluation[]
+  WineTasting              WineTasting[]
+  WineTasting_Participants WineTasting_Participants[]
 }
 
-//Vinmodel
+model WSET {
+  id                     Int                    @id @default(autoincrement())
+  aIntensity             WSET_aIntensity?
+  nIntensity             WSET_nIntensity?
+  sweetness              WSET_sweetness?
+  aromaCharacteristics   String?                @db.Text
+  acidity                WSET_acidity?
+  tannin                 WSET_tannin?
+  alcohol                WSET_alcohol?
+  body                   WSET_body?
+  flavourIntensity       WSET_flavourIntensity?
+  flavourCharacteristics String?                @db.Text
+  finish                 WSET_finish?
+  quality                WSET_quality?
+}
+
 model Wine {
-  id        Int      @id @default(autoincrement())
-  country   String
-  region    String
-  prodYear  DateTime @db.Date
-  producer  String
-  alcohol   Decimal
-  type      String
-  grape     String
-  price     Decimal
-  currentcy String
+  id                Int                 @id @default(autoincrement())
+  name              String?             @db.VarChar(255)
+  country           String?             @db.VarChar(255)
+  region            String?             @db.VarChar(255)
+  prodYear          DateTime?           @db.Date
+  producer          String?             @db.VarChar(255)
+  alcohol           Decimal?            @db.Decimal(5, 2)
+  type              String?             @db.VarChar(255)
+  grape             String?             @db.VarChar(255)
+  price             Decimal?            @db.Decimal(10, 2)
+  currency          String?             @db.VarChar(3)
+  WineEvaluation    WineEvaluation[]
+  WineTasting       WineTasting[]
+  WineTasting_Wines WineTasting_Wines[]
 }
 
-//Gender Enum
+model WineEvaluation {
+  id             Int     @id @default(autoincrement())
+  wineId         Int?
+  userId         Int?
+  evaluationName String? @db.VarChar(255)
+  note           String? @db.Text
+  Wine           Wine?   @relation(fields: [wineId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineEvaluation_ibfk_1")
+  User           User?   @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineEvaluation_ibfk_2")
+
+  @@index([userId], map: "userId")
+  @@index([wineId], map: "wineId")
+}
+
+model WineTasting {
+  id                       Int                        @id @default(autoincrement())
+  visibility               WineTasting_visibility?
+  date                     DateTime?                  @db.Date
+  hostId                   Int?
+  winnerId                 Int?
+  finished                 Boolean?
+  User                     User?                      @relation(fields: [hostId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_ibfk_1")
+  Wine                     Wine?                      @relation(fields: [winnerId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_ibfk_2")
+  WineTasting_Participants WineTasting_Participants[]
+  WineTasting_Wines        WineTasting_Wines[]
+
+  @@index([hostId], map: "hostId")
+  @@index([winnerId], map: "winnerId")
+}
+
+model WineTasting_Participants {
+  wineTastingId Int
+  userId        Int
+  WineTasting   WineTasting @relation(fields: [wineTastingId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_Participants_ibfk_1")
+  User          User        @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_Participants_ibfk_2")
+
+  @@id([wineTastingId, userId])
+  @@index([userId], map: "userId")
+}
+
+model WineTasting_Wines {
+  wineTastingId Int
+  wineId        Int
+  WineTasting   WineTasting @relation(fields: [wineTastingId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_Wines_ibfk_1")
+  Wine          Wine        @relation(fields: [wineId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "WineTasting_Wines_ibfk_2")
+
+  @@id([wineTastingId, wineId])
+  @@index([wineId], map: "wineId")
+}
+
+enum WineTasting_visibility {
+  Public
+  Private
+}
+
+enum WSET_aIntensity {
+  Low
+  Medium
+  High
+}
+
+enum WSET_nIntensity {
+  Low
+  Medium
+  High
+}
+
 enum GenderEnum {
   MALE
   FEMALE
+  
 }
 
-//Palate Enums
-enum AlcoholEnum {
-  Low
-  Medium
-  High
-}
-
-enum AcidityEnum {
-  Low
-  Medium
-  High
-}
-
-enum SweetnessEnum {
+enum WSET_sweetness {
   Dry
-  OffDry
   Medium
   Sweet
 }
 
-enum TanninEnum {
+enum WSET_acidity {
   Low
   Medium
   High
 }
 
-enum BodyEnum {
+enum WSET_tannin {
+  Low
+  Medium
+  High
+}
+
+enum WSET_alcohol {
+  Low
+  Medium
+  High
+}
+
+enum WSET_body {
   Light
   Medium
   Full
 }
 
-enum FlavourIntensityEnum {
-  Light
+enum WSET_flavourIntensity {
+  Low
   Medium
-  Pronounced
+  High
 }
 
-enum FinishEnum {
+enum WSET_finish {
   Short
   Medium
   Long
+}
+
+enum WSET_quality {
+  Poor
+  Fair
+  Good
+  Very_Good @map("Very Good")
+  Excellent
 }
