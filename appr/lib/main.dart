@@ -1,5 +1,6 @@
 import 'package:appr/screens/login_screen.dart';
 import 'package:appr/screens/main_menu.dart';
+import 'package:appr/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import "package:google_fonts/google_fonts.dart";
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class App extends StatelessWidget {
     return ChangeNotifierProvider(
         create: (context) => MyAppState(),
         child: MaterialApp(
-            theme: theme, darkTheme: darkTheme, home: const LoginScreen()));
+            theme: theme, darkTheme: darkTheme, home: const StartScreen()));
   }
 }
 
