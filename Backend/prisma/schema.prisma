@@ -54,7 +54,6 @@ model Wine {
 
 model WineEvaluation {
   id             Int     @id @default(autoincrement())
-  title          String? @db.VarChar(255)
   wineId         Int?
   userId         Int?
   evaluationName String? @db.VarChar(255)
@@ -67,7 +66,9 @@ model WineEvaluation {
 }
 
 model WineTasting {
-  id                       Int                        @id @default(autoincrement())
+  id    Int     @id @default(autoincrement())
+  title String? @db.VarChar(255)
+
   visibility               WineTasting_visibility?
   date                     DateTime?                  @db.Date
   hostId                   Int?
