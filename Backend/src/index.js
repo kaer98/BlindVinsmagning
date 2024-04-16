@@ -3,7 +3,9 @@ import dotenv from 'dotenv'; //Man skal installere NPM Package 'dotenv' for at k
 import tastingRoutes from './routes/tastings.routes.js';
 import userRoutes from './routes/users.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import cookieParser from 'cookie-parser';
 import { PrismaClient } from '@prisma/client'
+
 
 
 
@@ -20,6 +22,8 @@ const app = express();
 
 //Middleware - Etc
 app.use(express.json()); // Til at parse inkommende requests med JSON Payloads. Fra request body.
+
+app.use(cookieParser()); // Til at parse indkommende cookies fra req.cookies.
 
 //Middleware - Routes
 app.use("/api/tastings", tastingRoutes);
