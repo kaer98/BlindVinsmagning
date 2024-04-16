@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+//Bruger
 model User {
   id                       Int                        @id @default(autoincrement())
   fullName                 String?                    @db.VarChar(255)
