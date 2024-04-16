@@ -26,16 +26,28 @@ const protectRoute = async (request, response, next) => {
         // Verificering af JWT Token med JWT Secret key.
         const decoded = jwt.verify(token, process.env.JWT_SECRET); //Denne kan opdateres senere (Under produktion)
 
-        // Tjekker om decoding fungerede
-        if (!decoded) {
-            // Hvis ikke, returneres respons 401.
-            return response.status(401).json({ error: "Unauthorized - Invalid token" });
-        }
+        
 
-        // Her finder den brugeren der er associeret med den decodede UserId.
-        const user = await prisma.user.findById(decoded.userId).select("-password"); 
+        const user = await prisma.user.findUnique({
 
-        // Tjekker om brugeren eksisterer (om den er null)
+            where: {
+
+                id: decoded.userId
+            },
+
+            select: {
+                id: true,
+                fullName: true,
+                gender: true,
+                birthday: true,
+                username: true, //true betyder at den sender data.
+                password: false //false betyder at den ikke sender det valgte data som respons (adgangskode her)
+                
+            }
+
+        });
+
+        // ...
         if (!user) {
             // Hvis ikke, bliver en status 404 returneret som respons.
             return response.status(404).json({ error: "User not found" });

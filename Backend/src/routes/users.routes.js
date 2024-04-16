@@ -1,6 +1,7 @@
 import express from "express";
 import { PrismaClient } from '@prisma/client';
 import { createUser, deleteAllUsers, deleteUserById, getUserById, getUsers } from "../controllers/users.controller.js";
+import protectRoute from "../middleware/protectRoute.js";
 
 
 const prisma = new PrismaClient();
@@ -15,7 +16,7 @@ CRUD operationer til brugerne.
 const router = express.Router();
 
 //GET Route: /api/users (Henter alle brugere)
-router.get("/", getUsers);
+router.get("/", protectRoute, getUsers);
 
 //GET Route: /api/users/:id (Henter én bruger, ud fra ID)
 router.get("/:id", getUserById);
