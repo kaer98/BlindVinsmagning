@@ -23,7 +23,6 @@
     - [Start Container Shell](#start-container-shell)
 
 <!-- /TOC -->
-<!-- /TOC -->
 
 ## Documentation
 
