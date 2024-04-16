@@ -111,7 +111,10 @@ docker build --no-cache -t wine-backend .
 
 ### Environment Variables
 
-`DB_STRING` - MySQL Database Connection String
+| Variable | Type | Required | Description |
+|----------|------|----------|-------------|
+| DATABASE_URL | String | True | MySQL Connection String. |
+| JWT_SECRET | String | True | JWT Secret used to sign tokens. |
 
 ### Start Container
 
