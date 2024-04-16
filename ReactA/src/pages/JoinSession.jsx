@@ -1,4 +1,5 @@
 import styles from "../css/joinsession.module.css";
+import { Link } from "react-router-dom";
 
 export default function JoinSession() {
   return (
@@ -14,7 +15,9 @@ export default function JoinSession() {
         </div>
         <div className="mar">KAMERA</div>
         <div>
-          <button>Join</button>
+          <Link to="/current">
+            <button>Join</button>
+          </Link>
         </div>
       </div>
     </div>
