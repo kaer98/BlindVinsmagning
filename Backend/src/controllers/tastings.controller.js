@@ -1,3 +1,8 @@
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+
 /*
 Controller for tasting routen
 
@@ -23,12 +28,45 @@ Controller for tasting routen
 //GET Request: Hent smagninger ned så deltagere kan se kommende smagninger i appen
 export const getTastings = async (request, response) => {
     try {
-        const allTastings = await prisma.winetasting.findMany();
+        const allTastings = await prisma.wineTasting.findMany({
+            select: {
+                id: true,
+                title: true,   
+                visibility: true,
+                date: true,
+                winnerId: true,
+                finished: true,
+                User: true,
+                Wine: true,
+                WineTasting_Participants: true,
+                WineTasting_Wines: true,
+                hostId: true
 
-        response.json(allTastings);
+                
+            }
 
-    } catch {
-        console.error('ERROR: Getting WineTasting (getTastings)', error);
+        });
+
+        // let filteredUsers = [];
+
+        // allUsers.forEach(user => {
+
+        //     let gender = "";
+        //     if (user.isMale === false) {
+        //         gender = "Female";
+        //     }
+        //     else if (user.isMale === true) {
+        //         gender = "Male";
+        //     }
+
+        // filteredUsers.push({ name: user.name, gender: gender });
+        // });
+
+
+
+        response.json(allUsers);
+    } catch (error) {
+        console.error('ERROR: Getting User (getUsers)', error);
         response.status(500).json({ error: 'Intern Server Fejl' });
     }
 
@@ -36,7 +74,38 @@ export const getTastings = async (request, response) => {
 
 //POST Request: Oprettelse af smagning (Kun for administratorer)
 export const createTasting = async (request, response) => {
+    try {
+        const { title, visibility, date } = request.body;
 
+
+
+        // Validering af Request Body
+        if (!title || !visibility || !date  ) {
+            return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+        }
+
+        // Oprettelse af ny Smagning
+        const newTasting = await prisma.wineTasting.create({
+            data: {
+                
+                title,
+                visibility,
+                date: new Date(date),
+                hostId: request.user.id
+                
+
+             
+
+            }
+        });
+
+        // Den oprettede bruger sendes tilbage som respons til klienten.
+        response.json(newTasting);
+    } catch (error) {
+        // Interne fejl.
+        console.error('ERROR: Creating User (createTasting)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
 }
 
 //DELETE Request: Sletning af smagning (Kun for administratorer)

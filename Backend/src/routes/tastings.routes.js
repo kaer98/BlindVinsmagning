@@ -1,6 +1,7 @@
 import express from "express";
 import { getTastings, createTasting, deleteTasting, editTasting } from '../controllers/tastings.controller.js';
 import { PrismaClient } from '@prisma/client'
+import protectRoute from "../middleware/protectRoute.js";
 
 
 const prisma = new PrismaClient();
@@ -19,7 +20,7 @@ router.get("/", getTastings);
 
 // router.post("/", createTasting);
 
-router.post("/");
+router.post("/", protectRoute, createTasting);
 
 
 router.delete("/", deleteTasting);
