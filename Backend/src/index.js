@@ -26,18 +26,9 @@ app.use("/api/tastings", tastingRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(3000, () => {
+const PORT = 3000;
 
+app.listen(PORT, () => {
   //MySQL DB forbindelse
-  console.log(`(Listening on port 3000})...`);
+  console.log(`(Listening on port ${PORT}})...`);
 });
-
-
-
-
-
-
-
-
-
-
