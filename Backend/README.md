@@ -4,23 +4,25 @@
 ## Table of Contents
 <!-- TOC -->
 
-- [Documentation](#documentation)
-    - [Users](#users)
-        - [GET /api/users](#get-apiusers)
-        - [GET /api/users/:id](#get-apiusersid)
-        - [POST /api/users](#post-apiusers)
-        - [DELETE /api/users](#delete-apiusers)
-        - [DELETE /api/users/:id](#delete-apiusersid)
-        - [PUT /api/users/](#put-apiusers)
-    - [Auth](#auth)
-        - [POST /api/signup](#post-apisignup)
-        - [POST /api/login](#post-apilogin)
-        - [POST /api/logout](#post-apilogout)
-- [Docker Setup](#docker-setup)
-    - [Build Docker Image](#build-docker-image)
-    - [Environment Variables](#environment-variables)
-    - [Start Container](#start-container)
-    - [Start Container Shell](#start-container-shell)
+- [Backend](#backend)
+    - [Documentation](#documentation)
+        - [Users](#users)
+            - [GET /api/users](#get-apiusers)
+            - [GET /api/users/:id](#get-apiusersid)
+            - [POST /api/users](#post-apiusers)
+            - [DELETE /api/users](#delete-apiusers)
+            - [DELETE /api/users/:id](#delete-apiusersid)
+            - [PUT /api/users/](#put-apiusers)
+        - [Auth](#auth)
+            - [POST /api/signup](#post-apisignup)
+            - [POST /api/login](#post-apilogin)
+            - [POST /api/logout](#post-apilogout)
+    - [Docker Setup](#docker-setup)
+        - [Build Docker Image](#build-docker-image)
+        - [Environment Variables](#environment-variables)
+        - [Start Container](#start-container)
+        - [Start Container Shell](#start-container-shell)
+        - [Push Image to Registry](#push-image-to-registry)
 
 <!-- /TOC -->
 
@@ -128,4 +130,14 @@ docker run -d --name backend \
 
 ```console
 docker run -it --entrypoint /bin/bash wine-backend
+```
+
+### Push Image to Registry
+
+```console
+docker tag wine-backend registry.jazper.dk/wine-backend:latest
+```
+
+```console
+docker push registry.jazper.dk/wine-backend:latest
 ```
