@@ -32,8 +32,8 @@ export const createTasting = async (request: Request, response: Response) => {
         const newTastingCreation = await db.insert(winetastings).values({
             name: name,
             visibility: visibility,
-            date: new Date(date).toString(),
-            hostid: 1,
+            date: date.toString(),
+            hostid: 5,
             winnerid: 1,
             finished: false,
             participants: [1],
