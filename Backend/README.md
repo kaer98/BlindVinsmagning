@@ -4,25 +4,26 @@
 ## Table of Contents
 <!-- TOC -->
 
-- [Documentation](#documentation)
-    - [Users](#users)
-        - [GET /api/users](#get-apiusers)
-        - [GET /api/users/:id](#get-apiusersid)
-        - [POST /api/users](#post-apiusers)
-        - [DELETE /api/users](#delete-apiusers)
-        - [DELETE /api/users/:id](#delete-apiusersid)
-        - [PUT /api/users/](#put-apiusers)
-    - [Auth](#auth)
-        - [POST /api/signup](#post-apisignup)
-        - [POST /api/login](#post-apilogin)
-        - [POST /api/logout](#post-apilogout)
-- [Docker Setup](#docker-setup)
-    - [Build Docker Image](#build-docker-image)
-    - [Environment Variables](#environment-variables)
-    - [Start Container](#start-container)
-    - [Start Container Shell](#start-container-shell)
+- [Backend](#backend)
+    - [Documentation](#documentation)
+        - [Users](#users)
+            - [GET /api/users](#get-apiusers)
+            - [GET /api/users/:id](#get-apiusersid)
+            - [POST /api/users](#post-apiusers)
+            - [DELETE /api/users](#delete-apiusers)
+            - [DELETE /api/users/:id](#delete-apiusersid)
+            - [PUT /api/users/](#put-apiusers)
+        - [Auth](#auth)
+            - [POST /api/signup](#post-apisignup)
+            - [POST /api/login](#post-apilogin)
+            - [POST /api/logout](#post-apilogout)
+    - [Docker Setup](#docker-setup)
+        - [Build Docker Image](#build-docker-image)
+        - [Environment Variables](#environment-variables)
+        - [Start Container](#start-container)
+        - [Start Container Shell](#start-container-shell)
+        - [Push Image to Registry](#push-image-to-registry)
 
-<!-- /TOC -->
 <!-- /TOC -->
 
 ## Documentation
@@ -33,73 +34,106 @@
 
 #### GET `/api/users`
 
-- **Description:** Retrieves all users stored in the database.
-- **Middleware:** `protectRoute`
+- **Description:** Retrieves all users.
 - **Controller:** `getUsers`
+- **Response:**
+  - `200 OK` with an array of user objects.
 
 #### GET `/api/users/:id`
 
-- **Description:** Retrieves a specific user by their ID.
+- **Description:** Retrieves a specific user by ID.
 - **Parameters:**
   - `id` (integer): User ID.
 - **Controller:** `getUserById`
-
-#### POST `/api/users`
-
-- **Description:** Creates a new user.
-- **Controller:** `createUser`
-- **Request Body:**
-  - `fullName` (string, required): Full name of the user.
-  - `birthday` (string, required): Date of birth of the user (format: 'YYYY-MM-DD').
-  - `gender` (string, required): Gender of the user.
-  - `username` (string, required): Username of the user.
-  - `password` (string, required): Password of the user.
+- **Response:**
+  - `200 OK` with the user object if found.
+  - `404 Not Found` if the user with the specified ID does not exist.
 
 #### DELETE `/api/users`
 
-- **Description:** Deletes all users from the database.
+- **Description:** Deletes all users.
 - **Controller:** `deleteAllUsers`
+- **Response:**
+  - `200 OK` with a success message if users are deleted.
+  - `404 Not Found` if no users are found to delete.
 
 #### DELETE `/api/users/:id`
 
-- **Description:** Deletes a specific user by their ID.
+- **Description:** Deletes a specific user by ID.
 - **Parameters:**
   - `id` (integer): User ID.
 - **Controller:** `deleteUserById`
-
-#### PUT `/api/users/`
-
-- **Description:** Placeholder for updating user data (not implemented yet).
+- **Response:**
+  - `200 OK` with a success message if the user is deleted.
+  - `404 Not Found` if the user with the specified ID does not exist.
 
 ### Auth
 
 #### POST `/api/signup`
 
-- **Method:** POST
 - **Description:** Creates a new user account.
 - **Controller:** `signup`
 - **Request Body:**
-  - `fullName` (string, required): Full name of the user.
+  - `fullname` (string, required): Full name of the user.
   - `birthday` (string, required): Date of birth of the user (format: 'YYYY-MM-DD').
   - `gender` (string, required): Gender of the user.
   - `username` (string, required): Username of the user.
   - `password` (string, required): Password of the user.
   - `confirmPassword` (string, required): Confirm password for validation.
+- **Response:**
+  - `201 Created` with the newly created user object.
+  - `400 Bad Request` if any required fields are missing or passwords don't match.
+  - `500 Internal Server Error` if there's a server error.
 
 #### POST `/api/login`
 
-- **Method:** POST
 - **Description:** Authenticates a user and generates a JWT token for access.
 - **Controller:** `login`
 - **Request Body:**
   - `username` (string, required): Username of the user.
   - `password` (string, required): Password of the user.
+- **Response:**
+  - `200 OK` with user information and JWT token if authentication is successful.
+  - `400 Bad Request` if username or password is incorrect.
+  - `500 Internal Server Error` if there's a server error.
 
 #### POST `/api/logout`
 
-- **Method:** POST
 - **Description:** Logs out a user by clearing the JWT token.
 - **Controller:** `logout`
+- **Response:**
+  - `200 OK` with a success message if logout is successful.
+  - `500 Internal Server Error` if there's a server error.
+
+### Wine
+
+#### POST `/api/wines`
+
+- **Description:** Creates a new wine entry.
+- **Controller:** `createWines`
+- **Request Body:**
+  - `name` (string, required): Name of the wine.
+  - `country` (string, required): Country of origin for the wine.
+  - `region` (string, required): Region where the wine is produced.
+  - `prodyear` (string, required): Production year of the wine (format: 'YYYY').
+  - `producer` (string, required): Producer of the wine.
+  - `alcohol` (number, required): Alcohol content of the wine.
+  - `type` (string, required): Type of the wine (e.g., red, white, rosé).
+  - `grape` (string, required): Grape variety used in the wine.
+  - `price` (number, required): Price of the wine.
+  - `currency` (string, required): Currency of the price.
+- **Response:**
+  - `201 Created` if the wine is successfully created.
+  - `400 Bad Request` if any required fields are missing or if a wine with the same name already exists.
+  - `500 Internal Server Error` if there's a server error.
+
+#### GET `/api/wines`
+
+- **Description:** Retrieves all wines.
+- **Controller:** `getAllWines`
+- **Response:**
+  - `200 OK` with an array of wine objects.
+  - `500 Internal Server Error` if there's a server error.
 
 ## Docker Setup
 
@@ -129,4 +163,20 @@ docker run -d --name backend \
 
 ```console
 docker run -it --entrypoint /bin/bash wine-backend
+```
+
+### Push Image to Registry
+
+```console
+docker tag wine-backend registry.jazper.dk/wine-backend:latest
+```
+
+```console
+docker push registry.jazper.dk/wine-backend:latest
+```
+
+On other machines, you can pull the image with this command.
+
+```console
+docker pull registry.jazper.dk/wine-backend:latest
 ```

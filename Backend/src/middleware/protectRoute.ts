@@ -1,6 +1,10 @@
 // Importing necessary modules and models
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { db } from '../drizzle/db';
+import type { NextFunction, Request, Response } from 'express';
+import { eq } from 'drizzle-orm'; //Tester om 2 værdier er equal.
+import { users } from '../drizzle/schema';
+import type { User } from '../dtos/user.dto';
 
 
 // Middleware function to protect routes
@@ -10,9 +14,8 @@ routes den bliver brugt på.
 
 */
 
-const prisma = new PrismaClient();
 
-const protectRoute = async (request, response, next) => {
+const protectRoute = async (request : Request<{}, {}, User>, response : Response, next : NextFunction) => {
     try {
         // Tjekker om der er cookies og JWT i requesten.
         if (!request.cookies || !request.cookies.jwt) {
@@ -24,43 +27,30 @@ const protectRoute = async (request, response, next) => {
         const token = request.cookies.jwt;
 
         // Verificering af JWT Token med JWT Secret key.
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || "BUqC1n1xRU2D1iVbWyfLgA==" ); //Denne kan opdateres senere (Under produktion)
-
+        const decoded:any = jwt.verify(token, process.env.JWT_SECRET || "BUqC1n1xRU2D1iVbWyfLgA=="); //Denne kan opdateres senere (Under produktion)
         
 
-        const user = await prisma.user.findUnique({
-
-            where: {
-
-                id: decoded.userId
-            },
-
-            select: {
-                id: true,
-                fullName: true,
-                gender: true,
-                birthday: true,
-                username: true, //true betyder at den sender data.
-                password: false //false betyder at den ikke sender det valgte data som respons (adgangskode her)
-                
-            }
-
+        const userToFind = await db.query.users.findFirst({
+            where: eq(decoded.userId, users.id), 
+          
         });
 
+
         // ...
-        if (!user) {
+        if (!userToFind) {
             // Hvis ikke, bliver en status 404 returneret som respons.
             return response.status(404).json({ error: "User not found" });
         }
 
         // Hvis brugeren eksisterer bliver user objektet slået sammen med request objektet
-        request.user = user;
+        request.user = userToFind;
+        console.log(request.user?.fullname + " logged out"); //For at teste
 
         // Next funktionen sørge for at denne næste middleware i rækken bliver kørt.
         next();
     } catch (error) {
         // Error tjek
-        console.log("Error in protectRoute middleware:", error.message);
+        console.log("Error in protectRoute middleware:", error);
 
         response.status(500).json({ error: "Internal server error" });
     }
