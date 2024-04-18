@@ -1,4 +1,3 @@
-
 import express from 'express'
 import cookieParser from 'cookie-parser';
 import "dotenv/config";
@@ -6,6 +5,7 @@ import { db } from './drizzle/db';
 import authRoute from './routes/auth.route';
 import usersRoute from './routes/users.route';
 import winesRoute from './routes/wines.route';
+import checkEnvironmentVariables from './utils/checkEnvironmentVariables';
 
 
 const app = express();
@@ -21,5 +21,11 @@ app.use('/api/wines', winesRoute);
 
 
 app.listen(PORT, () => {
-    console.log(`Server running on PORT: ${PORT}`);
+    checkEnvironmentVariables()
+
+    if (process.env.NODE_ENV == "production") {
+        console.log(`Backend API available at: https://vin.jazper.dk/`);
+    } else {
+        console.log(`Backend API available at: http://localhost:${PORT}`);
+    }
 });
