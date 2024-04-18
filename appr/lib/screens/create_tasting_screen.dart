@@ -1,8 +1,13 @@
+import 'dart:convert';
+
+import 'package:appr/main.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/screens/create_wine.dart';
 import 'package:flutter/material.dart';
 import 'package:list_picker/list_picker.dart';
 import "package:intl/intl.dart";
+import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 final formatter = DateFormat("E-dd-MM-yyyy");
 
@@ -15,32 +20,26 @@ class CreateTastingScreen extends StatefulWidget {
 
 class _CreateTastingScreenState extends State<CreateTastingScreen> {
   int _amountOfWines = 1;
-  final List<Wine> _wineList = [
-    Wine(
-        id: 1,
-        name: "s",
-        country: "country",
-        region: "region",
-        type: "type",
-        producer: "1",
-        grape: "grape",
-        currency: "currency",
-        prodYear: DateTime.now(),
-        price: 22.2,
-        alcohol: 22.2),
-    Wine(
-        id: 2,
-        name: "2",
-        country: "country",
-        region: "region",
-        type: "type",
-        producer: "producer",
-        grape: "grape",
-        currency: "currency",
-        prodYear: DateTime.now(),
-        price: 1,
-        alcohol: 1)
-  ];
+   List<Wine>? _wineList;
+   bool _isLoading = true;
+
+void getWines() async {
+    var appState = context.read<MyAppState>();
+    var url = Uri.parse("https://vin.jazper.dk/api/wines");
+    var response = await http.get(url, headers: {"Cookie": appState.cookie!});
+    if (response.statusCode == 200) {
+      List<dynamic> jsonMap = json.decode(response.body);
+      List<Wine> wines = [];
+      for (var wine in jsonMap) {
+        wines.add(Wine.fromJson(wine));
+      }
+      _wineList = wines;
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   var _selectedWines = [];
   DateTime? _selectedDate;
   final wineController = TextEditingController();
@@ -88,7 +87,19 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getWines();
+    
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Tasting'),
@@ -128,10 +139,13 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
                   title: ListPickerField(
+                    
                     label: "wine number ${index + 1}",
-                    items: _wineList.map((e) => e.toString()).toList(),
+                    items: _wineList!.map((e) => e.toString()).toList(),
                     controller: _wineControllers.putIfAbsent(
                         index.toString(), () => TextEditingController()),
+
+
                   ),
                 );
               },
@@ -176,8 +190,10 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
               ),
               IconButton(
                 onPressed: _precentDatePicker,
-                icon: const Icon(
+                icon: Icon(
+                  
                   Icons.date_range,
+                  color: Theme.of(context).colorScheme.primary
                 ),
               ),
             ],

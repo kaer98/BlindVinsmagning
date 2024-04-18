@@ -50,7 +50,8 @@ class MainMenu extends StatelessWidget {
               ),
               SizedBox(height: _spacing),
               appState.userId != null
-                  ? ElevatedButton(
+                  ? 
+                  ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
