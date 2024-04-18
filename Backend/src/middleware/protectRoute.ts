@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import { db } from '../drizzle/db';
 import type { NextFunction, Request, Response } from 'express';
 import { eq } from 'drizzle-orm'; //Tester om 2 værdier er equal.
-import { user } from '../drizzle/schema';
+import { users } from '../drizzle/schema';
 import type { User } from '../dtos/user.dto';
 
 
@@ -30,8 +30,8 @@ const protectRoute = async (request : Request<{}, {}, User>, response : Response
         const decoded:any = jwt.verify(token, process.env.JWT_SECRET || "BUqC1n1xRU2D1iVbWyfLgA=="); //Denne kan opdateres senere (Under produktion)
         
 
-        const userToFind = await db.query.user.findFirst({
-            where: eq(decoded.userId, user.id), 
+        const userToFind = await db.query.users.findFirst({
+            where: eq(decoded.userId, users.id), 
           
         });
 
@@ -44,7 +44,7 @@ const protectRoute = async (request : Request<{}, {}, User>, response : Response
 
         // Hvis brugeren eksisterer bliver user objektet slået sammen med request objektet
         request.user = userToFind;
-        console.log(request.user.fullName + " logged out"); //For at teste
+        console.log(request.user?.fullname + " logged out"); //For at teste
 
         // Next funktionen sørge for at denne næste middleware i rækken bliver kørt.
         next();

@@ -2,7 +2,7 @@
 // Define a new interface to represent the user object
 export interface User {
     id: number;
-    fullName: string;
+    fullname: string;
     gender: string;
     birthday: string;
     username: string;
