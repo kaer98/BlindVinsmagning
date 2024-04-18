@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
-import "package:appj1/widgets/gradient_container.dart";
+
 
 void main() {
-  runApp(const MaterialApp(
-    home: Scaffold(
-        body: GradientContainer(
-                Color.fromARGB(255, 142, 10, 10),
-                Color.fromARGB(255, 174, 58, 95),
-              ),
-      ),
-    
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -20,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'vinsmagning',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -37,10 +29,10 @@ class MyApp extends StatelessWidget {
         //
         // This works for code too, not just values: Most code changes can be
         // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 200, 56, 45)),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'vinsmagning'),
     );
   }
 }
