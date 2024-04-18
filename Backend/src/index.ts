@@ -20,6 +20,9 @@ app.use('/api/users', usersRoute);
 
 
 app.listen(PORT, () => {
-
-    console.log(`Server kører på PORT: ${PORT}`);
+    if (process.env.NODE_ENV == "production") {
+        app.
+    } else {
+        console.log(`Server running on PORT: ${PORT}`);
+    }
 });
