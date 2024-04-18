@@ -5,11 +5,8 @@ import { db } from './drizzle/db';
 import authRoute from './routes/auth.route';
 import usersRoute from './routes/users.route';
 import winesRoute from './routes/wines.route';
-<<<<<<< HEAD
 import tastingsRoute from './routes/tastings.route';
-=======
 import checkEnvironmentVariables from './utils/checkEnvironmentVariables';
->>>>>>> e8a69b227740ef5cbf71351128ae9fad1ddbe76a
 
 
 const app = express();
