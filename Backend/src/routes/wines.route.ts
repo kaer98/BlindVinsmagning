@@ -5,7 +5,7 @@ import { createWines, getAllWines } from '../controllers/wines.controller';
 
 const router = express.Router();
 
-//ROUTE: GET /api/winy
+//ROUTE: GET /api/wines
 router.get("/", getAllWines);
 
 //ROUTE: POST /api/wines
