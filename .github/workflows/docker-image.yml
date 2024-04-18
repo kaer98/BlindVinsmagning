@@ -13,5 +13,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Build the Docker image
-        run: docker build /Backend --file Dockerfile --tag registry.jazper.dk/wine-backend:latest
-        working-directory: /Backend
+        run: docker build /Backend/Dockerfile --file Dockerfile --tag registry.jazper.dk/wine-backend:latest
