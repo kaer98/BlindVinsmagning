@@ -38,15 +38,24 @@ export const createTasting = async (request: Request, response: Response) => {
 
             const newTastingCreation = await db.insert(winetastings).values({
                 
+                // name: name,
+                // visibility: visibility,
+                // date: date.toString(),
+                // wines: parseInt(wines),
+                // hostid: "1",
                 name: name,
                 visibility: visibility,
-                date: date.toString(),
+                date: date,
+                hostid: 1,
+                finished: false, 
+                participants: [1],
                 wines: wines,
-                hostid: "1",
+                
+                   
+
 
                 //Værdier som først skal assignes senere:
-                finished: false,
-                participants: [],
+                //Skal være en array af bruger id'er
 
                 
                 // {
@@ -61,9 +70,9 @@ export const createTasting = async (request: Request, response: Response) => {
 
 
             }).returning({
-                wineName: winetastings.name,
-                id: winetastings.id,
-                wineRegion: wines.region,
+                // wineName: winetastings.name,
+                // id: winetastings.id,
+                // wineRegion: wines.region,
            
             });
 
@@ -89,8 +98,8 @@ export const createTasting = async (request: Request, response: Response) => {
 export const getAllTastings = async (request: Request, response: Response) => {
     try {
 
-        db.query.wines.findMany().then((tastings) => {
-            response.json(tastings);
+        db.query.wines.findMany().then((winetastings) => {
+            response.json(winetastings);
         });
 
 
