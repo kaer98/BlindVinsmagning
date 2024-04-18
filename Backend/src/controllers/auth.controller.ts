@@ -1,12 +1,14 @@
-import bcrypt from 'bcryptjs';
-import generateTokenAndSetCookie from "../utils/generateToken.js";
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-
+import bcrypt, { hash } from 'bcryptjs';
+import type { Request, Response } from 'express';
+import { db } from '../drizzle/db';
+import { eq } from 'drizzle-orm'; //Tester om 2 værdier er equal.
+import { user } from '../drizzle/schema';
+import { serial } from 'drizzle-orm/mysql-core';
+import generateTokenAndSetCookie from '../utils/generateToken';
+import type postgres from 'postgres';
 
 //Sign Up Endpoint
-export const signup = async (request, response) => {
+export const signup = async (request: Request, response: Response) => {
     try {
 
         //Disse er de data som serveren skal bruge til når en bruger skal oprette en ny bruger.
@@ -14,7 +16,7 @@ export const signup = async (request, response) => {
         const { fullName, birthday, gender, username, password, confirmPassword } = request.body;
 
         // Validering af Request Body
-        if (!fullName || !birthday || !gender || !username || !password || !confirmPassword ) {
+        if (!fullName || !birthday || !gender || !username || !password || !confirmPassword) {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
         }
 
@@ -25,14 +27,16 @@ export const signup = async (request, response) => {
         }
 
         //Her finder vi en bruger fra databasen med samme brugernavn som den indtastede brugernavn fra req body
-        const user = await prisma.user.findFirst({
-            where: {
-                username: username
-            }
+
+
+
+        const userToFind = await db.query.user.findFirst({
+            where: eq(user.username, username),
         });
 
+
         //Hvis denne brugernavn og bruger eksisterer i databasen, må man ikke oprette sig under samme navn.
-        if (user) {
+        if (userToFind) {
             return response.status(400).json({ error: "Username already exists" });
         }
 
@@ -46,25 +50,34 @@ export const signup = async (request, response) => {
 
         //Den nye bruger oprettes i første omgang på serveren (som objekt)
         const newUserObject = {
-            
-                fullName,
-                birthday: new Date(birthday),
-                gender,
-                username,
-                password: hashedPassword
 
-            
+            fullName: fullName,
+            birthday: birthday.toString(),
+            gender: gender,
+
+            username: username,
+            password: hashedPassword
+
+
         };
-        
+
 
         //Hvis alt er vel oprettes der en JWT token og brugeren gemmes i databasen.
         if (newUserObject) {
 
-            generateTokenAndSetCookie(newUserObject.id, response);
-            const newUser = await prisma.user.create({
-                data: newUserObject
+            const newUserCreation = await db.insert(user).values(newUserObject).returning({
+                id: user.id,
+                fullName: user.fullName,
+                username: user.username,
+                birthday: user.birthday
             });
+
+            const newUser = newUserCreation[0];
+
+            generateTokenAndSetCookie(newUser.id, response);
             response.status(201).json({ id: newUser.id, fullName: newUser.fullName, username: newUser.username, birthday: newUser.birthday });
+
+
         }
         else { //I tilfælde af brugerfejl.
             response.status(400).json({ error: "Invalid User Data" });
@@ -72,61 +85,57 @@ export const signup = async (request, response) => {
 
     } catch (error) { //I tilfælde af server fejl.
         console.log(error);
-        response.status(500).json({ clown: "BAD!", error: error.message });
+        response.status(500).json({ fejl: "BAD!", error: error });
     }
 
 
 
 }
 
-//Login Endpoint
-export const login = async (request, response) => {
+
+
+export const login = async (request: Request, response: Response) => {
     try {
+    console.log("Kørt");
+    //Her får serveren inputs fra brugeren (sendes med request body) og gemmer dem i en const.
+    const { username, password } = request.body;
 
-        //Her får serveren inputs fra brugeren (sendes med request body) og gemmer dem i en const.
-        const { username, password } = request.body;
+    //Her tjekker serveren om brugeren eksisterer i databasen eller ej.
+    const userToFind = await db.query.user.findFirst({
+        where: eq(username, user.username),
+    });
 
-        //Her tjekker serveren om brugeren eksisterer i databasen eller ej
-        const user = await prisma.user.findFirst({
-            where: {
-                username: username
-            }
-        });
-
-        //Her tjekker vi om adgangskoden er korrekt eller ikke
+     //Her tjekker vi om adgangskoden er korrekt eller ikke
         //Det der sker her med bcrypt er at vi sammenligner password vi modtager med password i databasen. 
         //Hvis brugeren ikke eksisterer er der empty string for at man ikke får fejlbeskeder.
-        const isPasswordCorrect = await bcrypt.compare(password, user?.password || "");
+        const isPasswordCorrect = await bcrypt.compare(password, userToFind?.password || "");
 
-        //Og hvis der er nogle fejl, bruges denne.
-        if (!user || !isPasswordCorrect) {
+        if (!userToFind || !isPasswordCorrect) {
             return response.status(400).json({ error: "Invalid Username or Password" });
         }
 
-        generateTokenAndSetCookie(user.id, response);
+        generateTokenAndSetCookie(userToFind.id, response);
 
-
-        //Hvis der er sucess, så sendes denne respons tilbage til klienten.
         response.status(200).json({
-            id: user.id,
-            fullName: user.fullName,
+            id: userToFind.id,
+            fullName: userToFind.fullName,
         });
 
-
     } catch (error) {
-        console.log("Error login controller", error.message);
+        console.log("Error login controller", error);
         response.status(500).json({ error: "Internal Server Error" });
     }
+
 }
 
-export const logout = async (request, response) => {
+
+export const logout = async (request: Request, response: Response) => {
     try {
         response.cookie("jwt", "", { maxAge: 0 });
         response.status(200).json({ message: "Logged out!" });
 
     } catch (error) {
-        console.log("Error logout controller", error.message);
+        console.log("Error logout controller", error);
         response.status(500).json({ error: "Internal Server Error" });
     }
 }
-
