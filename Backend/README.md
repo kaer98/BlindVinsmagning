@@ -9,14 +9,18 @@
         - [Users](#users)
             - [GET /api/users](#get-apiusers)
             - [GET /api/users/:id](#get-apiusersid)
-            - [POST /api/users](#post-apiusers)
             - [DELETE /api/users](#delete-apiusers)
             - [DELETE /api/users/:id](#delete-apiusersid)
-            - [PUT /api/users/](#put-apiusers)
         - [Auth](#auth)
-            - [POST /api/signup](#post-apisignup)
+            - [POST /api/auth/signup](#post-apiauthsignup)
             - [POST /api/login](#post-apilogin)
             - [POST /api/logout](#post-apilogout)
+        - [Wine](#wine)
+            - [POST /api/wines](#post-apiwines)
+            - [GET /api/wines](#get-apiwines)
+        - [Tastings](#tastings)
+            - [POST /api/tastings](#post-apitastings)
+            - [GET /api/tastings](#get-apitastings)
     - [Docker Setup](#docker-setup)
         - [Build Docker Image](#build-docker-image)
         - [Environment Variables](#environment-variables)
@@ -69,7 +73,7 @@
 
 ### Auth
 
-#### POST `/api/signup`
+#### POST `/api/auth/signup`
 
 - **Description:** Creates a new user account.
 - **Controller:** `signup`
@@ -133,6 +137,30 @@
 - **Controller:** `getAllWines`
 - **Response:**
   - `200 OK` with an array of wine objects.
+  - `500 Internal Server Error` if there's a server error.
+
+### Tastings
+
+#### POST `/api/tastings`
+
+- **Description:** Creates a new wine tasting.
+- **Controller:** `createTasting`
+- **Request Body:**
+  - `name` (string, required): Name of the wine tasting.
+  - `visibility` (boolean, required): Visibility status of the tasting.
+  - `date` (string, required): Date of the tasting (format: 'YYYY-MM-DD').
+  - `wines` (array, required): Array of wine IDs associated with the tasting.
+- **Response:**
+  - `201 Created` if the tasting is successfully created.
+  - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
+  - `500 Internal Server Error` if there's a server error.
+
+#### GET `/api/tastings`
+
+- **Description:** Retrieves all wine tastings.
+- **Controller:** `getAllTastings`
+- **Response:**
+  - `200 OK` with an array of wine tasting objects.
   - `500 Internal Server Error` if there's a server error.
 
 ## Docker Setup
