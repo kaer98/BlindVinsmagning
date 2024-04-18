@@ -89,7 +89,7 @@
   - `400 Bad Request` if any required fields are missing or passwords don't match.
   - `500 Internal Server Error` if there's a server error.
 
-#### POST `/api/login`
+#### POST `/api/auth/login`
 
 - **Description:** Authenticates a user and generates a JWT token for access.
 - **Controller:** `login`
@@ -101,7 +101,7 @@
   - `400 Bad Request` if username or password is incorrect.
   - `500 Internal Server Error` if there's a server error.
 
-#### POST `/api/logout`
+#### POST `/api/auth/logout`
 
 - **Description:** Logs out a user by clearing the JWT token.
 - **Controller:** `logout`
