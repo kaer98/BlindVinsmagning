@@ -1,5 +1,8 @@
 # see all versions at https://hub.docker.com/r/oven/bun/tags
 FROM oven/bun:1-alpine as base
+
+ENV NODE_ENV=production
+
 WORKDIR /backend
 
 
@@ -18,8 +21,6 @@ RUN cd /temp/prod && bun install --ignore-scripts --production
 FROM base AS prerelease
 COPY --from=install /temp/prod/node_modules node_modules
 COPY . .
-
-ENV NODE_ENV=production
 
 RUN bun run build
 

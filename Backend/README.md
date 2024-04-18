@@ -139,5 +139,11 @@ docker tag wine-backend registry.jazper.dk/wine-backend:latest
 ```
 
 ```console
+docker push registry.jazper.dk/wine-backend:latest
+```
+
+On other machines, you can pull the image with this command.
+
+```console
 docker pull registry.jazper.dk/wine-backend:latest
 ```
