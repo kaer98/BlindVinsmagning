@@ -1,0 +1,17 @@
+name: Docker Image CI
+
+on:
+  push:
+    paths:
+      - Backend/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        run: |
+          docker build ./Backend --file ./Backend/Dockerfile --tag registry.jazper.dk/wine-backend:latest
+          docker push registry.jazper.dk/wine-backend:latest
