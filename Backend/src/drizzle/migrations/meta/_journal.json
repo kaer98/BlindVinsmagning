@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1713384485641,
+      "tag": "0000_many_moondragon",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1713385516730,
+      "tag": "0001_majestic_otto_octavius",
+      "breakpoints": true
+    }
+  ]
+}
