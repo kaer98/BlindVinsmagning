@@ -1,24 +1,36 @@
-FROM node:20.10-alpine as builder
-
-COPY . /backend
-
+# see all versions at https://hub.docker.com/r/oven/bun/tags
+FROM oven/bun:1-alpine as base
 WORKDIR /backend
+
+
+# install dependencies into temp directory
+# this will cache them and speed up future builds
+FROM base AS install
+
+# install with --production (exclude devDependencies)
+RUN mkdir -p /temp/prod
+COPY package.json /temp/prod/
+RUN cd /temp/prod && bun install --ignore-scripts --production
+
+
+# copy node_modules from temp directory
+# then copy all (non-ignored) project files into the image
+FROM base AS prerelease
+COPY --from=install /temp/prod/node_modules node_modules
+COPY . .
 
 ENV NODE_ENV=production
 
-RUN yarn install --production
+RUN bun run build
 
-# Remove this line when prisma is no longer used
-RUN npx prisma generate
 
-FROM node:20.10-alpine as release
+# copy production dependencies and build output
+FROM base as release
 
-WORKDIR /backend
+COPY --from=install /temp/prod/node_modules /backend/node_modules
+COPY --from=prerelease /backend/build/index.js /backend/build/index.js
+COPY --from=install /temp/prod/package.json /backend/package.json
 
-ENV NODE_ENV=production
+EXPOSE 3000/tcp
 
-COPY --from=builder /backend /backend
-
-EXPOSE 3000
-
-CMD ["npm", "run", "server"]
+ENTRYPOINT [ "bun", "run", "run-build" ]

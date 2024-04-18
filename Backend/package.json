@@ -22,7 +22,6 @@
     "drizzle-orm": "^0.30.8",
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
-    "mysql2": "^3.9.5",
     "patch-package": "^8.0.0",
     "postgres": "^3.4.4"
   },

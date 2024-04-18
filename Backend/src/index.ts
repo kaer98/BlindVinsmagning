@@ -1,6 +1,5 @@
 
 import express from 'express'
-import * as mysql from 'mysql2/promise';
 import cookieParser from 'cookie-parser';
 import "dotenv/config";
 import { db } from './drizzle/db';
@@ -22,6 +21,5 @@ app.use('/api/wines', winesRoute);
 
 
 app.listen(PORT, () => {
-
-    console.log(`Server kører på PORT: ${PORT}`);
+    console.log(`Server running on PORT: ${PORT}`);
 });
