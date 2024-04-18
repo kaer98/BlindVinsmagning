@@ -1,6 +1,5 @@
 
 import express from 'express'
-import * as mysql from 'mysql2/promise';
 import cookieParser from 'cookie-parser';
 import "dotenv/config";
 import { db } from './drizzle/db';
