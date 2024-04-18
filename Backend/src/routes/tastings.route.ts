@@ -6,9 +6,9 @@ import { createTasting, getAllTastings } from '../controllers/tastings.controlle
 const router = express.Router();
 
 //ROUTE: GET /api/tastings
-router.get("/", getAllTastings);
+router.get("/",  getAllTastings);
 
 //ROUTE: POST /api/tastings
-router.post("/", createTasting);
+router.post("/", protectRoute, createTasting);
 
 export default router;

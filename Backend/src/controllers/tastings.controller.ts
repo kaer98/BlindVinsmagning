@@ -33,10 +33,10 @@ export const createTasting = async (request: Request, response: Response) => {
             name: name,
             visibility: visibility,
             date: date.toString(),
-            hostid: 5,
-            winnerid: 1,
+            hostid: request.user?.id,
+            winnerid: null,
             finished: false,
-            participants: [1],
+            participants: null,
             wines: wines
         });
 

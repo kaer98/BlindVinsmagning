@@ -3,7 +3,7 @@ import { pgTable, unique, pgEnum, serial, varchar, date, foreignKey, integer, bo
 
 export const genderEnum = pgEnum("GenderEnum", ['MALE', 'FEMALE'])
 export const genderenum = pgEnum("genderenum", ['Other', 'Female', 'Male'])
-export const visibilityenum = pgEnum("visibilityenum", ['Private', 'Public'])
+export const visibilityenum = pgEnum("visibilityenum", ['Open', 'Semiblind', 'Blind', 'Private', 'Public'])
 export const aintensityenum = pgEnum("aintensityenum", ['High', 'Medium', 'Low'])
 export const nintensityenum = pgEnum("nintensityenum", ['High', 'Medium', 'Low'])
 export const sweetnessenum = pgEnum("sweetnessenum", ['Sweet', 'Medium', 'Dry'])
