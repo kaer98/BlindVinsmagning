@@ -139,5 +139,5 @@ docker tag wine-backend registry.jazper.dk/wine-backend:latest
 ```
 
 ```console
-docker push registry.jazper.dk/wine-backend:latest
+docker pull registry.jazper.dk/wine-backend:latest
 ```

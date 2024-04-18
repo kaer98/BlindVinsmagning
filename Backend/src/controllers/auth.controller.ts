@@ -2,7 +2,7 @@ import bcrypt, { hash } from 'bcryptjs';
 import type { Request, Response } from 'express';
 import { db } from '../drizzle/db';
 import { eq } from 'drizzle-orm'; //Tester om 2 værdier er equal.
-import { user } from '../drizzle/schema';
+import { users } from '../drizzle/schema';
 import { serial } from 'drizzle-orm/mysql-core';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import type postgres from 'postgres';
@@ -13,10 +13,10 @@ export const signup = async (request: Request, response: Response) => {
 
         //Disse er de data som serveren skal bruge til når en bruger skal oprette en ny bruger.
         //Dem får man fra Request bodien. Matchende ting (som fulName fx) gemmes hvor de skal gemmes.
-        const { fullName, birthday, gender, username, password, confirmPassword } = request.body;
+        const { fullname, birthday, gender, username, password, confirmPassword } = request.body;
 
         // Validering af Request Body
-        if (!fullName || !birthday || !gender || !username || !password || !confirmPassword) {
+        if (!fullname || !birthday || !gender || !username || !password || !confirmPassword) {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
         }
 
@@ -26,12 +26,13 @@ export const signup = async (request: Request, response: Response) => {
             return response.status(400).json({ error: "Password don't match" });
         }
 
+
         //Her finder vi en bruger fra databasen med samme brugernavn som den indtastede brugernavn fra req body
 
 
 
-        const userToFind = await db.query.user.findFirst({
-            where: eq(user.username, username),
+        const userToFind = await db.query.users.findFirst({
+            where: eq(users.username, username),
         });
 
 
@@ -51,7 +52,7 @@ export const signup = async (request: Request, response: Response) => {
         //Den nye bruger oprettes i første omgang på serveren (som objekt)
         const newUserObject = {
 
-            fullName: fullName,
+            fullname: fullname,
             birthday: birthday.toString(),
             gender: gender,
 
@@ -65,22 +66,22 @@ export const signup = async (request: Request, response: Response) => {
         //Hvis alt er vel oprettes der en JWT token og brugeren gemmes i databasen.
         if (newUserObject) {
 
-            const newUserCreation = await db.insert(user).values(newUserObject).returning({
-                id: user.id,
-                fullName: user.fullName,
-                username: user.username,
-                birthday: user.birthday
+            const newUserCreation = await db.insert(users).values(newUserObject).returning({
+                id: users.id,
+                fullname: users.fullname,
+                username: users.username,
+                birthday: users.birthday
             });
 
             const newUser = newUserCreation[0];
 
             generateTokenAndSetCookie(newUser.id, response);
-            response.status(201).json({ id: newUser.id, fullName: newUser.fullName, username: newUser.username, birthday: newUser.birthday });
+            response.status(201).json({ id: newUser.id, fullname: newUser.fullname, username: newUser.username, birthday: newUser.birthday });
 
 
         }
         else { //I tilfælde af brugerfejl.
-            response.status(400).json({ error: "Invalid User Data" });
+            response.status(400).json({ error: "Invalid users Data" });
         }
 
     } catch (error) { //I tilfælde af server fejl.
@@ -101,8 +102,8 @@ export const login = async (request: Request, response: Response) => {
     const { username, password } = request.body;
 
     //Her tjekker serveren om brugeren eksisterer i databasen eller ej.
-    const userToFind = await db.query.user.findFirst({
-        where: eq(username, user.username),
+    const userToFind = await db.query.users.findFirst({
+        where: eq(username, users.username),
     });
 
      //Her tjekker vi om adgangskoden er korrekt eller ikke
@@ -118,7 +119,7 @@ export const login = async (request: Request, response: Response) => {
 
         response.status(200).json({
             id: userToFind.id,
-            fullName: userToFind.fullName,
+            fullname: userToFind.fullname,
         });
 
     } catch (error) {

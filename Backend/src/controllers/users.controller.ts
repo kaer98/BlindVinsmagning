@@ -1,13 +1,13 @@
 import type { Request, Response } from "express";
 import { db } from "../drizzle/db";
-import { user } from "../drizzle/schema";
+import { users } from "../drizzle/schema";
 import { eq } from "drizzle-orm";
 
 export const getUsers = async (request : Request, response : Response) => {
     try {
        
-          db.query.user.findMany().then((user) => {
-                response.json(user);
+          db.query.users.findMany().then((users) => {
+                response.json(users);
             });
         
 
@@ -20,11 +20,11 @@ export const getUsers = async (request : Request, response : Response) => {
 export const getUserById = async (request : Request, response : Response) => {
     try {
 
-        const userId = parseInt(request.params.id);
+        const usersId = parseInt(request.params.id);
 
 
-        const userToFind = await db.query.user.findFirst({
-            where: eq(user.id, userId),
+        const userToFind = await db.query.users.findFirst({
+            where: eq(users.id, usersId),
         });
 
         if (userToFind) {
@@ -42,12 +42,12 @@ export const getUserById = async (request : Request, response : Response) => {
 
 export const deleteAllUsers = async (request : Request, response : Response) => {
     try {
-        const deleteResult = await db.delete(user);
+        const deleteResult = await db.delete(users);
             
         if (deleteResult.count > 0) {
-            response.status(200).json({ message: "All users deleted" });
+            response.status(200).json({ message: "All userss deleted" });
         } else {
-            response.status(404).json({ message: "No users found to delete" });
+            response.status(404).json({ message: "No userss found to delete" });
         }
     } catch (error) {
         console.error('ERROR: Deleting All Users (deleteAllUsers)', error);
@@ -57,7 +57,7 @@ export const deleteAllUsers = async (request : Request, response : Response) => 
 
 export const deleteUserById = async (request : Request, response : Response) => {
     try {
-        const deleteResult = await db.delete(user).where(eq(user.id, parseInt(request.params.id)));
+        const deleteResult = await db.delete(users).where(eq(users.id, parseInt(request.params.id)));
             
         if (deleteResult.count > 0) {
             response.status(200).json({ message: "User Deleted" });
