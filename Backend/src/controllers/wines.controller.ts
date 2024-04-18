@@ -1,8 +1,7 @@
 import { db } from "../drizzle/db";
 import { eq } from "drizzle-orm";
-import { wines } from "../drizzle/schema";
+import { wines, winetastings } from "../drizzle/schema";
 import type { Request, Response } from "express";
-
 
 export const createWines = async (request: Request, response: Response) => {
     try {
@@ -15,8 +14,6 @@ export const createWines = async (request: Request, response: Response) => {
         if (!name || !country || !region || !prodyear || !producer || !alcohol || !type || !grape || !price || !currency) {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
         }
-
-
 
         //Her ser man om vinen allerede eksisterer i databasen. 
         const wineToFind = await db.query.wines.findFirst({
@@ -68,6 +65,7 @@ export const createWines = async (request: Request, response: Response) => {
 
 
 }
+
 
 
 export const getAllWines = async (request: Request, response: Response) => {

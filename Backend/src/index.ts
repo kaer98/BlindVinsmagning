@@ -6,6 +6,7 @@ import { db } from './drizzle/db';
 import authRoute from './routes/auth.route';
 import usersRoute from './routes/users.route';
 import winesRoute from './routes/wines.route';
+import tastingsRoute from './routes/tastings.route';
 
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cookieParser()); // Bruges til at parse Cookies fra Request
 app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/wines', winesRoute);
+app.use('/api/tastings', tastingsRoute);
 
 
 app.listen(PORT, () => {
