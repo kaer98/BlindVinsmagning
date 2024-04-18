@@ -1,4 +1,3 @@
-import 'package:appr/screens/history_screen.dart';
 import 'package:appr/screens/start_screen.dart';
 import 'package:flutter/material.dart';
 import "package:google_fonts/google_fonts.dart";
@@ -12,8 +11,8 @@ final theme = ThemeData(
     background: Colors.white,
   ),
   textTheme: GoogleFonts.latoTextTheme(),
-  canvasColor: ColorScheme.light().background,
-  scaffoldBackgroundColor: ColorScheme.light().background,
+  canvasColor: const ColorScheme.light().background,
+  scaffoldBackgroundColor: const ColorScheme.light().background,
   
 );
 

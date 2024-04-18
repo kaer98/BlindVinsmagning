@@ -16,7 +16,7 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-enum Gender { MALE, FEMALE }
+enum Gender { Male, Female }
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
@@ -28,13 +28,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
   var _confirmPassword;
   var _fullName;
 
+
+   void _registerFailedSnackBar() {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Register failed"),
+      ),
+    );
+  }
+
   void _precentDatePicker() async {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
-      firstDate: DateTime(now.year - 1, now.month, now.day),
-      lastDate: DateTime(now.year + 1, now.month, now.day),
+      firstDate: DateTime(now.year - 100, now.month, now.day),
+      lastDate: DateTime(now.year, now.month, now.day),
     );
     setState(() {
       _selectedDate = pickedDate;
@@ -70,19 +80,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         var response = await http.post(url,
             headers: {"Content-Type": "application/json"},
             body: json.encode({
-              "fullName": _fullName,
+              "fullname": _fullName,
               "birthday": _selectedDate.toString(),
               "gender":_gender,
               "username": _username,
               "password": _password,
               "confirmPassword": _confirmPassword,
             }));
+            if (response.statusCode != 201) {
+              _registerFailedSnackBar();
+            } else {
             appstate.userId = json.decode(response.body)['id'];
             appstate.cookie = response.headers['set-cookie'];
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
               return const MainMenu();
             }));
-      }
+      }}
       
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
