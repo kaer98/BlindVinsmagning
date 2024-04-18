@@ -50,22 +50,9 @@ export const createTasting = async (request: Request, response: Response) => {
                 finished: false, 
                 participants: [1],
                 wines: wines,
+                winnerid: 1,
                 
-                   
-
-
-                //Værdier som først skal assignes senere:
-                //Skal være en array af bruger id'er
-
                 
-                // {
-                //     createMany: {
-                //         data: wines.map((wine: any) => ({
-                //             name: wine.name,
-                //             region: wine.region // Assuming 'region' is a property of each wine object
-                //         }))
-                //     }
-                // }
                 
 
 
@@ -98,7 +85,7 @@ export const createTasting = async (request: Request, response: Response) => {
 export const getAllTastings = async (request: Request, response: Response) => {
     try {
 
-        db.query.wines.findMany().then((winetastings) => {
+        db.query.winetastings.findMany().then((winetastings) => {
             response.json(winetastings);
         });
 
