@@ -44,7 +44,7 @@
 
 - **Description:** Retrieves a specific user by ID.
 - **Parameters:**
-  - `id` (integer): User ID.
+  - `id` (integer, required): User ID.
 - **Controller:** `getUserById`
 - **Response:**
   - `200 OK` with the user object if found.
@@ -62,7 +62,7 @@
 
 - **Description:** Deletes a specific user by ID.
 - **Parameters:**
-  - `id` (integer): User ID.
+  - `id` (integer, required): User ID.
 - **Controller:** `deleteUserById`
 - **Response:**
   - `200 OK` with a success message if the user is deleted.
@@ -171,7 +171,7 @@
 - **Description:** Allows a user to join a wine tasting event.
 - **Controller:** `joinTasting`
 - **Parameters:**
-  - `id` (integer, path, required): The ID of the wine tasting event to join.
+  - `id` (integer, required): The ID of the wine tasting event to join.
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
@@ -185,8 +185,8 @@
 
 ### GenderEnum
 
-| Male | Female |
-|------|--------|
+| Male | Female | Other |
+|------|--------|-------|
 
 ### VisibilityEnum
 
@@ -232,6 +232,8 @@
 
 ### Build Docker Image
 
+Only for local builds. Production builds are build automatically on github.
+
 ```console
 docker build --no-cache -t wine-backend .
 ```
@@ -249,13 +251,7 @@ docker build --no-cache -t wine-backend .
 docker run -d --name backend \
     -e DATABASE_URL="postgresql://connection-string-here" \
     -e JWT_SECRET="verysecret" \
-    -p 3000:3000 wine-backend
-```
-
-### Start Container Shell
-
-```console
-docker run -it --entrypoint /bin/bash wine-backend
+    -p 3000:3000 registry.jazper.dk/wine-backend:latest
 ```
 
 ### Push Image to Registry
