@@ -1,10 +1,11 @@
 
 import 'package:appr/data/dropdownform_wset2.dart';
+import 'package:appr/data/dummydata.dart';
+import 'package:appr/models/wine_tasting.dart';
 import 'package:flutter/material.dart';
 
 class WineTastingScreen extends StatefulWidget {
-  const WineTastingScreen({super.key});
-
+  const WineTastingScreen(WineTasting wineTasting , {super.key});
   @override
   State<WineTastingScreen> createState() => _WineTastingScreenState();
 }
@@ -34,6 +35,8 @@ List<DropdownMenuItem> items = [
 ];
 
 class _WineTastingScreenState extends State<WineTastingScreen> {
+  final WineTasting _wineTasting = wineTasting;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +64,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
               ),
             ],
           ),
-          const Text("antal vine: 5"),
+           Text("antal vine: ${_wineTasting.wines!.length}"),
           const Flexible(
             child: Padding(
               padding: EdgeInsets.all(8.0),

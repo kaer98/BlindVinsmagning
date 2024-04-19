@@ -8,6 +8,8 @@ class HistoryScreen extends StatelessWidget {
   final bool history;
   final List<WineTasting> _wineTastings = [wineTasting];
 
+
+
   
 
   @override

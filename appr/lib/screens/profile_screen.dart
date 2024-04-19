@@ -41,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonMap = json.decode(response.body);
       setState(() {
-        _nameController.text = jsonMap['fullName'];
+        _nameController.text = jsonMap['fullname'];
         _selectedDate = DateTime.parse(jsonMap['birthday']);
         _emailController.text = jsonMap['username'];
       });

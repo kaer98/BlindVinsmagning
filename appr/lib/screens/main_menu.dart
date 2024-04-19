@@ -32,7 +32,7 @@ class MainMenu extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const JoinTasting();
+                        return JoinTasting();
                       },
                     ),
                   );

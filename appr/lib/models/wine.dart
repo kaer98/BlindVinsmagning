@@ -41,6 +41,6 @@ class Wine {
   
   @override
   String toString() {
-    return "Name: $name \nCountry: $country \nRegion: $region \nType: $type \nProducer: $producer \nGrape: $grape \nProduction Year: $getProdYear \nPrice: $price $currency \nAlcohol: $alcohol%";
+    return "Name: $name \nCountry: $country \nRegion: $region \nType: $type \nProducer: $producer \nGrape: $grape \nProduction Year: $getProdYear \nPrice: $price $currency \nAlcohol: $alcohol%\n$id";
   }
 }

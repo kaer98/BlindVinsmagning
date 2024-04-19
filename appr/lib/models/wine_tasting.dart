@@ -8,24 +8,24 @@ class WineTasting {
   int id;
   String name;
   List<Wine>? wines;
-  User host;
-  List<User> participents;
+  User? host;
+  List<User>? participents;
   VisibilityEnum? visibility;
-  List<WineEvaluation> wineEvaluation;
+  List<WineEvaluation>? wineEvaluation;
   DateTime date;
-  Wine winner;
+  Wine? winner;
   bool finished;
 
   WineTasting({
     required this.id,
     required this.name,
     required this.wines,
-    required this.host,
-    required this.participents,
+     this.host,
+     this.participents,
     required this.visibility,
-    required this.wineEvaluation,
+     this.wineEvaluation,
     required this.date,
-    required this.winner,
+     this.winner,
     required this.finished,
   });
 }
