@@ -1,7 +1,6 @@
 import { pgTable, unique, pgEnum, serial, varchar, date, foreignKey, integer, boolean, numeric, text } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
-export const genderEnum = pgEnum("GenderEnum", ['MALE', 'FEMALE'])
 export const genderenum = pgEnum("genderenum", ['Other', 'Female', 'Male'])
 export const visibilityenum = pgEnum("visibilityenum", ['Open', 'Semiblind', 'Blind', 'Private', 'Public'])
 export const aintensityenum = pgEnum("aintensityenum", ['High', 'Medium', 'Low'])
