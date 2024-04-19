@@ -91,6 +91,30 @@ export const deleteTastingById = async (request: Request, response: Response) =>
     
 }
 
+
+// Hent smagning efter ID
+export const getTastingById = async (request: Request, response: Response) => {
+    try {
+
+        const tastingId = parseInt(request.params.id);
+
+
+        const tastingToFind = await db.query.winetastings.findFirst({
+            where: eq(winetastings.id, tastingId),
+        });
+
+        if (tastingToFind) {
+            response.send(tastingToFind);
+        } else {
+            response.status(404).send("Smagning ikke fundet");
+        }
+    } catch (error) {
+        console.error('ERROR: Getting User By Id (getTastingById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+
+}
+
 // Deltag i smagning
 export const joinTasting = async (request: Request, response: Response) => {
     try {
