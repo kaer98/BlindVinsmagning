@@ -1,6 +1,7 @@
 import { pgTable, unique, pgEnum, serial, varchar, date, foreignKey, integer, boolean, numeric, text } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
+export const genderEnum = pgEnum("GenderEnum", ['MALE', 'FEMALE'])
 export const genderenum = pgEnum("genderenum", ['Other', 'Female', 'Male'])
 export const visibilityenum = pgEnum("visibilityenum", ['Open', 'Semiblind', 'Blind', 'Private', 'Public'])
 export const aintensityenum = pgEnum("aintensityenum", ['High', 'Medium', 'Low'])
@@ -80,4 +81,5 @@ export const evaluations = pgTable("evaluations", {
 	stars: givestarenum("stars"),
 	userid: integer("userid").references(() => users.id),
 	tastingid: integer("tastingid").references(() => winetastings.id),
+	wineid: integer("wineid").references(() => wines.id),
 });
