@@ -79,4 +79,5 @@ export const evaluations = pgTable("evaluations", {
 	name: varchar("name", { length: 100 }),
 	stars: givestarenum("stars"),
 	userid: integer("userid").references(() => users.id),
+	tastingid: integer("tastingid").references(() => winetastings.id),
 });
