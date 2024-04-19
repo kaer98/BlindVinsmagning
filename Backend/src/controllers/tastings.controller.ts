@@ -127,16 +127,16 @@ export const joinTasting = async (request: Request, response: Response) => {
 
 
         if (participants?.includes(userId)) {
-            return response.status(400).json({ error: "Du deltager allerede i denne smagning" });
+            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind});
 
         } else if (!participants?.includes(userId)) {
 
             participants?.push(userId);
            await db.update(winetastings).set({ participants: participants }).where(eq(winetastings.id, tastingId));
 
-            response.status(200).json({ message: "Deltager tilføjet" });
+            response.status(200).json({ message: "Deltager tilføjet", tastinginfo: tastingToFind  });
 
-        } else {
+        } else {    
             response.status(404).json({ error: "Noget gik galt." });
 
         }
