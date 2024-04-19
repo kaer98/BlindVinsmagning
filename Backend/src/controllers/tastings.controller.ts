@@ -68,6 +68,18 @@ export const getAllTastings = async (request: Request, response: Response) => {
     }
 }
 
+export const deleteTastingById = async (request: Request, response: Response) => { 
+    try {
+
+  
+    } catch (error) {
+        console.error('ERROR: Deleting Tasting By Id (deleteTastingById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+
+    
+}
+
 // Deltag i smagning
 export const joinTasting = async (request: Request, response: Response) => {
     try {
