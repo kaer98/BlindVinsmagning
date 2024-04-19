@@ -8,11 +8,6 @@ const router = express.Router();
 //ROUTE: GET /api/evaluations (Alle kan se evaluations)
 router.get("/", getAllEvaluations);
 
-//ROUTE: POST /api/auth/evaluations (Opret Evaluation (skal være logget ind))
-router.post("/", login);
-
-//ROUTE: POST /api/auth/logout (Logout)
-router.post("/logout", protectRoute, logout);
 
 
 export default router;
