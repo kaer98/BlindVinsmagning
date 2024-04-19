@@ -20,6 +20,7 @@
   - [Tastings](#tastings)
     - [POST /api/tastings](#post-apitastings)
     - [GET /api/tastings](#get-apitastings)
+    - [GET /api/tastings/:id](#get-apitastingsid)
     - [GET /api/tastings/join/:id](#get-apitastingsjoinid)
 - [Enums](#enums)
 - [Docker Setup](#docker-setup)
@@ -167,6 +168,16 @@
 - **Response:**
   - `200 OK` with an array of wine tasting objects.
   - `500 Internal Server Error` if there's a server error.
+
+#### GET `/api/tastings/:id`
+
+- **Description:** Retrieves a specific tasting by ID.
+- **Parameters:**
+  - `id` (integer, required): Tastings ID.
+- **Controller:** `getTastingsById`
+- **Response:**
+  - `200 OK` with the tastings object if found.
+  - `404 Not Found` if the tasting with the specified ID does not exist.
 
 #### GET `/api/tastings/join/:id`
 
