@@ -3,7 +3,7 @@ import { pgTable, unique, pgEnum, serial, varchar, date, foreignKey, integer, bo
 
 export const genderEnum = pgEnum("GenderEnum", ['MALE', 'FEMALE'])
 export const genderenum = pgEnum("genderenum", ['Other', 'Female', 'Male'])
-export const visibilityenum = pgEnum("visibilityenum", ['Blind', 'Semiblind', 'Open'])
+export const visibilityenum = pgEnum("visibilityenum", ['Open', 'Semiblind', 'Blind', 'Private', 'Public'])
 export const aintensityenum = pgEnum("aintensityenum", ['High', 'Medium', 'Low'])
 export const nintensityenum = pgEnum("nintensityenum", ['High', 'Medium', 'Low'])
 export const sweetnessenum = pgEnum("sweetnessenum", ['Sweet', 'Medium', 'Dry'])
@@ -14,6 +14,7 @@ export const bodyenum = pgEnum("bodyenum", ['Full', 'Medium', 'Light'])
 export const flavourintensityenum = pgEnum("flavourintensityenum", ['High', 'Medium', 'Low'])
 export const finishenum = pgEnum("finishenum", ['Long', 'Medium', 'Short'])
 export const qualityenum = pgEnum("qualityenum", ['Excellent', 'Good', 'Fair', 'Poor'])
+export const givestarenum = pgEnum("givestarenum", ['Five', 'Four', 'Three', 'Two', 'One'])
 
 
 export const users = pgTable("users", {
@@ -56,23 +57,8 @@ export const wines = pgTable("wines", {
 	currency: varchar("currency", { length: 3 }),
 });
 
-export const wineevaluations = pgTable("wineevaluations", {
-	id: serial("id").primaryKey().notNull(),
-	wineid: integer("wineid").references(() => wines.id),
-	evaluationname: varchar("evaluationname", { length: 100 }),
-	note: text("note"),
-	userid: integer("userid").references(() => users.id),
-});
-
-export const evaluations = pgTable("evaluations", {
-	id: serial("id").primaryKey().notNull(),
-	name: varchar("name", { length: 100 }),
-	note: text("note"),
-});
-
 export const wset = pgTable("wset", {
 	id: serial("id").primaryKey().notNull(),
-	evaluationid: integer("evaluationid").references(() => evaluations.id),
 	aintensity: aintensityenum("aintensity"),
 	nintensity: nintensityenum("nintensity"),
 	sweetness: sweetnessenum("sweetness"),
@@ -85,4 +71,13 @@ export const wset = pgTable("wset", {
 	flavourcharacteristics: text("flavourcharacteristics"),
 	finish: finishenum("finish"),
 	quality: qualityenum("quality"),
+});
+
+export const evaluations = pgTable("evaluations", {
+	id: serial("id").primaryKey().notNull(),
+	note: text("note"),
+	wsetid: integer("wsetid").references(() => wset.id),
+	name: varchar("name", { length: 100 }),
+	stars: givestarenum("stars"),
+	userid: integer("userid").references(() => users.id),
 });
