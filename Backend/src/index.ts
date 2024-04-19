@@ -11,6 +11,7 @@ import requestLogger from './middleware/requestLogger';
 
 
 const app = express();
+app.set('trust proxy', true) // Brug X-FORWARDED-FOR header til at hente IP'er pga. reverse proxy
 const PORT = 3000; //PORT for Server
 
 //Middleware Funktioner
