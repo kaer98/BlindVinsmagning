@@ -1,5 +1,7 @@
 # Backend
 
+[![Docker Image CI](https://github.com/kaer98/BlindVinsmagning/actions/workflows/docker-image.yml/badge.svg)](https://github.com/kaer98/BlindVinsmagning/actions/workflows/docker-image.yml)
+
 ## Table of Contents
 
 - [API Documentation](#api-documentation)
@@ -122,10 +124,10 @@
   - `region` (string, required): Region where the wine is produced.
   - `prodyear` (string, required): Production year of the wine (format: 'YYYY').
   - `producer` (string, required): Producer of the wine.
-  - `alcohol` (number, required): Alcohol content of the wine.
+  - `alcohol` (integer, required): Alcohol content of the wine.
   - `type` (string, required): Type of the wine (e.g., red, white, rosé).
   - `grape` (string, required): Grape variety used in the wine.
-  - `price` (number, required): Price of the wine.
+  - `price` (integer, required): Price of the wine.
   - `currency` (string, required): Currency of the price.
 - **Response:**
   - `201 Created` if the wine is successfully created.
