@@ -19,6 +19,7 @@
     - [POST /api/tastings](#post-apitastings)
     - [GET /api/tastings](#get-apitastings)
     - [GET /api/tastings/join/:id](#get-apitastingsjoinid)
+- [Enums](#enums)
 - [Docker Setup](#docker-setup)
   - [Build Docker Image](#build-docker-image)
   - [Environment Variables](#environment-variables)
@@ -76,7 +77,7 @@
 - **Request Body:**
   - `fullname` (string, required): Full name of the user.
   - `birthday` (string, required): Date of birth of the user (format: 'YYYY-MM-DD').
-  - `gender` (string, required): Gender of the user.
+  - `gender` ([GenderEnum](#genderenum), required): Gender of the user.
   - `username` (string, required): Username of the user.
   - `password` (string, required): Password of the user.
   - `confirmPassword` (string, required): Confirm password for validation.
@@ -147,7 +148,7 @@
 - **Controller:** `createTasting`
 - **Request Body:**
   - `name` (string, required): Name of the wine tasting.
-  - `visibility` (boolean, required): Visibility status of the tasting.
+  - `visibility` ([VisibilityEnum](#visibilityenum), required): Visibility status of the tasting.
   - `date` (string, required): Date of the tasting (format: 'YYYY-MM-DD').
   - `wines` (array, required): Array of wine IDs associated with the tasting.
 - **Cookie:**
@@ -179,6 +180,53 @@
   - `401 Unauthorized` with error "Du skal være logget ind for at deltage" if user is not logged in.
   - `404 Not Found` with error "Smagning ikke fundet" if the tasting event does not exist.
   - `500 Internal Server Error` with error message if there's a server error.
+
+## Enums
+
+### GenderEnum
+
+| Male | Female |
+|------|--------|
+
+### VisibilityEnum
+
+| Blind | SemiBlind | Open |
+|-------|-----------|------|
+
+### AlchoholEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### AcidityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### TanninEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### BodyEnum
+
+| Light | Medium | Full |
+|-------|--------|------|
+
+### FlavourIntensityEnum
+
+| Light | Medium | Pronounced |
+|-------|--------|------------|
+
+### SweetnessEnum
+
+| Dry | OffDry | Medium | Sweet |
+|-----|--------|--------|-------|
+
+### FinishEnum
+
+| Short | Medium | Long |
+|-------|--------|------|
 
 ## Docker Setup
 
