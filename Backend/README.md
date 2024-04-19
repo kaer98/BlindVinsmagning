@@ -18,6 +18,7 @@
   - [Tastings](#tastings)
     - [POST /api/tastings](#post-apitastings)
     - [GET /api/tastings](#get-apitastings)
+    - [GET /api/tastings/join/:id](#get-apitastingsjoinid)
 - [Docker Setup](#docker-setup)
   - [Build Docker Image](#build-docker-image)
   - [Environment Variables](#environment-variables)
