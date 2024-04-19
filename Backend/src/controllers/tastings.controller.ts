@@ -109,7 +109,7 @@ export const getTastingById = async (request: Request, response: Response) => {
             response.status(404).send("Smagning ikke fundet");
         }
     } catch (error) {
-        console.error('ERROR: Getting User By Id (getTastingById)', error);
+        console.error('ERROR: Getting Tasting By Id (getTastingById)', error);
         response.status(500).json({ error: 'Intern Server Fejl' });
     }
 
