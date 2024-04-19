@@ -8,6 +8,6 @@ dbCredentials: {
     connectionString: process.env.DATABASE_URL as string
 },
 // If NODE_ENV is set to "production", turn off verbose database logging
-verbose: process.env.NODE_ENV == "production" ? true : false,
+verbose: process.env.NODE_ENV == "production" ? false : true,
 strict: true,
 });
