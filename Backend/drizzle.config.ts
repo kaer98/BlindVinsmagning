@@ -1,5 +1,4 @@
 import { defineConfig } from 'drizzle-kit';
-import "dotenv/config";
 
 export default defineConfig({
 schema: "./src/drizzle/schema.ts",
@@ -8,7 +7,7 @@ driver: "pg",
 dbCredentials: {
     connectionString: process.env.DATABASE_URL as string
 },
-verbose: true,
+// If NODE_ENV is set to "production", turn off verbose database logging
+verbose: process.env.NODE_ENV == "production" ? true : false,
 strict: true,
-
 });

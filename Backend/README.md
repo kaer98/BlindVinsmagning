@@ -89,7 +89,7 @@
   - `400 Bad Request` if any required fields are missing or passwords don't match.
   - `500 Internal Server Error` if there's a server error.
 
-#### POST `/api/login`
+#### POST `/api/auth/login`
 
 - **Description:** Authenticates a user and generates a JWT token for access.
 - **Controller:** `login`
@@ -101,7 +101,7 @@
   - `400 Bad Request` if username or password is incorrect.
   - `500 Internal Server Error` if there's a server error.
 
-#### POST `/api/logout`
+#### POST `/api/auth/logout`
 
 - **Description:** Logs out a user by clearing the JWT token.
 - **Controller:** `logout`
@@ -175,14 +175,14 @@ docker build --no-cache -t wine-backend .
 
 | Variable | Type | Required | Description |
 |----------|------|----------|-------------|
-| DATABASE_URL | String | True | MySQL Connection String. |
+| DATABASE_URL | String | True | Postgres Connection String. |
 | JWT_SECRET | String | True | JWT Secret used to sign tokens. |
 
 ### Start Container
 
 ```console
 docker run -d --name backend \
-    -e DATABASE_URL="mysql://connection-string-here" \
+    -e DATABASE_URL="postgresql://connection-string-here" \
     -e JWT_SECRET="verysecret" \
     -p 3000:3000 wine-backend
 ```
