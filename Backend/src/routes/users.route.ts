@@ -17,4 +17,5 @@ router.delete("/", deleteAllUsers);
 //ROUTE: DELETE /api/users/:id
 router.delete("/:id", deleteUserById);
 
+
 export default router;

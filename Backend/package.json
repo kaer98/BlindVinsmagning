@@ -10,6 +10,7 @@
     "server-dev-watch": "bun --watch ./src/index.ts",
     "run-build": "bun run ./build/index.js",
     "server-dev": "bun --hot ./src/index.ts",
+    "debug": "bun --inspect ./src/index.ts",
     "test-build": "bun build --target=bun ./src/index.ts --outdir ./build",
     "db-pull": "drizzle-kit introspect:pg",
     "db-push": "drizzle-kit push:pg",

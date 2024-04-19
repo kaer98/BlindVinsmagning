@@ -1,38 +1,41 @@
 # Backend
 
-<!-- TOC ignore:true -->
+[![Docker Image CI](https://github.com/kaer98/BlindVinsmagning/actions/workflows/docker-image.yml/badge.svg)](https://github.com/kaer98/BlindVinsmagning/actions/workflows/docker-image.yml)
+
 ## Table of Contents
-<!-- TOC -->
 
-- [Backend](#backend)
-    - [Documentation](#documentation)
-        - [Users](#users)
-            - [GET /api/users](#get-apiusers)
-            - [GET /api/users/:id](#get-apiusersid)
-            - [DELETE /api/users](#delete-apiusers)
-            - [DELETE /api/users/:id](#delete-apiusersid)
-        - [Auth](#auth)
-            - [POST /api/auth/signup](#post-apiauthsignup)
-            - [POST /api/login](#post-apilogin)
-            - [POST /api/logout](#post-apilogout)
-        - [Wine](#wine)
-            - [POST /api/wines](#post-apiwines)
-            - [GET /api/wines](#get-apiwines)
-        - [Tastings](#tastings)
-            - [POST /api/tastings](#post-apitastings)
-            - [GET /api/tastings](#get-apitastings)
-    - [Docker Setup](#docker-setup)
-        - [Build Docker Image](#build-docker-image)
-        - [Environment Variables](#environment-variables)
-        - [Start Container](#start-container)
-        - [Start Container Shell](#start-container-shell)
-        - [Push Image to Registry](#push-image-to-registry)
-
-<!-- /TOC -->
-
-## Documentation
+- [API Documentation](#api-documentation)
+  - [Users](#users)
+    - [GET /api/users](#get-apiusers)
+    - [GET /api/users/:id](#get-apiusersid)
+    - [DELETE /api/users](#delete-apiusers)
+    - [DELETE /api/users/:id](#delete-apiusersid)
+  - [Auth](#auth)
+    - [POST /api/auth/signup](#post-apiauthsignup)
+    - [POST /api/auth/login](#post-apiauthlogin)
+    - [POST /api/auth/logout](#post-apiauthlogout)
+  - [Wine](#wine)
+    - [POST /api/wines](#post-apiwines)
+    - [GET /api/wines](#get-apiwines)
+  - [Tastings](#tastings)
+    - [POST /api/tastings](#post-apitastings)
+    - [GET /api/tastings](#get-apitastings)
+    - [GET /api/tastings/:id](#get-apitastingsid)
+    - [GET /api/tastings/join/:id](#get-apitastingsjoinid)
+  - [Evaluations](#evaluations)
+    - [GET /api/evaluations](#get-apievaluations)
+    - [POST /api/evaluations](#post-apievaluations)
+- [Enums](#enums)
+- [Docker Setup](#docker-setup)
+  - [Build Docker Image](#build-docker-image)
+  - [Environment Variables](#environment-variables)
+  - [Start Container](#start-container)
+  - [Start Container Shell](#start-container-shell)
+  - [Push Image to Registry](#push-image-to-registry)
 
 **Base URL:** `https://vin.jazper.dk/`
+
+## API Documentation
 
 ### Users
 
@@ -47,7 +50,7 @@
 
 - **Description:** Retrieves a specific user by ID.
 - **Parameters:**
-  - `id` (integer): User ID.
+  - `id` (integer, required): User ID.
 - **Controller:** `getUserById`
 - **Response:**
   - `200 OK` with the user object if found.
@@ -65,7 +68,7 @@
 
 - **Description:** Deletes a specific user by ID.
 - **Parameters:**
-  - `id` (integer): User ID.
+  - `id` (integer, required): User ID.
 - **Controller:** `deleteUserById`
 - **Response:**
   - `200 OK` with a success message if the user is deleted.
@@ -80,12 +83,13 @@
 - **Request Body:**
   - `fullname` (string, required): Full name of the user.
   - `birthday` (string, required): Date of birth of the user (format: 'YYYY-MM-DD').
-  - `gender` (string, required): Gender of the user.
+  - `gender` ([GenderEnum](#genderenum), required): Gender of the user.
   - `username` (string, required): Username of the user.
   - `password` (string, required): Password of the user.
   - `confirmPassword` (string, required): Confirm password for validation.
 - **Response:**
   - `201 Created` with the newly created user object.
+    - JWT Cookie is returned for authentication on other endpoints.
   - `400 Bad Request` if any required fields are missing or passwords don't match.
   - `500 Internal Server Error` if there's a server error.
 
@@ -98,6 +102,7 @@
   - `password` (string, required): Password of the user.
 - **Response:**
   - `200 OK` with user information and JWT token if authentication is successful.
+    - JWT Cookie is returned for authentication on other endpoints.
   - `400 Bad Request` if username or password is incorrect.
   - `500 Internal Server Error` if there's a server error.
 
@@ -105,6 +110,8 @@
 
 - **Description:** Logs out a user by clearing the JWT token.
 - **Controller:** `logout`
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
   - `200 OK` with a success message if logout is successful.
   - `500 Internal Server Error` if there's a server error.
@@ -121,10 +128,10 @@
   - `region` (string, required): Region where the wine is produced.
   - `prodyear` (string, required): Production year of the wine (format: 'YYYY').
   - `producer` (string, required): Producer of the wine.
-  - `alcohol` (number, required): Alcohol content of the wine.
+  - `alcohol` (integer, required): Alcohol content of the wine.
   - `type` (string, required): Type of the wine (e.g., red, white, rosé).
   - `grape` (string, required): Grape variety used in the wine.
-  - `price` (number, required): Price of the wine.
+  - `price` (integer, required): Price of the wine.
   - `currency` (string, required): Currency of the price.
 - **Response:**
   - `201 Created` if the wine is successfully created.
@@ -147,11 +154,13 @@
 - **Controller:** `createTasting`
 - **Request Body:**
   - `name` (string, required): Name of the wine tasting.
-  - `visibility` (boolean, required): Visibility status of the tasting.
+  - `visibility` ([VisibilityEnum](#visibilityenum), required): Visibility status of the tasting.
   - `date` (string, required): Date of the tasting (format: 'YYYY-MM-DD').
   - `wines` (array, required): Array of wine IDs associated with the tasting.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
-  - `201 Created` if the tasting is successfully created.
+  - `201 Created` with the new tastings object.
   - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
   - `500 Internal Server Error` if there's a server error.
 
@@ -163,9 +172,117 @@
   - `200 OK` with an array of wine tasting objects.
   - `500 Internal Server Error` if there's a server error.
 
+#### GET `/api/tastings/:id`
+
+- **Description:** Retrieves a specific tasting by ID.
+- **Parameters:**
+  - `id` (integer, required): Tastings ID.
+- **Controller:** `getTastingsById`
+- **Response:**
+  - `200 OK` with the tastings object if found.
+  - `404 Not Found` if the tasting with the specified ID does not exist.
+
+#### GET `/api/tastings/join/:id`
+
+- **Description:** Allows a user to join a wine tasting event.
+- **Controller:** `joinTasting`
+- **Parameters:**
+  - `id` (integer, required): The ID of the wine tasting event to join.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
+- **Response:**
+  - `200 OK` with message "Deltager tilføjet" if successfully joined.
+  - `400 Bad Request` with error "Du deltager allerede i denne smagning" if user is already a participant.
+  - `401 Unauthorized` with error "Du skal være logget ind for at deltage" if user is not logged in.
+  - `404 Not Found` with error "Smagning ikke fundet" if the tasting event does not exist.
+  - `500 Internal Server Error` with error message if there's a server error.
+
+### Evaluations
+
+#### GET `/api/evaluations`
+
+- **Description:** Retrieves all evaluations.
+- **Controller:** `getAllEvaluations`
+- **Response:**
+  - `200 OK` with an array of evaluation objects.
+
+#### POST `/api/evaluations`
+
+- **Description:** Creates a new evaluation.
+- **Controller:** `createEvaluation`
+- **Request Body:**
+  - `note` (string, required): Note to add to the evaluation.
+  - `name` (string, required): Name of the evaluation.
+  - `tastingId` (integer, required): Id of the tastings to evaluate.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
+- **Response:**
+  - `201 Created` with the new tastings object.
+  - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
+  - `500 Internal Server Error` if there's a server error.
+
+## Enums
+
+### GenderEnum
+
+| Male | Female | Other |
+|------|--------|-------|
+
+### VisibilityEnum
+
+| Blind | SemiBlind | Open |
+|-------|-----------|------|
+
+### AlchoholEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### AcidityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### TanninEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### BodyEnum
+
+| Light | Medium | Full |
+|-------|--------|------|
+
+### FlavourIntensityEnum
+
+| Light | Medium | Pronounced |
+|-------|--------|------------|
+
+### SweetnessEnum
+
+| Dry | OffDry | Medium | Sweet |
+|-----|--------|--------|-------|
+
+### FinishEnum
+
+| Short | Medium | Long |
+|-------|--------|------|
+
+### QualityEnum
+
+| Poor     | Fair   | Good   | Excellent |
+|----------|--------|--------|-----------|
+
+### GiveStarEnum
+
+| One   | Two    | Three  | Four   | Five   |
+|-------|--------|--------|--------|--------|
+
 ## Docker Setup
 
 ### Build Docker Image
+
+Only for local builds. Production builds are build automatically on github.
 
 ```console
 docker build --no-cache -t wine-backend .
@@ -184,13 +301,7 @@ docker build --no-cache -t wine-backend .
 docker run -d --name backend \
     -e DATABASE_URL="postgresql://connection-string-here" \
     -e JWT_SECRET="verysecret" \
-    -p 3000:3000 wine-backend
-```
-
-### Start Container Shell
-
-```console
-docker run -it --entrypoint /bin/bash wine-backend
+    -p 3000:3000 registry.jazper.dk/wine-backend:latest
 ```
 
 ### Push Image to Registry

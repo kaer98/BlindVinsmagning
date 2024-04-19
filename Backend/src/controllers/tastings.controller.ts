@@ -12,12 +12,16 @@ export const createTasting = async (request: Request, response: Response) => {
         // Dem får man fra Request bodien. Matchende ting (som fulName fx) gemmes hvor de skal gemmes.
         const { name, visibility, date, wines } = request.body;
 
-        console.log(name, visibility, date, wines);
 
         // Validering af Request Body
         if (!name || !visibility || !date || !wines) {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
         }
+
+        if (!request.user?.id) {
+            return response.status(401).json({ error: "Du skal være logget ind for at oprette en smagning" });
+         }
+
 
         // Her ser man om vinen allerede eksisterer i databasen. 
         const tastingToFind = await db.query.winetastings.findFirst({
@@ -29,20 +33,27 @@ export const createTasting = async (request: Request, response: Response) => {
             return response.status(400).json({ error: "Smagning med dette navn eksisterer allerede" });
         }
 
+        const userId:number = request.user?.id;
+
         // Den nye smagning oprettes i første omgang på serveren (som objekt)
         const newTastingCreation = await db.insert(winetastings).values({
             name: name,
             visibility: visibility,
             date: date.toString(),
-            hostid: request.user?.id,
+            hostid: userId,
             winnerid: null,
             finished: false,
-            participants: null,
+            participants: [],
             wines: wines
+        }).returning({
+            name: winetastings.name,
+            id: winetastings.id,
         });
 
+        const newTasting = newTastingCreation[0];
+
         if (newTastingCreation) {
-            response.status(201).json({ created: "yes" });
+            response.status(201).json({ tasting: newTasting.name, id: newTasting.id});
         } else {
             response.status(500).json({ fejl: "Blev ikke oprettet" });
         }
@@ -66,6 +77,42 @@ export const getAllTastings = async (request: Request, response: Response) => {
         console.error('ERROR: Getting Wine (getWines)', error);
         response.status(500).json({ error: 'Intern Server Fejl' });
     }
+}
+
+export const deleteTastingById = async (request: Request, response: Response) => { 
+    try {
+
+  
+    } catch (error) {
+        console.error('ERROR: Deleting Tasting By Id (deleteTastingById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+
+    
+}
+
+
+// Hent smagning efter ID
+export const getTastingById = async (request: Request, response: Response) => {
+    try {
+
+        const tastingId = parseInt(request.params.id);
+
+
+        const tastingToFind = await db.query.winetastings.findFirst({
+            where: eq(winetastings.id, tastingId),
+        });
+
+        if (tastingToFind) {
+            response.send(tastingToFind);
+        } else {
+            response.status(404).send("Smagning ikke fundet");
+        }
+    } catch (error) {
+        console.error('ERROR: Getting Tasting By Id (getTastingById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+
 }
 
 // Deltag i smagning
@@ -104,16 +151,16 @@ export const joinTasting = async (request: Request, response: Response) => {
 
 
         if (participants?.includes(userId)) {
-            return response.status(400).json({ error: "Du deltager allerede i denne smagning" });
+            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind});
 
         } else if (!participants?.includes(userId)) {
 
             participants?.push(userId);
-            const updatedTasting = await db.update(winetastings).set({ participants: participants }).where(eq(winetastings.id, tastingId));
+           await db.update(winetastings).set({ participants: participants }).where(eq(winetastings.id, tastingId));
 
-            response.status(200).json({ message: "Deltager tilføjet" });
+            response.status(200).json({ message: "Deltager tilføjet", tastinginfo: tastingToFind  });
 
-        } else {
+        } else {    
             response.status(404).json({ error: "Noget gik galt." });
 
         }

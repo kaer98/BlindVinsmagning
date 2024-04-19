@@ -6,11 +6,13 @@ import authRoute from './routes/auth.route';
 import usersRoute from './routes/users.route';
 import winesRoute from './routes/wines.route';
 import tastingsRoute from './routes/tastings.route';
+import evaluationsRoute from './routes/evaluations.route';
 import checkEnvironmentVariables from './utils/checkEnvironmentVariables';
 import requestLogger from './middleware/requestLogger';
 
 
 const app = express();
+app.set('trust proxy', true) // Brug X-FORWARDED-FOR header til at hente IP'er pga. reverse proxy
 const PORT = 3000; //PORT for Server
 
 //Middleware Funktioner
@@ -22,6 +24,7 @@ app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/wines', winesRoute);
 app.use('/api/tastings', tastingsRoute);
+app.use('/api/evaluations', evaluationsRoute );
 
 
 app.listen(PORT, () => {
