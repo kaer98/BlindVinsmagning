@@ -91,6 +91,30 @@ export const deleteTastingById = async (request: Request, response: Response) =>
     
 }
 
+
+// Hent smagning efter ID
+export const getTastingById = async (request: Request, response: Response) => {
+    try {
+
+        const tastingId = parseInt(request.params.id);
+
+
+        const tastingToFind = await db.query.winetastings.findFirst({
+            where: eq(winetastings.id, tastingId),
+        });
+
+        if (tastingToFind) {
+            response.send(tastingToFind);
+        } else {
+            response.status(404).send("Smagning ikke fundet");
+        }
+    } catch (error) {
+        console.error('ERROR: Getting User By Id (getTastingById)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
+
+}
+
 // Deltag i smagning
 export const joinTasting = async (request: Request, response: Response) => {
     try {
@@ -127,16 +151,16 @@ export const joinTasting = async (request: Request, response: Response) => {
 
 
         if (participants?.includes(userId)) {
-            return response.status(400).json({ error: "Du deltager allerede i denne smagning" });
+            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind});
 
         } else if (!participants?.includes(userId)) {
 
             participants?.push(userId);
            await db.update(winetastings).set({ participants: participants }).where(eq(winetastings.id, tastingId));
 
-            response.status(200).json({ message: "Deltager tilføjet" });
+            response.status(200).json({ message: "Deltager tilføjet", tastinginfo: tastingToFind  });
 
-        } else {
+        } else {    
             response.status(404).json({ error: "Noget gik galt." });
 
         }
