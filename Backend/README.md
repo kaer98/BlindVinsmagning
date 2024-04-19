@@ -22,6 +22,9 @@
     - [GET /api/tastings](#get-apitastings)
     - [GET /api/tastings/:id](#get-apitastingsid)
     - [GET /api/tastings/join/:id](#get-apitastingsjoinid)
+  - [Evaluations](#evaluations)
+    - [GET /api/evaluations](#get-apievaluations)
+    - [POST /api/evaluations](#post-apievaluations)
 - [Enums](#enums)
 - [Docker Setup](#docker-setup)
   - [Build Docker Image](#build-docker-image)
@@ -157,7 +160,7 @@
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
-  - `201 Created` if the tasting is successfully created.
+  - `201 Created` with the new tastings object.
   - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
   - `500 Internal Server Error` if there's a server error.
 
@@ -193,6 +196,30 @@
   - `401 Unauthorized` with error "Du skal være logget ind for at deltage" if user is not logged in.
   - `404 Not Found` with error "Smagning ikke fundet" if the tasting event does not exist.
   - `500 Internal Server Error` with error message if there's a server error.
+
+### Evaluations
+
+#### GET `/api/evaluations`
+
+- **Description:** Retrieves all evaluations.
+- **Controller:** `getAllEvaluations`
+- **Response:**
+  - `200 OK` with an array of evaluation objects.
+
+#### POST `/api/evaluations`
+
+- **Description:** Creates a new evaluation.
+- **Controller:** `createEvaluation`
+- **Request Body:**
+  - `note` (string, required): Note to add to the evaluation.
+  - `name` (string, required): Name of the evaluation.
+  - `tastingId` (integer, required): Id of the tastings to evaluate.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
+- **Response:**
+  - `201 Created` with the new tastings object.
+  - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
+  - `500 Internal Server Error` if there's a server error.
 
 ## Enums
 
@@ -240,6 +267,16 @@
 
 | Short | Medium | Long |
 |-------|--------|------|
+
+### QualityEnum
+
+| Poor     | Fair   | Good   | Excellent |
+|----------|--------|--------|-----------|
+
+### GiveStarEnum
+
+| One   | Two    | Three  | Four   | Five   |
+|-------|--------|--------|--------|--------|
 
 ## Docker Setup
 
