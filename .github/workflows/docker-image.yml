@@ -13,5 +13,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build the Docker image
         run: |
+          echo ${{ secrets.REGISTRY_PASSWORD }} | docker login registry.jazper.dk --username ${{ secrets.REGISTRY_USERNAME }} --password-stdin
           docker build ./Backend --file ./Backend/Dockerfile --tag registry.jazper.dk/wine-backend:latest
           docker push registry.jazper.dk/wine-backend:latest
