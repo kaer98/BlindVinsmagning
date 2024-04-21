@@ -1,4 +1,4 @@
-import { pgTable, unique, pgEnum, serial, varchar, date, foreignKey, integer, boolean, numeric, text } from "drizzle-orm/pg-core"
+import { pgTable, pgEnum, serial, text, foreignKey, integer, varchar, unique, date, boolean, numeric } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 export const genderEnum = pgEnum("GenderEnum", ['MALE', 'FEMALE'])
@@ -16,46 +16,6 @@ export const finishenum = pgEnum("finishenum", ['Long', 'Medium', 'Short'])
 export const qualityenum = pgEnum("qualityenum", ['Excellent', 'Good', 'Fair', 'Poor'])
 export const givestarenum = pgEnum("givestarenum", ['Five', 'Four', 'Three', 'Two', 'One'])
 
-
-export const users = pgTable("users", {
-	id: serial("id").primaryKey().notNull(),
-	fullname: varchar("fullname", { length: 100 }).notNull(),
-	birthday: date("birthday").notNull(),
-	gender: genderenum("gender").notNull(),
-	username: varchar("username", { length: 50 }).notNull(),
-	password: varchar("password", { length: 100 }).notNull(),
-},
-(table) => {
-	return {
-		usersUsernameKey: unique("users_username_key").on(table.username),
-	}
-});
-
-export const winetastings = pgTable("winetastings", {
-	id: serial("id").primaryKey().notNull(),
-	name: varchar("name", { length: 100 }),
-	visibility: visibilityenum("visibility"),
-	date: date("date"),
-	hostid: integer("hostid").references(() => users.id),
-	winnerid: integer("winnerid").references(() => wines.id),
-	finished: boolean("finished"),
-	participants: integer("participants").array(),
-	wines: integer("wines").array(),
-});
-
-export const wines = pgTable("wines", {
-	id: serial("id").primaryKey().notNull(),
-	name: varchar("name", { length: 100 }),
-	country: varchar("country", { length: 100 }),
-	region: varchar("region", { length: 100 }),
-	prodyear: date("prodyear"),
-	producer: varchar("producer", { length: 100 }),
-	alcohol: numeric("alcohol"),
-	type: varchar("type", { length: 50 }),
-	grape: varchar("grape", { length: 100 }),
-	price: numeric("price"),
-	currency: varchar("currency", { length: 3 }),
-});
 
 export const wset = pgTable("wset", {
 	id: serial("id").primaryKey().notNull(),
@@ -82,4 +42,54 @@ export const evaluations = pgTable("evaluations", {
 	userid: integer("userid").references(() => users.id),
 	tastingid: integer("tastingid").references(() => winetastings.id),
 	wineid: integer("wineid").references(() => wines.id),
+});
+
+export const users = pgTable("users", {
+	id: serial("id").primaryKey().notNull(),
+	fullname: varchar("fullname", { length: 100 }).notNull(),
+	birthday: date("birthday").notNull(),
+	gender: genderenum("gender").notNull(),
+	username: varchar("username", { length: 50 }).notNull(),
+	password: varchar("password", { length: 100 }).notNull(),
+},
+(table) => {
+	return {
+		usersUsernameKey: unique("users_username_key").on(table.username),
+	}
+});
+
+export const winetastings = pgTable("winetastings", {
+	id: serial("id").primaryKey().notNull(),
+	name: varchar("name", { length: 100 }),
+	visibility: visibilityenum("visibility"),
+	date: date("date"),
+	hostid: integer("hostid").references(() => users.id),
+	winnerid: integer("winnerid").references(() => wines.id),
+	finished: boolean("finished"),
+});
+
+export const wines = pgTable("wines", {
+	id: serial("id").primaryKey().notNull(),
+	name: varchar("name", { length: 100 }),
+	country: varchar("country", { length: 100 }),
+	region: varchar("region", { length: 100 }),
+	prodyear: date("prodyear"),
+	producer: varchar("producer", { length: 100 }),
+	alcohol: numeric("alcohol"),
+	type: varchar("type", { length: 50 }),
+	grape: varchar("grape", { length: 100 }),
+	price: numeric("price"),
+	currency: varchar("currency", { length: 3 }),
+});
+
+export const tastingwines = pgTable("tastingwines", {
+	id: serial("id").primaryKey().notNull(),
+	tastingid: integer("tastingid").references(() => winetastings.id),
+	wineid: integer("wineid").references(() => wines.id),
+});
+
+export const tastingparticipants = pgTable("tastingparticipants", {
+	id: serial("id").primaryKey().notNull(),
+	tastingid: integer("tastingid").references(() => winetastings.id),
+	userid: integer("userid").references(() => users.id),
 });

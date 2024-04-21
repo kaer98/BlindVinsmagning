@@ -2,7 +2,7 @@ import bcrypt, { hash } from 'bcryptjs';
 import type { Request, Response } from 'express';
 import { db } from '../drizzle/db';
 import { eq } from 'drizzle-orm'; //Tester om 2 værdier er equal.
-import { users } from '../drizzle/schema';
+import { users } from '../drizzle/migrations/schema';
 import { serial } from 'drizzle-orm/mysql-core';
 import generateTokenAndSetCookie from '../utils/generateToken';
 import type postgres from 'postgres';

@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { db } from "../drizzle/db";
-import { users } from "../drizzle/schema";
+import { users } from "../drizzle/migrations/schema";
 import { eq } from "drizzle-orm";
 
 export const getUsers = async (request : Request, response : Response) => {
