@@ -4,6 +4,7 @@ import { winetastings, users, tastingwines, tastingparticipants } from "../drizz
 import type { Request, Response } from "express";
 import type { User } from "../dtos/user.dto";
 import { wines } from "../drizzle/schema.ts";
+import { alias } from "drizzle-orm/pg-core/alias";
 
 
 //Oprettelse af tasting
@@ -40,6 +41,7 @@ export const createTasting = async (request: Request, response: Response) => {
 
 
 
+
         // Den nye smagning oprettes i første omgang på serveren (som objekt)
         const newTastingCreation = await db.insert(winetastings).values({
             name: name,
@@ -48,7 +50,7 @@ export const createTasting = async (request: Request, response: Response) => {
             hostid: userId,
             winnerid: null,
             finished: false,
-            participants: [],
+
 
 
         }).returning({
@@ -105,6 +107,7 @@ export const getAllTastings = async (request: Request, response: Response) => {
     }
 }
 
+// Slet smagning efter ID
 export const deleteTastingById = async (request: Request, response: Response) => {
     try {
 
@@ -117,7 +120,6 @@ export const deleteTastingById = async (request: Request, response: Response) =>
 
 }
 
-
 // Hent smagning efter ID
 export const getTastingById = async (request: Request, response: Response) => {
     try {
@@ -126,14 +128,68 @@ export const getTastingById = async (request: Request, response: Response) => {
 
 
 
-        const tastingToFind = await db.select()
-            .from(tastingwines)
-            .leftJoin(winetastings, eq(tastingwines.tastingid, tastingId))
-            .leftJoin(wines, eq(tastingwines.wineid, wines.id)).execute();
+        //Alias for at kunne hente hostens navn
+        const host = alias(users, "host");
 
 
-        if (tastingToFind) {
-            response.send(tastingToFind);
+        const tastingToFind = await db.select(
+            {
+                tastingName: winetastings.name,
+                tastingId: winetastings.id,
+                hostName: host.fullname,
+
+
+                tastingWines: wines.name,
+                tastingParticipants: {
+                    userId: users.id,
+                    username: users.username,
+                    fullname: users.fullname,
+                }
+
+            }
+        ).from(winetastings).where(eq(winetastings.id, tastingId))
+            .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
+            .leftJoin(wines, eq(tastingwines.wineid, wines.id))
+            .leftJoin(tastingparticipants, eq(tastingparticipants.tastingid, tastingId))
+            .leftJoin(users, eq(tastingparticipants.userid, users.id))
+            .leftJoin(host, eq(winetastings.hostid, host.id))
+            .execute();
+
+            // Hent alle deltagere
+            const participantsFromDb = tastingToFind.map((participant: any) => participant.tastingParticipants);
+
+            // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
+            const participants: any[] = [];
+            participantsFromDb.forEach((participant: any) => {
+                if (!participants.some((p) => p.userId === participant.userId)) {
+                participants.push(participant);
+                }
+            });
+
+            // Hent alle vine
+            const winesFromDb = tastingToFind.map((wine: any) => wine.tastingWines);
+
+            // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
+            const winesToSend: any[] = [];
+            winesFromDb.forEach((wine: any) => {
+                if (!winesToSend.some((w) => w === wine)) {
+                winesToSend.push(wine);
+                }
+            });
+
+            const tastingInfo = {
+                tastingName: tastingToFind[0].tastingName,
+                hostName: tastingToFind[0].hostName,
+                tastingId: tastingToFind[0].tastingId,
+                wineList: winesToSend,
+                participants: participants
+            }
+
+      
+
+
+        if (tastingToFind[0].tastingId == tastingId) {
+            response.send(tastingInfo);
         } else {
             response.status(404).send("Smagning ikke fundet");
         }
@@ -151,56 +207,72 @@ export const joinTasting = async (request: Request, response: Response) => {
             return response.status(401).json({ error: "Du skal være logget ind for at deltage" });
         }
 
-        // User Id that we get from the request body   
+        // User Id som vi får fra request.user
         const userId = request.user.id;
 
-        // Tasting Id that we get from the request body
+        // Smagnings ID som vi får fra request.params
         const tastingId = parseInt(request.params.id);
 
-
-        const doesTastingExist = await db.query.winetastings.findFirst({
-
+        // Finder deltager
+        const tastingToFind = await db.query.winetastings.findFirst({
             where: eq(winetastings.id, tastingId),
-
         });
 
-        if (doesTastingExist?.id !== tastingId) {
+        if (!tastingToFind) {
             return response.status(404).json({ error: "Smagning ikke fundet" });
-
         }
 
-            // Tasting's participants
-            const tastingToFind = await db.query.winetastings.findFirst({
-                where: eq(winetastings.id, tastingId),
+        const participantExists = await db.query.tastingparticipants.findMany({});
+
+        const isParticipantExisting = participantExists.some(participant => {
+            return participant.userid === userId && participant.tastingid === tastingId;
+
+        })
+
+        if (isParticipantExisting) {
+            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind });
+        } else {
+            await db.insert(tastingparticipants).values({
+                tastingid: tastingId,
+                userid: userId
             });
 
-            if (!tastingToFind) {
-                return response.status(404).json({ error: "Smagning ikke fundet" });
-            }
+            return response.status(200).json({ message: "Deltager tilføjet", tastinginfo: tastingToFind });
+        }
 
-            const participantExists = await db.query.tastingparticipants.findMany({
-            });
 
-            const isParticipantExisting = participantExists.some(participant => {
-                return participant.userid === userId && participant.tastingid === tastingId;
-            
-            })
-
-            if (isParticipantExisting) {
-                return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind });
-            } else {
-                await db.insert(tastingparticipants).values({
-                    tastingid: tastingId,
-                    userid: userId
-                });
-
-                return response.status(200).json({ message: "Deltager tilføjet"});
-            }
-        
-    
     } catch (error) {
         console.error('ERROR: Joining Tasting (joinTasting)', error);
         response.status(500).json({ error: 'Intern Server Fejl' });
     }
 
+}
+
+// For at se hvem og hvor manger der deltager i en smagning (Ud fra smagnings ID)
+export const getTastingParticipants = async (request: Request, response: Response) => {
+    try {
+        const tastingId = parseInt(request.params.id);
+
+        const tastingParticipants = await db.select({
+            userId: users.id,
+            username: users.username,
+            fullname: users.fullname,
+        })
+            .from(tastingparticipants)
+            .leftJoin(users, eq(tastingparticipants.userid, users.id))
+            .where(eq(tastingparticipants.tastingid, tastingId))
+            .execute();
+
+        var listOfParticipants: any = [];
+        tastingParticipants.forEach((participant: any) => {
+            listOfParticipants.push(participant);
+        });
+
+
+
+        response.json(listOfParticipants);
+    } catch (error) {
+        console.error('ERROR: Getting Tasting Participants (getTastingParticipants)', error);
+        response.status(500).json({ error: 'Intern Server Fejl' });
+    }
 }

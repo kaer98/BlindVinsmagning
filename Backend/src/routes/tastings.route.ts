@@ -1,7 +1,7 @@
 import {db} from '../drizzle/db';
 import express from "express";
 import protectRoute from '../middleware/protectRoute';
-import { createTasting, getAllTastings, joinTasting, getTastingById } from '../controllers/tastings.controller';
+import { createTasting, getAllTastings, joinTasting, getTastingById, getTastingParticipants } from '../controllers/tastings.controller';
 
 const router = express.Router();
 
@@ -16,5 +16,7 @@ router.get("/join/:id", protectRoute, joinTasting);
 
 //ROUTE: GET /api/tastings/:id (Alle kan se smagning)
 router.get("/:id", getTastingById);
+
+router.get("/participants/:id", getTastingParticipants);
 
 export default router;
