@@ -277,18 +277,14 @@ export const joinTasting = async (request: Request, response: Response) => {
             visibility: tastingToFind[0].visibility,
             wineList: winesToSend,
             participants: participants,
-        
         }
 
         if (!tastingToFind) {
             return response.status(404).json({ error: "Smagning ikke fundet" });
         }
 
-        const participantExists = await db.query.tastingparticipants.findMany({});
-
-        const isParticipantExisting = participantExists.some(participant => {
-            return participant.userid === userId && participant.tastingid === tastingId;
-
+        const isParticipantExisting = tastingInfo.participants.some(participant => {
+            return participant.userId == userId;
         })
 
         if (isParticipantExisting) {
