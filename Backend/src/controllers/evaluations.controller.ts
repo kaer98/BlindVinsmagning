@@ -34,7 +34,6 @@ export const createEvaluation = async (request: Request, response: Response) => 
             wsetid: null, //Tilføjes først senere
             name: name,
             tastingid: tastingId,
-            stars: null, //Tilføjes først senere
             userid: request.user?.id,
             wineid: wineId
 
