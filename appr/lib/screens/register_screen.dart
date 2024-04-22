@@ -22,11 +22,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   final formatter = DateFormat("dd-MM-yyyy");
-  var _gender;
-  var _username;
-  var _password;
-  var _confirmPassword;
-  var _fullName;
+  late Gender _gender;
+  String? _username;
+  String? _password;
+  String? _confirmPassword;
+   late String _fullName;
 
 
    void _registerFailedSnackBar() {
@@ -82,7 +82,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             body: json.encode({
               "fullname": _fullName,
               "birthday": _selectedDate.toString(),
-              "gender":_gender,
+              "gender":_gender.toString(),
               "username": _username,
               "password": _password,
               "confirmPassword": _confirmPassword,
@@ -200,13 +200,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   items: _getDropDownMenuItems(
                       Gender.values.map((e) => e.name).toList()),
                   onChanged: ((value) {
-                    _gender = value;
+                    _gender = Gender.values.firstWhere((element) {
+                      return element.name == value;
+                    });
                   }),
                   isExpanded: true,
                   validator: (value) =>
                       value == null ? "Please select gender" : null,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 ElevatedButton(

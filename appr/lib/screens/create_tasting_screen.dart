@@ -22,7 +22,7 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
   int _amountOfWines = 1;
    List<Wine>? _wineList;
    bool _isLoading = true;
-   var _formKey = GlobalKey<FormState>();
+   final _formKey = GlobalKey<FormState>();
     var _name;
   var _selectedWines = [];
   DateTime? _selectedDate;
@@ -87,7 +87,7 @@ void getWines() async {
             "date": _selectedDate.toString(),
             "wines":_selectedWines,
           }));
-      //Navigator.pop(context);
+      Navigator.pop(context);
       print(response.body);
     }
   }

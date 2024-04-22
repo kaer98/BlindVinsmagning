@@ -9,11 +9,11 @@ class ResultScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Result'),
       ),
-      body: Column(
+      body: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Result"),
+          Text("Result"),
         ],
       ),
     );

@@ -16,8 +16,8 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   final formatter = DateFormat("dd-MM-yyyy");
-  var _emailController = TextEditingController();
-  var _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
 
   DateTime? _selectedDate;
   void _precentDatePicker() async {
@@ -37,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var appState = context.read<MyAppState>();
     var url = Uri.parse("https://vin.jazper.dk/api/users/${appState.userId}");
     var response = await http.get(url, headers: {"Cookie": appState.cookie!});
-    print(response.body);
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonMap = json.decode(response.body);
       setState(() {
@@ -104,14 +103,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   );
                 }));
               },
-              child: Text("Plans")),
+              child: const Text("Plans")),
           ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return HistoryScreen(history: true,);
                 }));
               },
-              child: Text("History")),
+              child: const Text("History")),
           ElevatedButton(onPressed: () {}, child: const Text("Save")),
           ElevatedButton(onPressed: () {}, child: const Text("Cancel")),
         ],

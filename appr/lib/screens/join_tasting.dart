@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
+import 'package:appr/models/wine.dart';
+import 'package:appr/models/wine_evaluation.dart';
 import 'package:appr/models/wine_tasting.dart';
+import 'package:appr/models/wset_eval.dart';
 import 'package:appr/screens/wine_tasting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,21 +39,22 @@ class _JoinTastingState extends State<JoinTasting> {
         },
       );
       Map<String, dynamic> jsonMap = json.decode(response.body);
-     
       WineTasting wineTasting = WineTasting(
-        visibility: jsonMap['tastinginfo']['visibility'],
-        finished: jsonMap['tastinginfo']['finished'],
-        id: _tastingId,
-        name: jsonMap['tastinginfo']['name'],
-        date: jsonMap['tastinginfo']['date'],
-        wines: jsonMap['tastinginfo']['wines'],
+        visibility: VisibilityEnum.values.firstWhere((element) => element.name == jsonMap["tastingInfo"]['visibility']),
+        //jsonMap['tastinginfo']['visibility'],
+        finished: jsonMap["tastingInfo"]['finished'],
+        id: int.parse(_tastingId),
+        name: jsonMap["tastingInfo"]['tastingName'],
+        date: DateTime.parse(jsonMap["tastingInfo"]['date']),
+        wines: (jsonMap["tastingInfo"]['wineList'] as List).map((wine) => Wine.fromJson(wine)).toList(),
+        wineEvaluation: (jsonMap["tastingInfo"]["evaluations"]as List).map((wineEval) => Wset.fromJson(wineEval)).toList(),
       );
+     
       
-             print(jsonMap);
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const WineTastingScreen(wineTasting),
+          builder: (context) => WineTastingScreen(wineTasting),
         ),
       );
    

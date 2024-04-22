@@ -32,7 +32,7 @@ class MainMenu extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return JoinTasting();
+                        return const JoinTasting();
                       },
                     ),
                   );
@@ -60,7 +60,7 @@ class MainMenu extends StatelessWidget {
                       },
                       child: const Text('Profile'),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
                   ElevatedButton(
                       onPressed: () {
                         appState.userId = null;
