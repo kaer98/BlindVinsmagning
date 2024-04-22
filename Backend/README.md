@@ -221,7 +221,7 @@
 
 ### VisibilityEnum
 
-| Blind | SemiBlind | Open |
+| Blind | Semiblind | Open |
 |-------|-----------|------|
 
 ### AlchoholEnum
