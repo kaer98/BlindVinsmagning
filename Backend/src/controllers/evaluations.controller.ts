@@ -82,10 +82,10 @@ export const addWset = async (request: Request, response: Response) => {
     const parsedWineId = parseInt(wineId);
 
     // Validering af Request Body
-    if (!tannin || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
-        !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
-        return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
-    }
+    // if (!tannin || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
+    //     !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
+    //     return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+    // }
 
     if (!request.user) {
         return response.status(401).json({ error: 'Du skal være logget ind for at oprette en vurdering' });
