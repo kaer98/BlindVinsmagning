@@ -173,7 +173,7 @@ export const getTastingById = async (request: Request, response: Response) => {
         // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
         const winesToSend: any[] = [];
         winesFromDb.forEach((wine: any) => {
-            if (!winesToSend.some((w) => w === wine)) {
+            if (!winesToSend.some((w) => w.id === wine.id)) {
                 winesToSend.push(wine);
             }
         });
