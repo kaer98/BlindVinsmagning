@@ -13,12 +13,15 @@ import { pgTable, pgEnum, serial, text, foreignKey, integer, varchar, unique, da
   export const FlavourIntensityEnum = pgEnum("FlavourIntensityEnum", ['High', 'Medium', 'Low']);
   export const FinishEnum = pgEnum("FinishEnum", ['Long', 'Medium', 'Short']);
   export const QualityEnum = pgEnum("QualityEnum", ['Excellent', 'Good', 'Poor', 'Acceptable', 'VeryGood', 'Outstanding']);
-  
-  
-  
 
-export const wset = pgTable("WSETs", {
+
+export const evaluations = pgTable("Evaluations", {
 	id: serial("Id").primaryKey().notNull(),
+	note: text("Note"),
+	name: varchar("Name", { length: 100 }),
+	userid: integer("UserId").references(() => users.id),
+	tastingid: integer("TastingId").references(() => winetastings.id),
+	wineid: integer("WineId").references(() => wines.id),
 	aintensity: AIntensityEnum("AIntensity"),
 	nintensity: NIntensityEnum("NIntensity"),
 	sweetness: SweetnessEnum("Sweetness"),
@@ -31,18 +34,6 @@ export const wset = pgTable("WSETs", {
 	flavourcharacteristics: text("FlavourCharacteristics"),
 	finish: FinishEnum("Finish"),
 	quality: QualityEnum("Quality"),
-});
-
-
-
-export const evaluations = pgTable("Evaluations", {
-	id: serial("Id").primaryKey().notNull(),
-	note: text("Note"),
-	wsetid: integer("WSETId").references(() => wset.id),
-	name: varchar("Name", { length: 100 }),
-	userid: integer("UserId").references(() => users.id),
-	tastingid: integer("TastingId").references(() => winetastings.id),
-	wineid: integer("WineId").references(() => wines.id),
 });
 
 export const users = pgTable("Users", {

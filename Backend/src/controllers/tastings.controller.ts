@@ -64,10 +64,10 @@ export const createTasting = async (request: Request, response: Response) => {
         const tastingWinesArray = [];
         let newTastingWines;
 
-        const insertDefaultParticipant = await db.insert(tastingparticipants).values({
-            tastingid: newTasting.id,
-            userid: userId
-        });
+        // const insertDefaultParticipant = await db.insert(tastingparticipants).values({
+        //     tastingid: newTasting.id,
+        //     userid: userId
+        // });
 
         const insertDefaultWine = await db.insert(tastingwines).values({
             tastingid: newTasting.id,
@@ -134,14 +134,10 @@ export const deleteTastingById = async (request: Request, response: Response) =>
 // Hent smagning efter ID
 export const getTastingById = async (request: Request, response: Response) => {
     try {
-
         const tastingId = parseInt(request.params.id);
 
-
-
-        //Alias for at kunne hente hostens navn
+        // Alias for at kunne hente hostens navn
         const host = alias(users, "host");
-
 
         const tastingToFind = await db.select(
             {
@@ -173,7 +169,7 @@ export const getTastingById = async (request: Request, response: Response) => {
         // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
         const participants: any[] = [];
         participantsFromDb.forEach((participant: any) => {
-            if (!participants.some((p) => p.userId === participant.userId)) {
+            if (participant && !participants.some((p) => p.userId === participant.userId)) {
                 participants.push(participant.userId);
             }
         });
@@ -184,27 +180,23 @@ export const getTastingById = async (request: Request, response: Response) => {
         // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
         const winesToSend: any[] = [];
         winesFromDb.forEach((wine: any) => {
-            if (!winesToSend.some((w) => w.id === wine.id)) {
-                winesToSend.push(wine);
+            if (wine && !winesToSend.some((w) => w.id === wine.id)) {
+            winesToSend.push(wine);
             }
         });
 
         const tastingInfo = {
-            tastingName: tastingToFind[0].tastingName,
-            hostName: tastingToFind[0].hostName,
-            tastingId: tastingToFind[0].tastingId,
-            date: tastingToFind[0].date,
-            finished: tastingToFind[0].finished,
-            visibility: tastingToFind[0].visibility,
+            tastingName: tastingToFind[0]?.tastingName,
+            hostName: tastingToFind[0]?.hostName,
+            tastingId: tastingToFind[0]?.tastingId,
+            date: tastingToFind[0]?.date,
+            finished: tastingToFind[0]?.finished,
+            visibility: tastingToFind[0]?.visibility,
             wineList: winesToSend,
             participants: participants,
-        
         }
 
-
-
-
-        if (tastingToFind[0].tastingId == tastingId) {
+        if (tastingToFind[0]?.tastingId == tastingId) {
             response.send(tastingInfo);
         } else {
             response.status(404).send("Smagning ikke fundet");
@@ -256,14 +248,17 @@ export const joinTasting = async (request: Request, response: Response) => {
             .leftJoin(host, eq(winetastings.hostid, host.id))
             .execute();
 
+        if (!tastingToFind) {
+            return response.status(404).json({ error: "Smagning ikke fundet" });
+        }
 
-                   // Hent alle deltagere
+        // Hent alle deltagere
         const participantsFromDb = tastingToFind.map((participant: any) => participant.tastingParticipants);
 
         // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
         const participants: any[] = [];
         participantsFromDb.forEach((participant: any) => {
-            if (!participants.some((p) => p.userId === participant.userId)) {
+            if (participant && !participants.some((p) => p.userId === participant.userId)) {
                 participants.push(participant);
             }
         });
@@ -274,28 +269,24 @@ export const joinTasting = async (request: Request, response: Response) => {
         // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
         const winesToSend: any[] = [];
         winesFromDb.forEach((wine: any) => {
-            if (!winesToSend.some((w) => w.id === wine.id)) {
+            if (wine && !winesToSend.some((w) => w.id === wine.id)) {
                 winesToSend.push(wine);
             }
         });
 
         const tastingInfo = {
-            tastingName: tastingToFind[0].tastingName,
-            hostName: tastingToFind[0].hostName,
-            tastingId: tastingToFind[0].tastingId,
-            date: tastingToFind[0].date,
-            finished: tastingToFind[0].finished,
-            visibility: tastingToFind[0].visibility,
+            tastingName: tastingToFind[0]?.tastingName,
+            hostName: tastingToFind[0]?.hostName,
+            tastingId: tastingToFind[0]?.tastingId,
+            date: tastingToFind[0]?.date,
+            finished: tastingToFind[0]?.finished,
+            visibility: tastingToFind[0]?.visibility,
             wineList: winesToSend,
             participants: participants,
         }
 
-        if (!tastingToFind) {
-            return response.status(404).json({ error: "Smagning ikke fundet" });
-        }
-
         const isParticipantExisting = tastingInfo.participants.some(participant => {
-            return participant.userId == userId;
+            return participant?.userId == userId;
         })
 
         if (isParticipantExisting) {

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllEvaluations, createEvaluation, createAndAddWset } from '../controllers/evaluations.controller'
+import { getAllEvaluations, createEvaluation, addWset } from '../controllers/evaluations.controller'
 import protectRoute from "../middleware/protectRoute";
 
 
@@ -12,7 +12,7 @@ router.get("/", getAllEvaluations);
 router.post("/", protectRoute, createEvaluation);
 
 //ROUTE POST
-router.post("/wset/:id", protectRoute, createAndAddWset)
+router.put("/:id", protectRoute, addWset)
 
 
 
