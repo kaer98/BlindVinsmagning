@@ -138,14 +138,12 @@ export const getTastingById = async (request: Request, response: Response) => {
                 tastingId: winetastings.id,
                 hostName: host.fullname,
 
-
-                tastingWines: wines.name,
+                tastingWines: wines,
                 tastingParticipants: {
                     userId: users.id,
                     username: users.username,
                     fullname: users.fullname,
                 }
-
             }
         ).from(winetastings).where(eq(winetastings.id, tastingId))
             .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
