@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { db } from "../drizzle/db";
-import { evaluations, wset } from "../drizzle/migrations/schema";
+import { evaluations } from "../drizzle/migrations/schema";
 import { eq } from "drizzle-orm";
 
 export const getAllEvaluations = async (request: Request, response: Response) => {
