@@ -48,6 +48,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
             flavourcharacteristics: null,
             finish: null,
             quality: null,
+            acolourintensity: null
 
         }).returning({
 
@@ -73,7 +74,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
 export const addWset = async (request: Request, response: Response) => { 
 
     const { aIntensity, nIntensity, sweetness, aromacharacteristics, acidity,
-        tannin, alcohol, body, flavourintensity, flavourcharacteristics, finish, quality, wineId } = request.body;
+        tannin, alcohol, body, flavourintensity, flavourcharacteristics, finish, quality, wineId, acolourintensity } = request.body;
 
     const tastingId = request.params.id;
 
@@ -81,10 +82,10 @@ export const addWset = async (request: Request, response: Response) => {
     const parsedWineId = parseInt(wineId);
 
     // Validering af Request Body
-    if (!tannin || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
-        !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
-        return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
-    }
+    // if (!tannin || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
+    //     !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
+    //     return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+    // }
 
     if (!request.user) {
         return response.status(401).json({ error: 'Du skal være logget ind for at oprette en vurdering' });
@@ -115,7 +116,8 @@ export const addWset = async (request: Request, response: Response) => {
             flavourintensity,
             flavourcharacteristics,
             finish,
-            quality
+            quality,
+            acolourintensity
            
 
     }).where((eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId), eq(evaluations.wineid, parsedWineId)));
