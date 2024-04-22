@@ -28,7 +28,6 @@ RUN bun run build
 # copy production dependencies and build output
 FROM base as release
 
-COPY --from=install /temp/prod/node_modules /backend/node_modules
 COPY --from=prerelease /backend/build/index.js /backend/build/index.js
 COPY --from=install /temp/prod/package.json /backend/package.json
 
