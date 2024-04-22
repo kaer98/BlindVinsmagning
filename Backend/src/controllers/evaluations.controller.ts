@@ -69,8 +69,8 @@ export const createAndAddWset = async (request: Request, response: Response) => 
         const { aIntensity, nIntensity, sweetness, aromacharacteristics, acidity,
             tannin, alcohol, body, flavourintensity, flavourcharacteristics, finish, quality } = request.body;
 
-            const tastingId = request.params.id;
-            const parsedTastingId = parseInt(tastingId);
+        const tastingId = request.params.id;
+        const parsedTastingId = parseInt(tastingId);
 
 
         // Validering af Request Body
@@ -82,8 +82,16 @@ export const createAndAddWset = async (request: Request, response: Response) => 
         if (!request.user) {
             return response.status(401).json({ error: 'Du skal være logget ind for at oprette en vurdering' });
         }
-
         const userId = request.user.id;
+
+        const evaluationToFind = await db.query.evaluations.findFirst({
+            where: (eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId)),
+        });
+
+
+        if (!evaluationToFind) {
+            return response.status(404).json({ error: 'Evaluation ikke fundet, kan ikke oprette WSET.' });
+        }
 
         const createWset = await db.insert(wset).values({
             aintensity: aIntensity, nintensity: nIntensity, sweetness, aromacharacteristics, acidity,
@@ -101,7 +109,9 @@ export const createAndAddWset = async (request: Request, response: Response) => 
 
             wsetid: newWset.id
 
-        }).where(( eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId)));
+        }).where((eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId)));
+
+
 
         if (createWset) {
             response.status(201).json({ message: `WSET with ID: ${newWset.id} - Created and added to your Evaluation!` });

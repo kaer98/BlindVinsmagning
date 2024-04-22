@@ -219,9 +219,66 @@ export const joinTasting = async (request: Request, response: Response) => {
         const tastingId = parseInt(request.params.id);
 
         // Finder deltager
-        const tastingToFind = await db.query.winetastings.findFirst({
-            where: eq(winetastings.id, tastingId),
+        const host = alias(users, "host");
+
+        const tastingToFind = await db.select(
+            {
+                tastingName: winetastings.name,
+                tastingId: winetastings.id,
+                hostName: host.fullname,
+                finished: winetastings.finished,
+                date: winetastings.date,
+                visibility: winetastings.visibility,
+
+                tastingWines: wines,
+                tastingParticipants: {
+                    userId: users.id,
+                    username: users.username,
+                    fullname: users.fullname,
+                }
+            }
+        ).from(winetastings).where(eq(winetastings.id, tastingId))
+            .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
+            .leftJoin(wines, eq(tastingwines.wineid, wines.id))
+            .leftJoin(tastingparticipants, eq(tastingparticipants.tastingid, tastingId))
+            .leftJoin(users, eq(tastingparticipants.userid, users.id))
+            .leftJoin(host, eq(winetastings.hostid, host.id))
+            .execute();
+
+
+                   // Hent alle deltagere
+        const participantsFromDb = tastingToFind.map((participant: any) => participant.tastingParticipants);
+
+        // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
+        const participants: any[] = [];
+        participantsFromDb.forEach((participant: any) => {
+            if (!participants.some((p) => p.userId === participant.userId)) {
+                participants.push(participant);
+            }
         });
+
+        // Hent alle vine
+        const winesFromDb = tastingToFind.map((wine: any) => wine.tastingWines);
+
+        // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
+        const winesToSend: any[] = [];
+        winesFromDb.forEach((wine: any) => {
+            if (!winesToSend.some((w) => w.id === wine.id)) {
+                winesToSend.push(wine);
+            }
+        });
+
+        const tastingInfo = {
+            tastingName: tastingToFind[0].tastingName,
+            hostName: tastingToFind[0].hostName,
+            tastingId: tastingToFind[0].tastingId,
+            date: tastingToFind[0].date,
+            finished: tastingToFind[0].finished,
+            visibility: tastingToFind[0].visibility,
+            wineList: winesToSend,
+            participants: participants,
+        
+        }
 
         if (!tastingToFind) {
             return response.status(404).json({ error: "Smagning ikke fundet" });
@@ -235,14 +292,14 @@ export const joinTasting = async (request: Request, response: Response) => {
         })
 
         if (isParticipantExisting) {
-            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastinginfo: tastingToFind });
+            return response.status(400).json({ error: "Du deltager allerede i denne smagning", tastingInfo });
         } else {
             await db.insert(tastingparticipants).values({
                 tastingid: tastingId,
                 userid: userId
             });
 
-            return response.status(200).json({ message: "Deltager tilføjet", tastinginfo: tastingToFind });
+            return response.status(200).json({ message: "Deltager tilføjet", tastingInfo });
         }
 
 
