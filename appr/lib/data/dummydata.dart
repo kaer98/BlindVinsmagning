@@ -4,18 +4,18 @@ import 'package:appr/models/wine_evaluation.dart';
 import 'package:appr/models/wine_tasting.dart';
 import 'package:appr/models/wset_eval.dart';
 
-Wset eval = Wset(
-  pAlcohol: PAlcoholEnum.medium,
-  pAcidity: PAcidityEnum.medium,
-  pSweetness: PSweetnessEnum.medium,
-  pTannin: PTanninEnum.medium,
-  pBody: PBodyEnum.medium,
-  pFlavorIntensity: PFlavorIntensityEnum.medium,
-  pFinish: PFinishEnum.medium,
-  aIntensity: AIntensityEnum.medium,
-  aColor: AColorEnum.gold,
-  nIntensity: NintensityEnum.medium,
-  cQuality: CQualityEnum.good,
+Wset wset = Wset(
+  pAlcohol: PAlcoholEnum.Medium,
+  pAcidity: PAcidityEnum.Medium,
+  pSweetness: PSweetnessEnum.Medium,
+  pTannin: PTanninEnum.Medium,
+  pBody: PBodyEnum.Medium,
+  pFlavorIntensity: PFlavorIntensityEnum.Medium,
+  pFinish: PFinishEnum.Medium,
+  aIntensity: AIntensityEnum.Medium,
+  aColor: AColorEnum.Gold,
+  nIntensity: NintensityEnum.Medium,
+  cQuality: CQualityEnum.Good,
   note: "This is a note",
 );
 
@@ -37,8 +37,7 @@ User user = User(
     gender: Gender.MALE,
     birthDate: DateTime.now(),
     username: "username");
-WineEvaluation wineEvaluation =
-    WineEvaluation(evaluation: eval, wine: wine, user: user);
+
 
 User user2 = User(
     fullName: "jens",
@@ -52,8 +51,8 @@ User user2 = User(
   wines: [wine],
   host: user,
   participents: [user, user2],
-  visibility: VisibilityEnum.blind,
-  wineEvaluation: [wineEvaluation],
+  visibility: VisibilityEnum.Blind,
+  wineEvaluation: [],
   date: DateTime.now(),
   winner: wine,
   finished: false,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:appr/main.dart';
+import 'package:appr/models/wine.dart';
 import 'package:flutter/material.dart';
 import "package:http/http.dart" as http;
 import 'package:provider/provider.dart';
@@ -31,23 +32,37 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
     var appstate = context.read<MyAppState>();
     if (isValid) {
       _formKey.currentState!.save();
+      Wine wine = Wine(
+          name: _name,
+          country: _country,
+          region: _region,
+          type: _type,
+          producer: _producer,
+          grape: _grape,
+          currency: _currency,
+          prodYear: _prodYear!,
+          price: _price,
+          alcohol: _alcohol);
       var url = Uri.parse("https://vin.jazper.dk/api/wines");
       var response = await http.post(url,
-          headers: {"Content-Type": "application/json",
-          "Cookie": appstate.cookie!},
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie": appstate.cookie!
+          },
           body: json.encode({
-            "name": _name,
-            "country": _country,
-            "region": _region,
-            "prodyear": _prodYear.toString(),
-            "producer": _producer,
-            "alcohol": _alcohol,
-            "type": _type,
-            "grape": _grape,
-            "price": _price,
-            "currency": _currency,
+            "name": wine.name,
+            "country": wine.country,
+            "region": wine.region,
+            "prodyear": wine.prodYear.toString(),
+            "producer": wine.producer,
+            "alcohol": wine.alcohol,
+            "type": wine.type,
+            "grape": wine.grape,
+            "price": wine.price,
+            "currency": wine.currency,
           }));
-      Navigator.pop(context);
+      print(response.request);
+      // Navigator.pop(context);
     }
   }
 
@@ -149,7 +164,8 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
                               value.trim().length > 50)
                           ? 'Please enter a production year'
                           : null,
-                          onSaved: (newValue) => _prodYear = DateTime(int.parse(newValue.toString())),
+                      onSaved: (newValue) =>
+                          _prodYear = DateTime(int.parse(newValue.toString())),
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: "Price"),
@@ -160,7 +176,8 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
                               value.trim().length > 50)
                           ? 'Please enter a price'
                           : null,
-                          onSaved: (newValue) => _price = double.parse(newValue.toString()),
+                      onSaved: (newValue) =>
+                          _price = double.parse(newValue.toString()),
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: "Alcohol"),
@@ -171,7 +188,8 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
                               value.trim().length > 50)
                           ? 'Please enter a alcohol'
                           : null,
-                          onSaved: (newValue) => _alcohol = double.parse(newValue.toString()),
+                      onSaved: (newValue) =>
+                          _alcohol = double.parse(newValue.toString()),
                     ),
                   ],
                 ),

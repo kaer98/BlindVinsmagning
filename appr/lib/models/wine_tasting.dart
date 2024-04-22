@@ -1,31 +1,32 @@
+import 'package:appr/models/evaluation.dart';
 import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
-import 'package:appr/models/wine_evaluation.dart';
+import 'package:appr/models/wset_eval.dart';
 
-enum VisibilityEnum { blind, semi, open }
+ enum VisibilityEnum { Blind, SemiBlind, Open }
 
 class WineTasting {
   int id;
   String name;
   List<Wine>? wines;
-  User host;
-  List<User> participents;
+  User? host;
+  List<User>? participents;
   VisibilityEnum? visibility;
-  List<WineEvaluation> wineEvaluation;
+  List<Wset>? wineEvaluation;
   DateTime date;
-  Wine winner;
+  Wine? winner;
   bool finished;
 
   WineTasting({
     required this.id,
     required this.name,
     required this.wines,
-    required this.host,
-    required this.participents,
+     this.host,
+     this.participents,
     required this.visibility,
-    required this.wineEvaluation,
+     this.wineEvaluation,
     required this.date,
-    required this.winner,
+     this.winner,
     required this.finished,
   });
 }

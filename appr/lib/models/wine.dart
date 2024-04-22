@@ -2,14 +2,14 @@
 
 class Wine {
   String name, country, region, type, producer, grape, currency;
-  int id;
+  int? id;
   DateTime prodYear;
   double price, alcohol;
 
   get getProdYear => prodYear.year;
 
   Wine({
-    required this.id,
+    this.id,
     required this.name,
     required this.country,
     required this.region,
@@ -23,7 +23,6 @@ class Wine {
   });
 
   factory Wine.fromJson(Map<String, dynamic> json) {
-    print(json['prodyear']);
     return Wine(
       id: json['id'],
       name: json['name'],
@@ -41,6 +40,6 @@ class Wine {
   
   @override
   String toString() {
-    return "Name: $name \nCountry: $country \nRegion: $region \nType: $type \nProducer: $producer \nGrape: $grape \nProduction Year: $getProdYear \nPrice: $price $currency \nAlcohol: $alcohol%";
+    return "Name: $name \nCountry: $country \nRegion: $region \nType: $type \nProducer: $producer \nGrape: $grape \nProduction Year: $getProdYear \nPrice: $price $currency \nAlcohol: $alcohol%\n$id";
   }
 }

@@ -60,7 +60,7 @@ class MainMenu extends StatelessWidget {
                       },
                       child: const Text('Profile'),
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
                   ElevatedButton(
                       onPressed: () {
                         appState.userId = null;

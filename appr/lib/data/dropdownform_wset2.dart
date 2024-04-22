@@ -52,6 +52,7 @@ class WSET2FORM extends StatelessWidget {
           ),
           items: _getDropDownMenuItems(
               CQualityEnum.values.map((e) => e.name).toList()),
+              
           onChanged: ((value) {}),
           alignment: Alignment.center,
           isExpanded: true,
