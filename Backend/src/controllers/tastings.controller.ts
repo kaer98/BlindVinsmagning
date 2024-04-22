@@ -137,6 +137,8 @@ export const getTastingById = async (request: Request, response: Response) => {
                 tastingName: winetastings.name,
                 tastingId: winetastings.id,
                 hostName: host.fullname,
+                finished: winetastings.finished,
+                date: winetastings.date,
 
                 tastingWines: wines,
                 tastingParticipants: {
@@ -153,37 +155,40 @@ export const getTastingById = async (request: Request, response: Response) => {
             .leftJoin(host, eq(winetastings.hostid, host.id))
             .execute();
 
-            // Hent alle deltagere
-            const participantsFromDb = tastingToFind.map((participant: any) => participant.tastingParticipants);
+        // Hent alle deltagere
+        const participantsFromDb = tastingToFind.map((participant: any) => participant.tastingParticipants);
 
-            // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
-            const participants: any[] = [];
-            participantsFromDb.forEach((participant: any) => {
-                if (!participants.some((p) => p.userId === participant.userId)) {
+        // Sørger for at der ikke er duplikater (Så den ikke sender deltager 2 gange)
+        const participants: any[] = [];
+        participantsFromDb.forEach((participant: any) => {
+            if (!participants.some((p) => p.userId === participant.userId)) {
                 participants.push(participant);
-                }
-            });
-
-            // Hent alle vine
-            const winesFromDb = tastingToFind.map((wine: any) => wine.tastingWines);
-
-            // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
-            const winesToSend: any[] = [];
-            winesFromDb.forEach((wine: any) => {
-                if (!winesToSend.some((w) => w === wine)) {
-                winesToSend.push(wine);
-                }
-            });
-
-            const tastingInfo = {
-                tastingName: tastingToFind[0].tastingName,
-                hostName: tastingToFind[0].hostName,
-                tastingId: tastingToFind[0].tastingId,
-                wineList: winesToSend,
-                participants: participants
             }
+        });
 
-      
+        // Hent alle vine
+        const winesFromDb = tastingToFind.map((wine: any) => wine.tastingWines);
+
+        // Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
+        const winesToSend: any[] = [];
+        winesFromDb.forEach((wine: any) => {
+            if (!winesToSend.some((w) => w === wine)) {
+                winesToSend.push(wine);
+            }
+        });
+
+        const tastingInfo = {
+            tastingName: tastingToFind[0].tastingName,
+            hostName: tastingToFind[0].hostName,
+            tastingId: tastingToFind[0].tastingId,
+            date: tastingToFind[0].date,
+            finished: tastingToFind[0].finished,
+            wineList: winesToSend,
+            participants: participants,
+        
+        }
+
+
 
 
         if (tastingToFind[0].tastingId == tastingId) {
