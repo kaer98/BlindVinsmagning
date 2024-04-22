@@ -50,6 +50,7 @@ export const createTasting = async (request: Request, response: Response) => {
             hostid: userId,
             winnerid: null,
             finished: false,
+            
 
 
         }).returning({
@@ -62,6 +63,17 @@ export const createTasting = async (request: Request, response: Response) => {
 
         const tastingWinesArray = [];
         let newTastingWines;
+
+        const insertDefaultParticipant = await db.insert(tastingparticipants).values({
+            tastingid: newTasting.id,
+            userid: userId
+        });
+
+        const insertDefaultWine = await db.insert(tastingwines).values({
+            tastingid: newTasting.id,
+            wineid: 1
+        });
+        
 
         //Tilføj Wine/Tasting Relation til tastingwines tabellen
         for (const id of wines) {
@@ -162,7 +174,7 @@ export const getTastingById = async (request: Request, response: Response) => {
         const participants: any[] = [];
         participantsFromDb.forEach((participant: any) => {
             if (!participants.some((p) => p.userId === participant.userId)) {
-                participants.push(participant);
+                participants.push(participant.userId);
             }
         });
 
