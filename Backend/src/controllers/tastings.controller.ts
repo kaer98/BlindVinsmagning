@@ -239,7 +239,8 @@ export const joinTasting = async (request: Request, response: Response) => {
                     username: users.username,
                     fullname: users.fullname,
                 },
-                evaluations: evaluations
+            
+                evaluationsList: evaluations
             }
         ).from(winetastings).where(eq(winetastings.id, tastingId))
             .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
@@ -276,6 +277,14 @@ export const joinTasting = async (request: Request, response: Response) => {
             }
         });
 
+        const evaluationsToSend: any[] = [];    
+        const evaluationsFromDb = tastingToFind.map((evaluation: any) => evaluation.evaluationsList);
+        evaluationsFromDb.forEach((evaluation: any) => {
+            if (evaluation && !evaluationsToSend.some((e) => e.id === evaluation.id)) {
+                evaluationsToSend.push(evaluation);
+            }
+        });
+
         const tastingInfo = {
             tastingName: tastingToFind[0]?.tastingName,
             hostName: tastingToFind[0]?.hostName,
@@ -285,7 +294,7 @@ export const joinTasting = async (request: Request, response: Response) => {
             visibility: tastingToFind[0]?.visibility,
             wineList: winesToSend,
             participants: participants,
-            evaluations: tastingToFind[0]?.evaluations
+            evaluations: evaluationsToSend
         }
 
         const isParticipantExisting = tastingInfo.participants.some(participant => {
