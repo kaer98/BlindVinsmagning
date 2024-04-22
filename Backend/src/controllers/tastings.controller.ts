@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { winetastings, users, tastingwines, tastingparticipants } from "../drizzle/migrations/schema.ts";
 import type { Request, Response } from "express";
 import type { User } from "../dtos/user.dto";
-import { wines } from "../drizzle/schema.ts";
+import { evaluations, wines } from "../drizzle/schema.ts";
 import { alias } from "drizzle-orm/pg-core/alias";
 
 
@@ -238,7 +238,8 @@ export const joinTasting = async (request: Request, response: Response) => {
                     userId: users.id,
                     username: users.username,
                     fullname: users.fullname,
-                }
+                },
+                evaluations: evaluations
             }
         ).from(winetastings).where(eq(winetastings.id, tastingId))
             .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
@@ -246,6 +247,7 @@ export const joinTasting = async (request: Request, response: Response) => {
             .leftJoin(tastingparticipants, eq(tastingparticipants.tastingid, tastingId))
             .leftJoin(users, eq(tastingparticipants.userid, users.id))
             .leftJoin(host, eq(winetastings.hostid, host.id))
+            .leftJoin(evaluations, (eq(evaluations.tastingid, tastingId), eq(evaluations.userid, userId)))
             .execute();
 
         if (!tastingToFind) {
@@ -283,6 +285,7 @@ export const joinTasting = async (request: Request, response: Response) => {
             visibility: tastingToFind[0]?.visibility,
             wineList: winesToSend,
             participants: participants,
+            evaluations: tastingToFind[0]?.evaluations
         }
 
         const isParticipantExisting = tastingInfo.participants.some(participant => {
