@@ -223,7 +223,7 @@
 - **Controller:** `addWset`
 - **Parameters:**
   - `id` (integer, required): The ID of the wine tasting event.
- **Request Body:**
+- **Request Body:**
   - `tannin` ([TanninEnum](#tanninenum), required): Tannin rating.
   - `aIntensity` ([AIntensityEnum](#aintensityenum), required): Appearance intensity.
   - `nIntensity` ([NIntensity](#nintensityenum), required): Nose intensity.
