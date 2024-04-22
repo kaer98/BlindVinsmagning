@@ -25,6 +25,7 @@
   - [Evaluations](#evaluations)
     - [GET /api/evaluations](#get-apievaluations)
     - [POST /api/evaluations](#post-apievaluations)
+    - [PUT /api/evaluations/:id](#put-apievaluationsid)
 - [Enums](#enums)
 - [Docker Setup](#docker-setup)
   - [Build Docker Image](#build-docker-image)
@@ -91,7 +92,6 @@
   - `201 Created` with the newly created user object.
     - JWT Cookie is returned for authentication on other endpoints.
   - `400 Bad Request` if any required fields are missing or passwords don't match.
-  - `500 Internal Server Error` if there's a server error.
 
 #### POST `/api/auth/login`
 
@@ -104,7 +104,6 @@
   - `200 OK` with user information and JWT token if authentication is successful.
     - JWT Cookie is returned for authentication on other endpoints.
   - `400 Bad Request` if username or password is incorrect.
-  - `500 Internal Server Error` if there's a server error.
 
 #### POST `/api/auth/logout`
 
@@ -114,7 +113,6 @@
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
   - `200 OK` with a success message if logout is successful.
-  - `500 Internal Server Error` if there's a server error.
 
 ### Wine
 
@@ -136,7 +134,6 @@
 - **Response:**
   - `201 Created` if the wine is successfully created.
   - `400 Bad Request` if any required fields are missing or if a wine with the same name already exists.
-  - `500 Internal Server Error` if there's a server error.
 
 #### GET `/api/wines`
 
@@ -144,7 +141,6 @@
 - **Controller:** `getAllWines`
 - **Response:**
   - `200 OK` with an array of wine objects.
-  - `500 Internal Server Error` if there's a server error.
 
 ### Tastings
 
@@ -162,7 +158,6 @@
 - **Response:**
   - `201 Created` with the new tastings object.
   - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
-  - `500 Internal Server Error` if there's a server error.
 
 #### GET `/api/tastings`
 
@@ -170,7 +165,6 @@
 - **Controller:** `getAllTastings`
 - **Response:**
   - `200 OK` with an array of wine tasting objects.
-  - `500 Internal Server Error` if there's a server error.
 
 #### GET `/api/tastings/:id`
 
@@ -191,11 +185,10 @@
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
-  - `200 OK` with message "Deltager tilføjet" if successfully joined.
+  - `200 OK` with message "Deltager tilføjet" if successfully joined and tastings object.
   - `400 Bad Request` with error "Du deltager allerede i denne smagning" if user is already a participant.
   - `401 Unauthorized` with error "Du skal være logget ind for at deltage" if user is not logged in.
   - `404 Not Found` with error "Smagning ikke fundet" if the tasting event does not exist.
-  - `500 Internal Server Error` with error message if there's a server error.
 
 ### Evaluations
 
@@ -211,22 +204,52 @@
 - **Description:** Creates a new evaluation.
 - **Controller:** `createEvaluation`
 - **Request Body:**
-  - `note` (string, required): Note to add to the evaluation.
   - `name` (string, required): Name of the evaluation.
+  - `wineId` (integer, required): Id of the wine to make an evaluation on.
   - `tastingId` (integer, required): Id of the tastings to evaluate.
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
   - `201 Created` with the new tastings object.
   - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
-  - `500 Internal Server Error` if there's a server error.
+
+#### PUT `/api/evaluations/:id`
+
+    if (!tannin || !aIntensity || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
+        !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
+        return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+
+- **Description:** Update an evaluation.
+- **Controller:** `addWset`
+- **Parameters:**
+  - `id` (integer, required): The ID of the wine tasting event.
+- **Request Body:**
+  - `tannin` ([TanninEnum](#tanninenum), required): Tannin rating.
+  - `aIntensity` ([AIntensityEnum](#aintensityenum), required): Appearance intensity.
+  - `nIntensity` ([NIntensity](#nintensityenum), required): Nose intensity.
+  - `sweetness` ([SweetnessEnum](#sweetnessenum), required): Sweetness rating.
+  - `acidity` ([AcidityEnum](#acidityenum), required): Acidity rating.
+  - `aromacharacteristics` (string, required): Aroma characteristics.
+  - `alcohol` ([AlchoholEnum](#alchoholenum), required): Acohol rating.
+  - `body` ([BodyEnum](#bodyenum), required): Wine body rating.
+  - `flavourintensity` ([FlavourIntensityEnum](#flavourintensityenum), required): Flavour intensity rating.
+  - `flavourcharacteristics` (string, required): Flavour characteristics.
+  - `quality` ([QualityEnum](#qualityenum), required): Quality rating.
+  - `acolourintensity` ([AColourIntensity](#acolourintensity), required): Color intensity.
+  - `note` (string, required): Note to add to the evaluation.
+  - `wineId` (integer, required): Id of the wine to evaluate.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
+- **Response:**
+  - `200 OK` with name of the updated evaluation.
+  - `500 Server Error` with WSET not updated error.
 
 ## Enums
 
 ### GenderEnum
 
-| Male | Female | Other |
-|------|--------|-------|
+| Male | Female |
+|------|--------|
 
 ### VisibilityEnum
 
@@ -277,6 +300,21 @@
 
 | One   | Two    | Three  | Four   | Five   |
 |-------|--------|--------|--------|--------|
+
+### AIntensityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### NIntensityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### AColourIntensity
+
+| Lemon | Gold | Amber | Pink | PinkOrange | Orange | Ruby | Garnet | Tawny | Purple |
+|-------|------|-------|------|------------|--------|------|--------|-------|--------|
 
 ## Docker Setup
 
