@@ -138,7 +138,6 @@ export const getTastingById = async (request: Request, response: Response) => {
                 tastingId: winetastings.id,
                 hostName: host.fullname,
 
-
                 tastingWines: wines,
                 tastingParticipants: {
                     userId: users.id,
