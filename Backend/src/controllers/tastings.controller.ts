@@ -139,6 +139,7 @@ export const getTastingById = async (request: Request, response: Response) => {
                 hostName: host.fullname,
                 finished: winetastings.finished,
                 date: winetastings.date,
+                visibility: winetastings.visibility,
 
                 tastingWines: wines,
                 tastingParticipants: {
@@ -183,6 +184,7 @@ export const getTastingById = async (request: Request, response: Response) => {
             tastingId: tastingToFind[0].tastingId,
             date: tastingToFind[0].date,
             finished: tastingToFind[0].finished,
+            visibility: tastingToFind[0].visibility,
             wineList: winesToSend,
             participants: participants,
         
