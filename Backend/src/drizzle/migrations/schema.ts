@@ -13,6 +13,7 @@ import { pgTable, pgEnum, serial, text, foreignKey, integer, varchar, unique, da
   export const FlavourIntensityEnum = pgEnum("FlavourIntensityEnum", ['High', 'Medium', 'Low']);
   export const FinishEnum = pgEnum("FinishEnum", ['Long', 'Medium', 'Short']);
   export const QualityEnum = pgEnum("QualityEnum", ['Excellent', 'Good', 'Poor', 'Acceptable', 'VeryGood', 'Outstanding']);
+  export const AColourIntensityEnum = pgEnum("AColorIntensityEnum", ['Lemon', 'Gold', 'Amber', 'Pink', 'PinkOrange', 'Orange', 'Ruby', 'Garnet', 'Tawny', 'Purple']);
 
 
 export const evaluations = pgTable("Evaluations", {
@@ -34,6 +35,7 @@ export const evaluations = pgTable("Evaluations", {
 	flavourcharacteristics: text("FlavourCharacteristics"),
 	finish: FinishEnum("Finish"),
 	quality: QualityEnum("Quality"),
+	acolourintensity: AColourIntensityEnum("AColourIntensity"),
 });
 
 export const users = pgTable("Users", {

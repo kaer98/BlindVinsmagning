@@ -48,6 +48,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
             flavourcharacteristics: null,
             finish: null,
             quality: null,
+            acolourintensity: null
 
         }).returning({
 
@@ -73,7 +74,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
 export const addWset = async (request: Request, response: Response) => { 
 
     const { aIntensity, nIntensity, sweetness, aromacharacteristics, acidity,
-        tannin, alcohol, body, flavourintensity, flavourcharacteristics, finish, quality, wineId } = request.body;
+        tannin, alcohol, body, flavourintensity, flavourcharacteristics, finish, quality, wineId, acolourintensity } = request.body;
 
     const tastingId = request.params.id;
 
@@ -115,7 +116,8 @@ export const addWset = async (request: Request, response: Response) => {
             flavourintensity,
             flavourcharacteristics,
             finish,
-            quality
+            quality,
+            acolourintensity
            
 
     }).where((eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId), eq(evaluations.wineid, parsedWineId)));
