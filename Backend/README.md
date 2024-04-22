@@ -25,6 +25,7 @@
   - [Evaluations](#evaluations)
     - [GET /api/evaluations](#get-apievaluations)
     - [POST /api/evaluations](#post-apievaluations)
+    - [PUT /api/evaluations/:id](#put-apievaluationsid)
 - [Enums](#enums)
 - [Docker Setup](#docker-setup)
   - [Build Docker Image](#build-docker-image)
@@ -203,14 +204,45 @@
 - **Description:** Creates a new evaluation.
 - **Controller:** `createEvaluation`
 - **Request Body:**
-  - `note` (string, required): Note to add to the evaluation.
   - `name` (string, required): Name of the evaluation.
+  - `wineId` (integer, required): Id of the wine to make an evaluation on.
   - `tastingId` (integer, required): Id of the tastings to evaluate.
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
   - `201 Created` with the new tastings object.
   - `400 Bad Request` if any required fields are missing or if a tasting with the same name already exists.
+
+#### PUT `/api/evaluations/:id`
+
+    if (!tannin || !aIntensity || !nIntensity || !sweetness || !acidity || !aromacharacteristics ||
+        !alcohol || !body || !flavourintensity || !flavourcharacteristics || !finish || !quality) {
+        return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
+
+- **Description:** Update an evaluation.
+- **Controller:** `addWset`
+- **Parameters:**
+  - `id` (integer, required): The ID of the wine tasting event.
+ **Request Body:**
+  - `tannin` ([TanninEnum](#tanninenum), required): Tannin rating.
+  - `aIntensity` ([AIntensityEnum](#aintensityenum), required): Appearance intensity.
+  - `nIntensity` ([NIntensity](#nintensityenum), required): Nose intensity.
+  - `sweetness` ([SweetnessEnum](#sweetnessenum), required): Sweetness rating.
+  - `acidity` ([AcidityEnum](#acidityenum), required): Acidity rating.
+  - `aromacharacteristics` (string, required): Aroma characteristics.
+  - `alcohol` ([AlchoholEnum](#alchoholenum), required): Acohol rating.
+  - `body` ([BodyEnum](#bodyenum), required): Wine body rating.
+  - `flavourintensity` ([FlavourIntensityEnum](#flavourintensityenum), required): Flavour intensity rating.
+  - `flavourcharacteristics` (string, required): Flavour characteristics.
+  - `quality` ([QualityEnum](#qualityenum), required): Quality rating.
+  - `acolourintensity` ([AColourIntensity](#acolourintensity), required): Color intensity.
+  - `note` (string, required): Note to add to the evaluation.
+  - `wineId` (integer, required): Id of the wine to evaluate.
+- **Cookie:**
+  - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
+- **Response:**
+  - `200 OK` with name of the updated evaluation.
+  - `500 Server Error` with WSET not updated error.
 
 ## Enums
 
@@ -221,7 +253,7 @@
 
 ### VisibilityEnum
 
-| Blind | Semiblind | Open |
+| Blind | SemiBlind | Open |
 |-------|-----------|------|
 
 ### AlchoholEnum
@@ -268,6 +300,21 @@
 
 | One   | Two    | Three  | Four   | Five   |
 |-------|--------|--------|--------|--------|
+
+### AIntensityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### NIntensityEnum
+
+| Low | Medium | High |
+|-----|--------|------|
+
+### AColourIntensity
+
+| Lemon | Gold | Amber | Pink | PinkOrange | Orange | Ruby | Garnet | Tawny | Purple |
+|-------|------|-------|------|------------|--------|------|--------|-------|--------|
 
 ## Docker Setup
 
