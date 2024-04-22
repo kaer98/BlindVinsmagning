@@ -40,7 +40,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
 
        
 
-
+//Tjekker om der allerede eksisterer en vurdering for denne vin i denne smagning
       const doesItExist = doesEvaluationForWineExist.some((evaluation) => {
             // Check for undefined properties before comparing
             return (
@@ -51,7 +51,7 @@ export const createEvaluation = async (request: Request, response: Response) => 
         });
 
         if(doesItExist) { 
-            return response.status(400).json({ error: 'DIN Vurdering for denne vin i denne smagning eksisterer allerede' });
+            return response.status(400).json({ error: `Du har allerede oprettet en vurdering for vin med ID ${parsedWineId} for denne smagning` });
         } 
         
 
