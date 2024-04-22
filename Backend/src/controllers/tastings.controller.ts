@@ -52,7 +52,6 @@ export const createTasting = async (request: Request, response: Response) => {
             finished: false,
 
 
-
         }).returning({
             name: winetastings.name,
             id: winetastings.id,
