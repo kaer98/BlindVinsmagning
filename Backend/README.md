@@ -185,7 +185,7 @@
 - **Cookie:**
   - `JWT` (string, required): JWT Cookie recieved from the [login](#post-apilogin) or [signup](#post-apisignup) endpoint.
 - **Response:**
-  - `200 OK` with message "Deltager tilføjet" if successfully joined.
+  - `200 OK` with message "Deltager tilføjet" if successfully joined and tastings object.
   - `400 Bad Request` with error "Du deltager allerede i denne smagning" if user is already a participant.
   - `401 Unauthorized` with error "Du skal være logget ind for at deltage" if user is not logged in.
   - `404 Not Found` with error "Smagning ikke fundet" if the tasting event does not exist.
