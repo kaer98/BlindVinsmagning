@@ -145,7 +145,6 @@ export const getTastingById = async (request: Request, response: Response) => {
                     username: users.username,
                     fullname: users.fullname,
                 }
-
             }
         ).from(winetastings).where(eq(winetastings.id, tastingId))
             .leftJoin(tastingwines, eq(tastingwines.tastingid, tastingId))
