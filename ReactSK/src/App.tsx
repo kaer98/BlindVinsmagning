@@ -1,35 +1,32 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+//Med følgende importer vi Router. Det vil sige vi kan lave flere sider.
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import './App.css'
+import Index from './pages/Index';
+import CreateTasting from './pages/CreateTasting';
+import JoinSession from './pages/JoinSession';
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div >
+        
+      <BrowserRouter>
+        <Routes>
+          
+          <Route path="/" element={<Index></Index>}/>
+          <Route path="/join" element={<JoinSession></JoinSession>}/>
+          <Route path="/opret" element={<CreateTasting></CreateTasting>}/>
+          {/* <Route path="/apitest" element={<ApiTestPage></ApiTestPage>}/> */}
+          {/* <Route path="/Profile" element={<VinPage></VinPage>}/> */}
+         
+
+
+
+        </Routes>
+      </BrowserRouter>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
   )
+
 }
 
 export default App
