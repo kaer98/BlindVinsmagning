@@ -105,9 +105,20 @@ export const createTasting = async (request: Request, response: Response) => {
 export const getAllTastings = async (request: Request, response: Response) => {
     try {
 
-        db.query.winetastings.findMany().then((winetastings) => {
-            response.json(winetastings);
-        });
+        const { userId } = request.query;
+        const parsedUserId = parseInt(userId as string);
+
+        if (userId) {
+            const tastings = await db.query.winetastings.findMany({
+                where: eq(winetastings.hostid, parsedUserId)
+            });
+
+            response.json(tastings);
+        } else {
+            const tastings = await db.query.winetastings.findMany();
+            response.json(tastings);
+        }
+
 
 
 
