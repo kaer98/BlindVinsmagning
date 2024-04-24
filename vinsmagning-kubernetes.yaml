@@ -25,3 +25,5 @@ spec:
           image: registry.jazper.dk/reactsk:latest
           ports:
             - containerPort: 80
+      imagePullSecrets:
+      - name: regcred
