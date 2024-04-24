@@ -5,6 +5,7 @@ import type { Request, Response } from "express";
 import type { User } from "../dtos/user.dto";
 import { evaluations, wines } from "../drizzle/schema.ts";
 import { alias } from "drizzle-orm/pg-core/alias";
+import { parse } from "dotenv";
 
 
 //Oprettelse af tasting
@@ -49,7 +50,7 @@ export const createTasting = async (request: Request, response: Response) => {
             hostid: userId,
             winnerid: null,
             finished: false,
-            
+
 
 
         }).returning({
@@ -72,7 +73,7 @@ export const createTasting = async (request: Request, response: Response) => {
         //     tastingid: newTasting.id,
         //     wineid: 1
         // });
-        
+
 
         //Tilføj Wine/Tasting Relation til tastingwines tabellen
         for (const id of wines) {
@@ -106,7 +107,9 @@ export const getAllTastings = async (request: Request, response: Response) => {
     try {
 
         const { userId } = request.query;
+        const {userJoinedId } = request.query;
         const parsedUserId = parseInt(userId as string);
+        const parsedHasJoined = parseInt(userJoinedId as string);
 
         if (userId) {
             const tastings = await db.query.winetastings.findMany({
@@ -114,7 +117,33 @@ export const getAllTastings = async (request: Request, response: Response) => {
             });
 
             response.json(tastings);
-        } else {
+        } else if (userJoinedId) {
+          
+            const tastingParticipants = await db.select({
+                userId: users.id,
+                tastingId: tastingparticipants.tastingid
+            })
+                .from(tastingparticipants)
+                .leftJoin(users, eq(tastingparticipants.userid, users.id))
+                .execute();
+
+            const userJoinedTastingsId = tastingParticipants.filter(tp => {
+                // Check for undefined properties before comparing
+                return tp.userId === parsedHasJoined;
+            });
+
+            const tastings = await db.query.winetastings.findMany();  
+            
+            const userJoinedTastings = [];
+            for (let i = 0; i < userJoinedTastingsId.length; i++) {
+                const joinedTasting = tastings.find(tasting => tasting.id === userJoinedTastingsId[i].tastingId);
+                if (joinedTasting) {
+                    userJoinedTastings.push(joinedTasting);
+                }
+            }
+                response.json(userJoinedTastings);
+            }
+ else {
             const tastings = await db.query.winetastings.findMany();
             response.json(tastings);
         }
@@ -191,7 +220,7 @@ export const getTastingById = async (request: Request, response: Response) => {
         const winesToSend: any[] = [];
         winesFromDb.forEach((wine: any) => {
             if (wine && !winesToSend.some((w) => w.id === wine.id)) {
-            winesToSend.push(wine);
+                winesToSend.push(wine);
             }
         });
 
@@ -249,7 +278,7 @@ export const joinTasting = async (request: Request, response: Response) => {
                     username: users.username,
                     fullname: users.fullname,
                 },
-            
+
                 evaluationsList: evaluations
             }
         ).from(winetastings).where(eq(winetastings.id, tastingId))
@@ -287,9 +316,9 @@ export const joinTasting = async (request: Request, response: Response) => {
             }
         });
 
-        
 
-        const evaluationsToSend: any[] = [];    
+
+        const evaluationsToSend: any[] = [];
         const evaluationsFromDb = tastingToFind.map((evaluation: any) => evaluation.evaluationsList);
         evaluationsFromDb.forEach((evaluation: any) => {
             if (evaluation && !evaluationsToSend.some((e) => e.id === evaluation.id)) {
@@ -304,10 +333,10 @@ export const joinTasting = async (request: Request, response: Response) => {
         //     );
         // });
 
-       const userEvalsOnTating  = evaluationsToSend.filter(evaluation => {
+        const userEvalsOnTating = evaluationsToSend.filter(evaluation => {
             // Check for undefined properties before comparing
             return evaluation?.tastingid === tastingId;
-          });
+        });
 
 
 
