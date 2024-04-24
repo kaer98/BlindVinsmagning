@@ -16,7 +16,6 @@ export const createTasting = async (request: Request, response: Response) => {
 
         //var winesArray = wines.split(",");
 
-
         // Validering af Request Body
         if (!name || !visibility || !date || !wines) {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
@@ -61,7 +60,7 @@ export const createTasting = async (request: Request, response: Response) => {
         const newTasting = newTastingCreation[0];
 
 
-        const tastingWinesArray = [];
+        //const tastingWinesArray = [];
         let newTastingWines;
 
         // const insertDefaultParticipant = await db.insert(tastingparticipants).values({
@@ -69,10 +68,10 @@ export const createTasting = async (request: Request, response: Response) => {
         //     userid: userId
         // });
 
-        const insertDefaultWine = await db.insert(tastingwines).values({
-            tastingid: newTasting.id,
-            wineid: 1
-        });
+        // const insertDefaultWine = await db.insert(tastingwines).values({
+        //     tastingid: newTasting.id,
+        //     wineid: 1
+        // });
         
 
         //Tilføj Wine/Tasting Relation til tastingwines tabellen
