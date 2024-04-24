@@ -8,7 +8,9 @@ spec:
   selector:
     matchLabels:
       app: web
+  # Number of replicas to make, this will run a container X times, here we are running 2 of each containers to prevent downtime.
   replicas: 2
+  # RollingUpdate makes kubernetes auto update when new images are present. By running 2 replicas, kubernetes will only update one container at a time, to prevent downtime.
   strategy:
     type: RollingUpdate
   template:
@@ -17,11 +19,36 @@ spec:
         app: web
     spec:
       containers:
+        # Our express.js backend.
         - name: backend
           image: registry.jazper.dk/wine-backend:latest
           ports:
             - containerPort: 3000
+          # Required environment variables needed for the backend to run.
+          env:
+          - name: DATABASE_URL
+            value: "postgresql://connection-string-here:5432/"
+          - name: JWT_SECRET
+            value: "JWT_Secret here"
+          # Container Healthcheck that makes a request to the api to check if it's actually running.
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+        # One of our react pages.
         - name: reactsk
           image: registry.jazper.dk/reactsk:latest
           ports:
             - containerPort: 80
+          # Same healthcheck as the first container.
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      # We use a private container image registry, and the credentials has been added to kubernetes with the name "regcred".
+      imagePullSecrets:
+      - name: regcred
