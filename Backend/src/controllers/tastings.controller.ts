@@ -277,6 +277,8 @@ export const joinTasting = async (request: Request, response: Response) => {
             }
         });
 
+        
+
         const evaluationsToSend: any[] = [];    
         const evaluationsFromDb = tastingToFind.map((evaluation: any) => evaluation.evaluationsList);
         evaluationsFromDb.forEach((evaluation: any) => {
@@ -284,6 +286,20 @@ export const joinTasting = async (request: Request, response: Response) => {
                 evaluationsToSend.push(evaluation);
             }
         });
+
+        // const onlyWhereTastingIdEvaluation = evaluationsToSend.some((evaluation) => {
+        //     // Check for undefined properties before comparing
+        //     return (
+        //         evaluation?.tastingid === tastingId
+        //     );
+        // });
+
+       const userEvalsOnTating  = evaluationsToSend.filter(evaluation => {
+            // Check for undefined properties before comparing
+            return evaluation?.tastingid === tastingId;
+          });
+
+
 
         const tastingInfo = {
             tastingName: tastingToFind[0]?.tastingName,
@@ -294,7 +310,7 @@ export const joinTasting = async (request: Request, response: Response) => {
             visibility: tastingToFind[0]?.visibility,
             wineList: winesToSend,
             participants: participants,
-            evaluations: evaluationsToSend
+            evaluations: userEvalsOnTating
         }
 
         const isParticipantExisting = tastingInfo.participants.some(participant => {
