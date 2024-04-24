@@ -14,7 +14,7 @@ export const createTasting = async (request: Request, response: Response) => {
         // Dem får man fra Request bodien. Matchende ting (som fulName fx) gemmes hvor de skal gemmes.
         const { name, visibility, date, wines } = request.body;
 
-        var winesArray = wines.split(",");
+        //var winesArray = wines.split(",");
 
 
         // Validering af Request Body
