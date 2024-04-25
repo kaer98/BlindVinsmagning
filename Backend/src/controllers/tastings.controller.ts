@@ -6,6 +6,7 @@ import type { User } from "../dtos/user.dto";
 import { evaluations, wines } from "../drizzle/schema.ts";
 import { alias } from "drizzle-orm/pg-core/alias";
 import { parse } from "dotenv";
+import { filter } from 'lodash';
 
 
 //Oprettelse af tasting
@@ -375,9 +376,24 @@ export const getUserJoinedTastings = async (request: Request, response: Response
         }
         const userId = request.user.id;
 
-        // const userJoinedTastings = await db.select({}).from(winetastings).where(eq(tastingparticipants.userid, userId)).execute();
+        const getJoinedTastings = await db.select({
+            tastings: winetastings,
+            evaluations: evaluations,
+        })
+        .from(tastingparticipants)
+        .leftJoin(winetastings, eq(tastingparticipants.tastingid, winetastings.id) && eq(tastingparticipants.userid, userId))
+        .leftJoin(evaluations, eq(evaluations.tastingid, winetastings.id) && eq(evaluations.userid, userId))
+        .where(eq(tastingparticipants.userid, userId) && eq(tastingparticipants.tastingid, winetastings.id))
+        .execute();
 
-        response.send("lol");
+        var infoToSend: any[] = [];
+        getJoinedTastings.forEach((tasting: any) => {
+            const matchingEvaluations = filter(evaluations, (evaluation: any) => evaluation.tastingid === tasting.tastings.id);
+            infoToSend.push({ tasting: tasting.tastings, evaluations: matchingEvaluations });
+        });
+
+        response.send({ infoToSend: infoToSend.map((tasting: any) => tasting) });
+        response.send({infoToSend: infoToSend.map((tasting: any) => tasting)});
 
      
     } catch(error) {
