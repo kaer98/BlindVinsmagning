@@ -26,14 +26,10 @@ RUN bun run build
 
 
 # copy production dependencies
-FROM httpd:alpine
+FROM nginx:stable-alpine
 
-#COPY --from=install /temp/prod/node_modules /react/node_modules
-#COPY --from=prerelease /react/build/index.js /react/build/index.js
-#COPY --from=install /temp/prod/package.json /react/package.json
+COPY --from=prerelease /react/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=prerelease /react/dist /usr/local/apache2/htdocs
+COPY --from=prerelease /react/dist /usr/share/nginx/html
 
 EXPOSE 80/tcp
-
-#ENTRYPOINT [ "bun", "run", "run-build" ]
