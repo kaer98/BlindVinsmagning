@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { db } from "../drizzle/db";
 import { evaluations } from "../drizzle/migrations/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 export const getAllEvaluations = async (request: Request, response: Response) => {
     try {
@@ -189,7 +189,14 @@ export const addWset = async (request: Request, response: Response) => {
             note: note
            
 
-    }).where((eq(evaluations.userid, userId), eq(evaluations.tastingid, parsedTastingId), eq(evaluations.wineid, parsedWineId)));
+    }).where(
+        and(
+            eq(evaluations.userid, userId),
+            eq(evaluations.tastingid, parsedTastingId),
+            eq(evaluations.wineid, parsedWineId)
+        )
+    )
+
 
     if (updateEvaluation) {
         response.status(201).json(evaluationToFind.name + " er blevet opdateret");
@@ -198,6 +205,7 @@ export const addWset = async (request: Request, response: Response) => {
     }
 
 }
+
 
 // export const createAndAddWset = async (request: Request, response: Response) => {
 
