@@ -17,6 +17,45 @@ export const getAllEvaluations = async (request: Request, response: Response) =>
 
 }
 
+export const getEvaluationById = async (request: Request, response: Response) => {
+    try {
+
+        const evaluationId = parseInt(request.params.id);
+
+        const evaluationToFind = await db.query.evaluations.findFirst({
+            where: eq(evaluations.id, evaluationId),
+        });
+
+        if (evaluationToFind) {
+            response.send(evaluationToFind);
+        } else {
+            response.status(404).send("Vurdering ikke fundet");
+        }
+    } catch (error) {
+
+    }
+
+}
+
+export const getAllEvaluationsByTastingId = async (request: Request, response: Response) => { 
+    try {
+        const tastingId = parseInt(request.params.id);
+
+        const findEvaluations = await db.query.evaluations.findMany({
+            where: eq(evaluations.tastingid, tastingId),
+        });
+
+        if (findEvaluations) {
+            response.send(findEvaluations);
+        } else {
+            response.status(404).send("Ingen vurderinger fundet for denne smagning");
+        }
+    } catch (error) {
+
+    }
+
+}
+
 export const createEvaluation = async (request: Request, response: Response) => {
     try {
         const { name, wineId, tastingId } = request.body;
