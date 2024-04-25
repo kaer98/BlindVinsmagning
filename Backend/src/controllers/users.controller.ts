@@ -2,14 +2,21 @@ import type { Request, Response } from "express";
 import { db } from "../drizzle/db";
 import { users } from "../drizzle/migrations/schema";
 import { eq } from "drizzle-orm";
+import type { parseJsonSourceFileConfigFileContent } from "typescript";
 
-export const getUsers = async (request : Request, response : Response) => {
+export const getUsers = async (request: Request, response: Response) => {
     try {
-       
-          db.query.users.findMany().then((users) => {
-                response.json(users);
-            });
-        
+
+        const userList = await db.select({
+            username: users.username,
+            fullname: users.fullname,
+            birthday: users.birthday
+
+
+        }).from(users);
+
+        response.send(userList);
+
 
     } catch (error) {
         console.error('ERROR: Getting User (getUsers)', error);
@@ -17,7 +24,7 @@ export const getUsers = async (request : Request, response : Response) => {
     }
 }
 
-export const getUserById = async (request : Request, response : Response) => {
+export const getUserById = async (request: Request, response: Response) => {
     try {
 
         const usersId = parseInt(request.params.id);
@@ -40,10 +47,10 @@ export const getUserById = async (request : Request, response : Response) => {
 }
 
 
-export const deleteAllUsers = async (request : Request, response : Response) => {
+export const deleteAllUsers = async (request: Request, response: Response) => {
     try {
         const deleteResult = await db.delete(users);
-            
+
         if (deleteResult.count > 0) {
             response.status(200).json({ message: "All userss deleted" });
         } else {
@@ -55,10 +62,10 @@ export const deleteAllUsers = async (request : Request, response : Response) => 
     }
 }
 
-export const deleteUserById = async (request : Request, response : Response) => {
+export const deleteUserById = async (request: Request, response: Response) => {
     try {
         const deleteResult = await db.delete(users).where(eq(users.id, parseInt(request.params.id)));
-            
+
         if (deleteResult.count > 0) {
             response.status(200).json({ message: "User Deleted" });
         } else {
