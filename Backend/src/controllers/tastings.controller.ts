@@ -230,7 +230,7 @@ export const joinTasting = async (request: Request, response: Response) => {
             {
                 tastingName: winetastings.name,
                 tastingId: winetastings.id,
-                hostName: host.fullname,
+                host: host,
                 finished: winetastings.finished,
                 date: winetastings.date,
                 visibility: winetastings.visibility,
@@ -305,7 +305,11 @@ export const joinTasting = async (request: Request, response: Response) => {
 
         const tastingInfo = {
             tastingName: tastingToFind[0]?.tastingName,
-            hostName: tastingToFind[0]?.hostName,
+            host: {
+                id: tastingToFind[0]?.host.id,
+                name: tastingToFind[0]?.host.fullname,
+            
+            },
             tastingId: tastingToFind[0]?.tastingId,
             date: tastingToFind[0]?.date,
             finished: tastingToFind[0]?.finished,
@@ -385,14 +389,42 @@ export const getUserJoinedTastings = async (request: Request, response: Response
         .where(eq(tastingparticipants.userid, userId) && eq(tastingparticipants.tastingid, winetastings.id))
         .execute();
 
-        var infoToSend: any[] = [];
-        getJoinedTastings.forEach((tasting: any) => {
-            const matchingEvaluations = filter(evaluations, (evaluation: any) => evaluation.tastingid === tasting.tastings.id);
-            infoToSend.push({ tasting: tasting.tastings, evaluations: matchingEvaluations });
+        //Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
+        const evaluationsToSend: any[] = [];
+        const evaluationsGET = getJoinedTastings.map((evaluation: any) => evaluation.evaluations);
+
+        evaluationsGET.forEach((evaluation: any) => {
+            if (evaluation && !evaluationsToSend.some((e) => e.wineid === evaluation.wineid)) {
+                evaluationsToSend.push(evaluation);
+            }});
+
+
+        
+        const tastingsToSend: any[] = [];
+        const tastingsGET = getJoinedTastings.map((tasting: any) => tasting.tastings);
+
+        tastingsGET.forEach((tasting: any) => { 
+            if (tasting && !tastingsToSend.some((t) => t.id === tasting.id)) {
+                tastingsToSend.push(tasting);
+            }
         });
 
-        response.send({ infoToSend: infoToSend.map((tasting: any) => tasting) });
-        response.send({infoToSend: infoToSend.map((tasting: any) => tasting)});
+
+
+            const tastingInfoSend = {
+                tastings: tastingsToSend.map((tasting: any) => ({
+                    tastingId: tasting.tastings.id,
+                    tastingName: tasting.tastings.name,
+                    hostName: tasting.tastings.hostName,
+                    date: tasting.tastings.date,
+                    finished: tasting.tastings.finished,
+                    visibility: tasting.tastings.visibility,
+                    evaluations: evaluationsToSend.filter((evaluation: any) => evaluation.tastingid === tasting.tastings.id)
+                })),
+           
+            }
+
+         response.json(tastingInfoSend);
 
      
     } catch(error) {
