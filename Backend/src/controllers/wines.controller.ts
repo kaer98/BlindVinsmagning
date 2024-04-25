@@ -1,6 +1,6 @@
 import { db } from "../drizzle/db";
 import { eq } from "drizzle-orm";
-import { wines, winetastings } from "../drizzle/schema";
+import { wines, winetastings as wineTastings } from "../drizzle/schema";
 import type { Request, Response } from "express";
 
 export const createWines = async (request: Request, response: Response) => {
