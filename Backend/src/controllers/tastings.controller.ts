@@ -390,6 +390,14 @@ export const getUserJoinedTastings = async (request: Request, response: Response
         .execute();
 
         //Sørger for at der ikke er duplikater (Så den ikke sender vinen 2 gange)
+
+        const getJoinedFix: any[] = [];
+        getJoinedTastings.forEach((tasting: any) => {
+            if (tasting && !getJoinedFix.some((t) => t.tastings.id === tasting.tastings.id)) {
+                getJoinedFix.push(tasting);
+            }
+        });
+
         const evaluationsToSend: any[] = [];
         const evaluationsGET = getJoinedTastings.map((evaluation: any) => evaluation.evaluations);
 
@@ -398,21 +406,8 @@ export const getUserJoinedTastings = async (request: Request, response: Response
                 evaluationsToSend.push(evaluation);
             }});
 
-
-        
-        const tastingsToSend: any[] = [];
-        const tastingsGET = getJoinedTastings.map((tasting: any) => tasting.tastings);
-
-        tastingsGET.forEach((tasting: any) => { 
-            if (tasting && !tastingsToSend.some((t) => t.id === tasting.id)) {
-                tastingsToSend.push(tasting);
-            }
-        });
-
-
-
             const tastingInfoSend = {
-                tastings: tastingsToSend.map((tasting: any) => ({
+                tastings: getJoinedFix.map((tasting: any) => ({
                     tastingId: tasting.tastings.id,
                     tastingName: tasting.tastings.name,
                     hostName: tasting.tastings.hostName,
