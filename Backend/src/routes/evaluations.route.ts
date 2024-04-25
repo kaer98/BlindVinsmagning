@@ -11,7 +11,7 @@ router.get("/", getAllEvaluations);
 //ROUTE: POST
 router.post("/", protectRoute, createEvaluation);
 
-router.get("/:id", addWset)
+router.put("/:id", addWset)
 
 //ROUTE POST
 router.get("/tasting/:id", protectRoute, getAllEvaluationsByTastingId)
