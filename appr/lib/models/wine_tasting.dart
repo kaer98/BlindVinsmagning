@@ -3,6 +3,7 @@ import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/models/wset_eval.dart';
 
+ // ignore: constant_identifier_names
  enum VisibilityEnum { Blind, SemiBlind, Open }
 
 class WineTasting {

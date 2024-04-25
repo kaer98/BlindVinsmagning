@@ -3,6 +3,7 @@ import 'package:appr/screens/create_tasting_screen.dart';
 import 'package:appr/screens/join_tasting.dart';
 import 'package:appr/screens/profile_screen.dart';
 import 'package:appr/screens/start_screen.dart';
+import 'package:appr/screens/tasting_overview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -50,8 +51,7 @@ class MainMenu extends StatelessWidget {
               ),
               SizedBox(height: _spacing),
               appState.userId != null
-                  ? 
-                  ElevatedButton(
+                  ? ElevatedButton(
                       onPressed: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
@@ -61,17 +61,25 @@ class MainMenu extends StatelessWidget {
                       child: const Text('Profile'),
                     )
                   : const SizedBox(),
-                  ElevatedButton(
-                      onPressed: () {
-                        appState.userId = null;
-                        appState.cookie = null;
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) {
-                          return const StartScreen();
-                        }));
-                      },
-                      child: const Text('Log out'),
-                    )
+              ElevatedButton(
+                onPressed: () {
+                  appState.userId = null;
+                  appState.cookie = null;
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return const StartScreen();
+                  }));
+                },
+                child: const Text('Log out'),
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) {
+                      return OverViewScreen(7);
+                    }));
+                  },
+                  child: Text("Overview"))
             ],
           ),
         ],

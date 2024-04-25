@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
+import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/models/wine_evaluation.dart';
 import 'package:appr/models/wine_tasting.dart';
@@ -41,10 +42,10 @@ class _JoinTastingState extends State<JoinTasting> {
       Map<String, dynamic> jsonMap = json.decode(response.body);
       WineTasting wineTasting = WineTasting(
         visibility: VisibilityEnum.values.firstWhere((element) => element.name == jsonMap["tastingInfo"]['visibility']),
-        //jsonMap['tastinginfo']['visibility'],
         finished: jsonMap["tastingInfo"]['finished'],
         id: int.parse(_tastingId),
         name: jsonMap["tastingInfo"]['tastingName'],
+        host: User(UserId: jsonMap["tastingInfo"]['host']["id"]),
         date: DateTime.parse(jsonMap["tastingInfo"]['date']),
         wines: (jsonMap["tastingInfo"]['wineList'] as List).map((wine) => Wine.fromJson(wine)).toList(),
         wineEvaluation: (jsonMap["tastingInfo"]["evaluations"]as List).map((wineEval) => Wset.fromJson(wineEval)).toList(),

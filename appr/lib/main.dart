@@ -1,3 +1,4 @@
+import 'package:appr/models/wine_tasting.dart';
 import 'package:appr/screens/start_screen.dart';
 import 'package:appr/screens/wine_tasting_screen.dart';
 import 'package:flutter/material.dart';
@@ -49,4 +50,5 @@ class App extends StatelessWidget {
 class MyAppState extends ChangeNotifier {
   String? cookie;
   int? userId;
+  List<WineTasting> wineTastings = [];
 }

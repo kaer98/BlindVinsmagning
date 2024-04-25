@@ -10,7 +10,7 @@ Wset wset = Wset(
   pSweetness: PSweetnessEnum.Medium,
   pTannin: PTanninEnum.Medium,
   pBody: PBodyEnum.Medium,
-  pFlavorIntensity: PFlavorIntensityEnum.Medium,
+  pFlavourIntensity: PFlavourIntensityEnum.Medium,
   pFinish: PFinishEnum.Medium,
   aIntensity: AIntensityEnum.Medium,
   aColor: AColorEnum.Gold,
@@ -34,7 +34,7 @@ Wine wine = Wine(
 );
 User user = User(
     fullName: "poul jense",
-    gender: Gender.MALE,
+    gender: Gender.Male,
     birthDate: DateTime.now(),
     username: "username");
 
@@ -42,7 +42,7 @@ User user = User(
 User user2 = User(
     fullName: "jens",
     birthDate: DateTime.now(),
-    gender: Gender.MALE,
+    gender: Gender.Male,
     username: "username2");
 
  WineTasting wineTasting = WineTasting(

@@ -1,6 +1,11 @@
 import 'dart:convert';
 
+import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
+import 'package:appr/models/evaluation.dart';
+import 'package:appr/models/wine.dart';
+import 'package:appr/models/wine_tasting.dart';
+import 'package:appr/models/wset_eval.dart';
 import 'package:appr/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final formatter = DateFormat("dd-MM-yyyy");
   final _emailController = TextEditingController();
   final _nameController = TextEditingController();
+  List<WineTasting> wineTasting = [];
 
   DateTime? _selectedDate;
   void _precentDatePicker() async {
@@ -47,9 +53,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void getTastings() async {
+    var appState = context.read<MyAppState>();
+    var url = Uri.parse(
+        "https://vin.jazper.dk/api/tastings?userJoinedId=${appState.userId}");
+    var response = await http.get(url, headers: {"Cookie": appState.cookie!});
+    if (response.statusCode == 200) {
+      List<dynamic> jsonMap = json.decode(response.body);
+      List<WineTasting> tastings = [];
+      for (var tasting in jsonMap) {
+        tastings.add(WineTasting(
+            id: tasting["id"],
+            name: tasting["name"],
+            wines: null,
+            visibility: VisibilityEnum.values.firstWhere(
+                (element) => element.name == tasting["visibility"].toString()),
+            date: DateTime.parse(tasting["date"]),
+            finished: tasting["finished"],
+         ));
+            
+      }
+      appState.wineTastings = tastings;
+      wineTasting = tastings;
+    }
+  }
+
   @override
   void initState() {
     getProfile();
+    getTastings();
     super.initState();
   }
 
@@ -100,6 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return HistoryScreen(
                     history: false,
+                    wineTastings: wineTasting,
                   );
                 }));
               },
@@ -107,7 +140,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ElevatedButton(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return HistoryScreen(history: true,);
+                  return HistoryScreen(
+                    history: true,
+                    wineTastings: wineTasting,
+                  );
                 }));
               },
               child: const Text("History")),

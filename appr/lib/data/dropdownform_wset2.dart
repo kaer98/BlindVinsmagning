@@ -112,7 +112,7 @@ class WSET2FORM extends StatelessWidget {
             labelText: 'Flavor Intensity',
           ),
           items: _getDropDownMenuItems(
-              PFlavorIntensityEnum.values.map((e) => e.name).toList()),
+              PFlavourIntensityEnum.values.map((e) => e.name).toList()),
           onChanged: ((value) {}),
           alignment: Alignment.center,
           isExpanded: true,

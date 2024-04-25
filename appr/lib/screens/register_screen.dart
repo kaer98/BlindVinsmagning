@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:math';
 
 import 'package:appr/main.dart';
@@ -82,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             body: json.encode({
               "fullname": _fullName,
               "birthday": _selectedDate.toString(),
-              "gender":_gender.toString(),
+              "gender":_gender.name.toString(),
               "username": _username,
               "password": _password,
               "confirmPassword": _confirmPassword,

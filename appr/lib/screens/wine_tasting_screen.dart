@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
-import 'package:appr/models/evaluation.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/models/wine_tasting.dart';
 import 'package:appr/models/wset_eval.dart';
+import 'package:appr/screens/results_screen.dart';
+import 'package:appr/screens/tasting_overview_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
 
   List<DropdownMenuItem> wineDropDownMenuItems = [];
   int selectedWine = 1;
-  var evalMap = <Wine, Wset>{};
+  Map<Wine,Wset> evalMap = <Wine, Wset>{};
   var noteControllerMap = <Wine, TextEditingController>{};
   var flavourcharacteristicsControllerMap = <Wine, TextEditingController>{};
   var aromacharacteristicsControllerMap = <Wine, TextEditingController>{};
@@ -45,7 +45,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             "sweetness": e.value.pSweetness?.name,
             "tannin": e.value.pTannin?.name,
             "body": e.value.pBody?.name,
-            "flavorintensity": e.value.pFlavorIntensity?.name,
+            "flavourintensity": e.value.pFlavourIntensity?.name,
             "finish": e.value.pFinish?.name,
             "acolourintensity": e.value.aColor?.name,
             "note": e.value.note,
@@ -55,6 +55,21 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
           headers: {"Content-Type": "application/json",
           "Cookie": appstate.cookie!},
          body: body);
+        var tasting = widget.wineTasting.wineEvaluation!.firstWhere((element) => element.wineId == e.key.id);
+        tasting.aIntensity = e.value.aIntensity;
+        tasting.nIntensity = e.value.nIntensity;
+        tasting.cQuality = e.value.cQuality;
+        tasting.pAlcohol = e.value.pAlcohol;
+        tasting.aromacharacteristics = e.value.aromacharacteristics;
+        tasting.flavourcharacteristics = e.value.flavourcharacteristics;
+        tasting.pAcidity = e.value.pAcidity;
+        tasting.pSweetness = e.value.pSweetness;
+        tasting.pTannin = e.value.pTannin;
+        tasting.pBody = e.value.pBody;
+        tasting.pFlavourIntensity = e.value.pFlavourIntensity;
+        tasting.pFinish = e.value.pFinish;
+        tasting.aColor = e.value.aColor;
+        tasting.note = e.value.note;
           print(body);
           print(response.body);
        }
@@ -76,8 +91,13 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
   }
 
   void makeEvalMap() {
+    evalMap.clear();
     for (int i=0;i<widget.wineTasting.wines!.length;i++) {
       evalMap[widget.wineTasting.wines![i]] = widget.wineTasting.wineEvaluation!.firstWhere((element) => element.wineId == widget.wineTasting.wines![i].id);
+      noteControllerMap[widget.wineTasting.wines![i]] = TextEditingController(text: evalMap[widget.wineTasting.wines![i]]!.note );
+      flavourcharacteristicsControllerMap[widget.wineTasting.wines![i]] = TextEditingController(text: evalMap[widget.wineTasting.wines![i]]!.flavourcharacteristics );
+      aromacharacteristicsControllerMap[widget.wineTasting.wines![i]] = TextEditingController(text: evalMap[widget.wineTasting.wines![i]]!.aromacharacteristics );
+
     }
   }
 
@@ -101,7 +121,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
       var url = Uri.parse("https://vin.jazper.dk/api/evaluations");
       var appstate = context.read<MyAppState>();
       for(var wine in widget.wineTasting.wines!){
-        var response =await http.post(url,
+        var response =http.post(url,
           headers: {"Content-Type": "application/json",
           "Cookie": appstate.cookie!},
           body: json.encode({
@@ -109,7 +129,8 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             "wineId": wine.id,
             "tastingId": widget.wineTasting.id,
           }));
-          print(response.body);
+          widget.wineTasting.wineEvaluation!.add(Wset(wineId: wine.id, tastingId: widget.wineTasting.id, ));
+        //  print(response.body);
       }
 
   }
@@ -118,8 +139,8 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
   void initState() {
     super.initState();
     makeWineList();
-    if(widget.wineTasting.wineEvaluation==null){
-      makeEval();
+    if(widget.wineTasting.wineEvaluation!.isEmpty){
+     makeEval();
     }
     makeEvalMap();
     
@@ -155,6 +176,11 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             ],
           ),
           Text("antal vine: ${widget.wineTasting.wines!.length}"),
+          if(widget.wineTasting.host!.UserId == context.read<MyAppState>().userId)
+          ElevatedButton(onPressed: (){Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return OverViewScreen(widget.wineTasting.id);
+                    }));}, child: Text("Overview")),
           Flexible(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -217,6 +243,26 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
                     }),
                     value: evalMap[widget.wineTasting.wines![selectedWine - 1]]!
                         .cQuality
+                        ?.name,
+                    alignment: Alignment.center,
+                    isExpanded: true,
+                  ),
+                   DropdownButtonFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'Flavorintensity',
+                    ),
+                    items: _getDropDownMenuItems(
+                        PFlavourIntensityEnum.values.map((e) => e.name).toList()),
+                    onChanged: ((value) {
+                      setState(() {
+                        evalMap[widget.wineTasting.wines![selectedWine - 1]]!
+                                .pFlavourIntensity =
+                            PFlavourIntensityEnum.values
+                                .firstWhere((element) => element.name == value);
+                      });
+                    }),
+                    value: evalMap[widget.wineTasting.wines![selectedWine - 1]]!
+                        .pFlavourIntensity
                         ?.name,
                     alignment: Alignment.center,
                     isExpanded: true,
@@ -362,19 +408,19 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
                     decoration: const InputDecoration(
                       labelText: 'Flavor Intensity',
                     ),
-                    items: _getDropDownMenuItems(PFlavorIntensityEnum.values
+                    items: _getDropDownMenuItems(PFlavourIntensityEnum.values
                         .map((e) => e.name)
                         .toList()),
                     onChanged: ((value) {
                       setState(() {
                         evalMap[widget.wineTasting.wines![selectedWine - 1]]!
-                                .pFlavorIntensity =
-                            PFlavorIntensityEnum.values
+                                .pFlavourIntensity =
+                            PFlavourIntensityEnum.values
                                 .firstWhere((element) => element.name == value);
                       });
                     }),
                     value: evalMap[widget.wineTasting.wines![selectedWine - 1]]!
-                        .pFlavorIntensity
+                        .pFlavourIntensity
                         ?.name,
                     alignment: Alignment.center,
                     isExpanded: true,
@@ -439,11 +485,24 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             decoration: const InputDecoration(
                 labelText: "Notes", filled: true, fillColor: Colors.grey),
           ),
-          ElevatedButton(
-            onPressed: () {
-             updateEval();
-            },
-            child: const Text("Save"),
+          Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                 updateEval();
+                },
+                child: const Text("Save"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  updateEval();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+                    return ResultScreen(widget.wineTasting);
+                  }));
+                },
+                child: const Text("Afslut"),
+              ),
+            ],
           ),
         ],
       ),
