@@ -106,47 +106,10 @@ export const createTasting = async (request: Request, response: Response) => {
 export const getAllTastings = async (request: Request, response: Response) => {
     try {
 
-        const { userId } = request.query;
-        const {userJoinedId } = request.query;
-        const parsedUserId = parseInt(userId as string);
-        const parsedHasJoined = parseInt(userJoinedId as string);
-
-        if (userId) {
-            const tastings = await db.query.winetastings.findMany({
-                where: eq(winetastings.hostid, parsedUserId)
-            });
-
-            response.json(tastings);
-        } else if (userJoinedId) {
-          
-            const tastingParticipants = await db.select({
-                userId: users.id,
-                tastingId: tastingparticipants.tastingid
-            })
-                .from(tastingparticipants)
-                .leftJoin(users, eq(tastingparticipants.userid, users.id))
-                .execute();
-
-            const userJoinedTastingsId = tastingParticipants.filter(tp => {
-                // Check for undefined properties before comparing
-                return tp.userId === parsedHasJoined;
-            });
-
-            const tastings = await db.query.winetastings.findMany();  
-            
-            const userJoinedTastings = [];
-            for (let i = 0; i < userJoinedTastingsId.length; i++) {
-                const joinedTasting = tastings.find(tasting => tasting.id === userJoinedTastingsId[i].tastingId);
-                if (joinedTasting) {
-                    userJoinedTastings.push(joinedTasting);
-                }
-            }
-                response.json(userJoinedTastings);
-            }
- else {
+ 
             const tastings = await db.query.winetastings.findMany();
             response.json(tastings);
-        }
+        
 
 
 
@@ -403,3 +366,39 @@ export const getTastingParticipants = async (request: Request, response: Respons
         response.status(500).json({ error: 'Intern Server Fejl' });
     }
 }
+
+// Hent alle brugerens egne evaluations for den tasting brugeren deltager i 
+export const getUserJoinedTastings = async (request: Request, response: Response) => {
+    try {
+        if (!request.user?.id) {
+            return response.status(401).json({ error: "Du skal være logget ind for at se dine vurderinger" });
+        }
+        const userId = request.user.id;
+
+        const getJoinedTastings = await db.select({
+            tastings: winetastings,
+            evaluations: evaluations,
+        })
+        .from(tastingparticipants)
+        .leftJoin(winetastings, eq(tastingparticipants.tastingid, winetastings.id) && eq(tastingparticipants.userid, userId))
+        .leftJoin(evaluations, eq(evaluations.tastingid, winetastings.id) && eq(evaluations.userid, userId))
+        .where(eq(tastingparticipants.userid, userId) && eq(tastingparticipants.tastingid, winetastings.id))
+        .execute();
+
+        var infoToSend: any[] = [];
+        getJoinedTastings.forEach((tasting: any) => {
+            const matchingEvaluations = filter(evaluations, (evaluation: any) => evaluation.tastingid === tasting.tastings.id);
+            infoToSend.push({ tasting: tasting.tastings, evaluations: matchingEvaluations });
+        });
+
+        response.send({ infoToSend: infoToSend.map((tasting: any) => tasting) });
+        response.send({infoToSend: infoToSend.map((tasting: any) => tasting)});
+
+     
+    } catch(error) {
+        console.error('ERROR: Getting My Evaluations (getMyEvaluations)', error);
+        response.status(500).json({ error: 'Intern Server Fejl..' });
+    }
+}
+
+

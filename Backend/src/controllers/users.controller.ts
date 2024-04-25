@@ -10,7 +10,8 @@ export const getUsers = async (request: Request, response: Response) => {
         const userList = await db.select({
             username: users.username,
             fullname: users.fullname,
-            birthday: users.birthday
+            birthday: users.birthday,
+            userid: users.id
 
 
         }).from(users);

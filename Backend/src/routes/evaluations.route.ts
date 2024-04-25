@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllEvaluations, createEvaluation, addWset } from '../controllers/evaluations.controller'
+import { getAllEvaluations, createEvaluation, addWset, getAllEvaluationsByTastingId } from '../controllers/evaluations.controller'
 import protectRoute from "../middleware/protectRoute";
 
 
@@ -11,8 +11,10 @@ router.get("/", getAllEvaluations);
 //ROUTE: POST
 router.post("/", protectRoute, createEvaluation);
 
+router.get("/:id", addWset)
+
 //ROUTE POST
-router.put("/:id", protectRoute, addWset)
+router.get("/tasting/:id", protectRoute, getAllEvaluationsByTastingId)
 
 
 
