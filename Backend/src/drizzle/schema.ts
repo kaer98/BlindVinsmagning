@@ -1,46 +1,48 @@
-import { pgTable, pgEnum, serial, text, foreignKey, integer, varchar, unique, date, boolean, numeric } from "drizzle-orm/pg-core"
+import { pgTable, foreignKey, pgEnum, serial, text, varchar, integer, unique, date, boolean, numeric } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
-  export const GenderEnum = pgEnum("GenderEnum", ['Male', 'Female']);
-  export const VisibilityEnum = pgEnum("VisibilityEnum", ['Open', 'SemiBlind', 'Blind']);
-  export const AIntensityEnum = pgEnum("AIntensityEnum", ['High', 'Medium', 'Low']);
-  export const NIntensityEnum = pgEnum("NIntensityEnum", ['High', 'Medium', 'Low']);
-  export const SweetnessEnum = pgEnum("SweetnessEnum", ['Sweet', 'Medium', 'Dry', 'OffDry']);
-  export const AcidityEnum = pgEnum("AcidityEnum", ['High', 'Medium', 'Low']);
-  export const TanninEnum = pgEnum("TanninEnum", ['High', 'Medium', 'Low']);
-  export const AlcoholEnum = pgEnum("AlcoholEnum", ['High', 'Medium', 'Low']);
-  export const BodyEnum = pgEnum("BodyEnum", ['Full', 'Medium', 'Light']);
-  export const FlavourIntensityEnum = pgEnum("FlavourIntensityEnum", ['High', 'Medium', 'Low']);
-  export const FinishEnum = pgEnum("FinishEnum", ['Long', 'Medium', 'Short']);
-  export const QualityEnum = pgEnum("QualityEnum", ['Excellent', 'Good', 'Poor', 'Acceptable', 'VeryGood', 'Outstanding']);
+export const aintensityEnum = pgEnum("AIntensityEnum", ['High', 'Medium', 'Low', 'Pale', 'Deep'])
+export const acidityEnum = pgEnum("AcidityEnum", ['High', 'Medium', 'Low'])
+export const alcoholEnum = pgEnum("AlcoholEnum", ['High', 'Medium', 'Low'])
+export const bodyEnum = pgEnum("BodyEnum", ['Full', 'Medium', 'Light'])
+export const finishEnum = pgEnum("FinishEnum", ['Long', 'Medium', 'Short'])
+export const flavourIntensityEnum = pgEnum("FlavourIntensityEnum", ['High', 'Medium', 'Low', 'Light', 'Pronounced'])
+export const genderEnum = pgEnum("GenderEnum", ['Male', 'Female'])
+export const nintensityEnum = pgEnum("NIntensityEnum", ['High', 'Medium', 'Low', 'Light', 'Pronounced'])
+export const qualityEnum = pgEnum("QualityEnum", ['Excellent', 'Good', 'Poor', 'Acceptable', 'VeryGood', 'Outstanding'])
+export const sweetnessEnum = pgEnum("SweetnessEnum", ['Sweet', 'Medium', 'Dry', 'OffDry'])
+export const tanninEnum = pgEnum("TanninEnum", ['High', 'Medium', 'Low'])
+export const visibilityEnum = pgEnum("VisibilityEnum", ['Open', 'SemiBlind', 'Blind'])
+export const acolorIntensityEnum = pgEnum("AColorIntensityEnum", ['Lemon', 'Gold', 'Amber', 'Pink', 'PinkOrange', 'Orange', 'Ruby', 'Garnet', 'Tawny', 'Purple'])
 
 
 export const evaluations = pgTable("Evaluations", {
 	id: serial("Id").primaryKey().notNull(),
 	note: text("Note"),
 	name: varchar("Name", { length: 100 }),
-	userid: integer("UserId").references(() => users.id),
-	tastingid: integer("TastingId").references(() => winetastings.id),
-	wineid: integer("WineId").references(() => wines.id),
-	aintensity: AIntensityEnum("AIntensity"),
-	nintensity: NIntensityEnum("NIntensity"),
-	sweetness: SweetnessEnum("Sweetness"),
-	aromacharacteristics: text("AromaCharacteristics"),
-	acidity: AcidityEnum("Acidity"),
-	tannin: TanninEnum("Tannin"),
-	alcohol: AlcoholEnum("Alcohol"),
-	body: BodyEnum("Body"),
-	flavourintensity: FlavourIntensityEnum("FlavourIntensity"),
-	flavourcharacteristics: text("FlavourCharacteristics"),
-	finish: FinishEnum("Finish"),
-	quality: QualityEnum("Quality"),
+	userId: integer("UserId").references(() => users.id),
+	tastingId: integer("TastingId").references(() => wineTastings.id),
+	wineId: integer("WineId").references(() => wines.id),
+	aintensity: aintensityEnum("AIntensity"),
+	nintensity: nintensityEnum("NIntensity"),
+	sweetness: sweetnessEnum("Sweetness"),
+	aromaCharacteristics: text("AromaCharacteristics"),
+	acidity: acidityEnum("Acidity"),
+	tannin: tanninEnum("Tannin"),
+	alcohol: alcoholEnum("Alcohol"),
+	body: bodyEnum("Body"),
+	flavourIntensity: flavourIntensityEnum("FlavourIntensity"),
+	flavourCharacteristics: text("FlavourCharacteristics"),
+	finish: finishEnum("Finish"),
+	quality: qualityEnum("Quality"),
+	acolourIntensity: acolorIntensityEnum("AColourIntensity"),
 });
 
 export const users = pgTable("Users", {
 	id: serial("Id").primaryKey().notNull(),
-	fullname: varchar("FullName", { length: 100 }).notNull(),
-	birthday: date("BirthDay").notNull(),
-	gender: GenderEnum("Gender").notNull(),
+	fullName: varchar("FullName", { length: 100 }).notNull(),
+	birthDay: date("BirthDay").notNull(),
+	gender: genderEnum("Gender").notNull(),
 	username: varchar("Username", { length: 50 }).notNull(),
 	password: varchar("Password", { length: 100 }).notNull(),
 },
@@ -50,13 +52,13 @@ export const users = pgTable("Users", {
 	}
 });
 
-export const winetastings = pgTable("WineTastings", {
+export const wineTastings = pgTable("WineTastings", {
 	id: serial("Id").primaryKey().notNull(),
 	name: varchar("Name", { length: 100 }),
-	visibility: VisibilityEnum("Visibility"),
+	visibility: visibilityEnum("Visibility"),
 	date: date("Date"),
-	hostid: integer("HostId").references(() => users.id),
-	winnerid: integer("WinnerId").references(() => wines.id),
+	hostId: integer("HostId").references(() => users.id),
+	winnerId: integer("WinnerId").references(() => wines.id),
 	finished: boolean("Finished"),
 });
 
@@ -65,7 +67,7 @@ export const wines = pgTable("Wines", {
 	name: varchar("Name", { length: 100 }),
 	country: varchar("Country", { length: 100 }),
 	region: varchar("Region", { length: 100 }),
-	prodyear: date("ProdYear"),
+	prodYear: date("ProdYear"),
 	producer: varchar("Producer", { length: 100 }),
 	alcohol: numeric("Alcohol"),
 	type: varchar("Type", { length: 50 }),
@@ -74,14 +76,14 @@ export const wines = pgTable("Wines", {
 	currency: varchar("Currency", { length: 3 }),
 });
 
-export const tastingwines = pgTable("TastingWines", {
+export const tastingParticipants = pgTable("TastingParticipants", {
 	id: serial("Id").primaryKey().notNull(),
-	tastingid: integer("TastingId").references(() => winetastings.id),
-	wineid: integer("WineId").references(() => wines.id),
+	tastingId: integer("TastingId").references(() => wineTastings.id),
+	userId: integer("UserId").references(() => users.id),
 });
 
-export const tastingparticipants = pgTable("TastingParticipants", {
+export const tastingWines = pgTable("TastingWines", {
 	id: serial("Id").primaryKey().notNull(),
-	tastingid: integer("TastingId").references(() => winetastings.id),
-	userid: integer("UserId").references(() => users.id),
+	tastingId: integer("TastingId").references(() => wineTastings.id),
+	wineId: integer("WineId").references(() => wines.id),
 });
