@@ -12,6 +12,14 @@
 
 [React Site 2](/ReactA/) made by [@AdilJavatogo](https://github.com/AdilJavatogo)
 
+## Docker Images
+
+All docker images in this repository are autoamtically built, using github actions.
+
+Backend API - `registry.jazper.dk/wine-backend:latest`
+
+React 1 - `registry.jazper.dk/reactsk:latest`
+
 ## Kubernetes
 
 Clone the kubernetes manifest: [vinsmagning-kubernetes.yaml](/vinsmagning-kubernetes.yaml). Click on view raw and copy the URL which contains a token.
