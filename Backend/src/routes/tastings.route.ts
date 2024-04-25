@@ -1,7 +1,7 @@
 import {db} from '../drizzle/db';
 import express from "express";
 import protectRoute from '../middleware/protectRoute';
-import { createTasting, getAllTastings, joinTasting, getTastingById, getTastingParticipants, getUserJoinedTastings } from '../controllers/tastings.controller';
+import { createTasting, getAllTastings, joinTasting, getTastingById, getTastingParticipants, getUserJoinedTastings } from '../controllers/tastings/tastings.controller';
 
 const router = express.Router();
 
