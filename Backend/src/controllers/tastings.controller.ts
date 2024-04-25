@@ -6,7 +6,6 @@ import type { User } from "../dtos/user.dto";
 import { evaluations, wines } from "../drizzle/schema.ts";
 import { alias } from "drizzle-orm/pg-core/alias";
 import { parse } from "dotenv";
-import { filter } from 'lodash';
 
 
 //Oprettelse af tasting
