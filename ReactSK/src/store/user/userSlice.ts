@@ -36,10 +36,13 @@ export const userSlice = createSlice({
         //Reducer er funktioner som man kalder for at opdatere en state.
         updateUsername: (state, action: PayloadAction<string>) => {
             state.username = action.payload;
+        },
+        updateFullname: (state, action: PayloadAction<string>) => {
+            state.fullname = action.payload;
         }
 
     }
 });
 
-export const { updateUsername } = userSlice.actions;
+export const { updateUsername, updateFullname } = userSlice.actions;
 export default userSlice.reducer;

@@ -6,6 +6,7 @@ import CreateView from "../components/pagecomponents/index/CreateView";
 import axios from "axios";
 import { ProfileCard } from "../components/users/ProfileCard";
 import UserForm from "../components/users/UserForm";
+import TastingsList from "../components/pagecomponents/index/TastingsList";
 
 
 
@@ -53,7 +54,7 @@ function Index() {
         }
         else if (changeInfo == 'opret') {
             setOperationText('Se kommende smagninger');
-            outputInfo = <CreateView />
+            outputInfo = <TastingsList />
 
         }
 
@@ -69,8 +70,8 @@ function Index() {
 
             </h1>
 
-            <ProfileCard/>
-            <UserForm/>
+            {/* <ProfileCard/>
+            <UserForm/> */}
             <section id="choices">
 
             </section>

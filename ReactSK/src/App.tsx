@@ -32,6 +32,7 @@ function App() {
       </BrowserRouter>
 
       </div >
+      <div className="mt-10"></div>
       <BottomBar/>
 
     </div>

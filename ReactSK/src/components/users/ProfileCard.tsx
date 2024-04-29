@@ -8,6 +8,7 @@ export const ProfileCard = () => {
     return (
     <div>
 
+       <h1 className='text-white'> {userSlice.username} </h1>
        <h1 className='text-white'> {userSlice.fullname} </h1>
 
 
