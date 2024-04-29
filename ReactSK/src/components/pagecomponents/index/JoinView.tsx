@@ -11,17 +11,17 @@ export default function JoinView() {
 
         
         
-    <InFormButton url="/join/guest" onSelect={() => {}}>
+    <InFormButton url="/signup" onSelect={() => {}}>
         <div className="flex flex-col justify-center">
-            <img src="https://www.pngrepo.com/png/14933/180/guest.png" height="50" width="50" className=" ml-40"/>
-            <h1>Deltag som gæst</h1>
+            <img src="https://www.pngrepo.com/png/14933/180/guest.png" height="50" width="50" className=" ml-8"/>
+            <h1>Opret ny Bruger</h1>
         </div>
     </InFormButton>
 
-    <InFormButton url="/join" onSelect={() => {}}>
+    <InFormButton url="/join" onSelect={() => {}} >
         <div className="flex flex-col justify-center">
-            <img src="https://media.licdn.com/dms/image/C4D0BAQH5rc9zh-M7XQ/company-logo_200_200/0/1630482462395/it_kartellet_logo?e=2147483647&v=beta&t=Pp4qOfZw17xi849gVU1mEE51INsZbC_9isSWErPBL2U" height="50" width="50" className=" ml-40"/>
-            <h1>Deltag nu!</h1>
+            <img src="https://media.licdn.com/dms/image/C4D0BAQH5rc9zh-M7XQ/company-logo_200_200/0/1630482462395/it_kartellet_logo?e=2147483647&v=beta&t=Pp4qOfZw17xi849gVU1mEE51INsZbC_9isSWErPBL2U" height="50" width="50" className=" rounded-[16px]"/>
+            <h1>Log ind</h1>
         </div>
     </InFormButton>
     </div>
