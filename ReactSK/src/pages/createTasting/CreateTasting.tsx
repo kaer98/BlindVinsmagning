@@ -1,12 +1,12 @@
 
-import CreateMenuButton from "../components/CreateMenuButton"
+import CreateMenuButton from "../../components/CreateMenuButton"
 
 function CreateTasting() {
 
     return (
-        <div className="flex flex-col justify-center  items-center">
+        <div className="flex flex-col justify-center  items-center text-white">
             <h1 className="font-bold">
-                Opret Smagning!
+                Opret Smagning..
             </h1>
             <div className="m-10 flex flex-row items-center space-x-3 ">
             <CreateMenuButton  imgUrl="https://www.pngrepo.com/png/381632/180/file-create.png">Opret Nu!</CreateMenuButton>

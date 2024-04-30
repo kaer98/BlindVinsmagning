@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-    background: #0f0e21
+
+html,
+html, body {
+    height: 130%;
+    margin: 0;
+    padding: 0;
+    background-color: #1d232a;
 }
 
+#root {
+    min-height: 100vh; /* This ensures that the main container for React has at least the viewport's height */
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

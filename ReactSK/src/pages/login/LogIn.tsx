@@ -1,13 +1,13 @@
-import PinForm from "./PinForm"
+import LoginForm from "./LoginForm"
 
 
 
-function JoinSession() {
+function Login() {
 
     return (
 
-        <div>
-            <PinForm/>
+        <div className='flex justify-center'>
+        <LoginForm/>
         </div>
     )
       
@@ -16,4 +16,4 @@ function JoinSession() {
 
 }
 
-export default JoinSession
+export default Login

@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react"
-import '../index.css';
-import SimpleButton from "../components/SimpleButton";
-import JoinView from "../components/pagecomponents/index/JoinView";
-import CreateView from "../components/pagecomponents/index/CreateView";
+import '../../index.css';
+import SimpleButton from "../../components/SimpleButton";
+import LoginOrSignupView from "./LoginOrSignupView";
+import CreateView from "../createTasting/CreateView";
 import axios from "axios";
-import { ProfileCard } from "../components/users/ProfileCard";
-import UserForm from "../components/users/UserForm";
-import TastingsList from "../components/pagecomponents/index/TastingsList";
+import { ProfileCard } from "../../components/users/ProfileCard";
+import UserForm from "../../components/users/UserForm";
+import TastingsList from "../../components/pagecomponents/index/TastingsList";
+import Tasting from "../../components/tastingComponents/Tasting";
+import ListOfTastings from "./ListOfTastings";
 
 
 
-function Index() {
+function Home() {
 
     const [displayNameInput, setDisplayNameInput] = useState('Test Info');
     const [userNameInput, setUserNameInput] = useState();
@@ -30,18 +32,6 @@ function Index() {
 
     }
 
-
-
-    // useEffect(() => {
-    //     axios.get("http://localhost:3000/users")
-    //         .then(res => {
-    //             setGames(res.data);
-    //         }).catch(error => {
-    //             setError("Der er sket en fejl..");
-    //         })
-    // }, []);
-
-
     function changeSelect(changeInfo: string) {
 
         let outputInfo: JSX.Element;
@@ -49,29 +39,34 @@ function Index() {
 
         if (changeInfo == 'join') {
             setOperationText('Log ind eller Opret Bruger')
-            outputInfo = <JoinView />
+            outputInfo = <div className="">
+                <LoginOrSignupView />
+            </div>
 
         }
         else if (changeInfo == 'opret') {
             setOperationText('Se kommende smagninger');
-            outputInfo = <TastingsList />
+            outputInfo = <div className=" ">
+                <ListOfTastings />
+            </div>
 
         }
 
-     
+
 
         setJoinInfo(outputInfo);
     }
 
     return (
-        <div className="flex flex-col justify-center  items-center">
-            <h1 className=" text-3xl mt-2 text-white">
+        <div className="flex flex-col justify-center items-center text-white  ">
+
+
+            <h1 className=" text-3xl mt-2 text-white ">
                 Velkommen til IT Kartellet Vinsmagning! 😁
 
             </h1>
 
-            {/* <ProfileCard/>
-            <UserForm/> */}
+
             <section id="choices">
 
             </section>
@@ -80,19 +75,17 @@ function Index() {
                 <SimpleButton onSelect={() => changeSelect('join')}>Log Ind</SimpleButton>
                 <SimpleButton onSelect={() => changeSelect('opret')}>Smagninger</SimpleButton>
             </div>
-            <h1 className="m-2 font-bold text-black">{operationText}</h1>
+            <h1 className="m-2 font-bold text-white">{operationText}</h1>
 
-            <div className="bg-white rounded-md shadow-2xl p-5 mt-10">
-                {!joinInfo ? <h1>Velkommen til IT Kartellet vinsmagning. Vælg enten Join eller Opret for at fortsætte.</h1> : joinInfo}
-            </div>
+            {!joinInfo ? <h1 className="text-white">Velkommen til IT Kartellet vinsmagning. Vælg enten Log Ind eller Smagninger for at fortsætte.</h1> : joinInfo}
 
-          
 
-               </div>
+
+        </div>
 
 
     )
 
 }
 
-export default Index
+export default Home
