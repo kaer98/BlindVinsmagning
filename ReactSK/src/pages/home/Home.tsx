@@ -6,7 +6,6 @@ import CreateView from "../createTasting/CreateView";
 import axios from "axios";
 import { ProfileCard } from "../../components/users/ProfileCard";
 import UserForm from "../../components/users/UserForm";
-import TastingsList from "../../components/pagecomponents/index/TastingsList";
 import Tasting from "../../components/tastingComponents/Tasting";
 import ListOfTastings from "./ListOfTastings";
 
