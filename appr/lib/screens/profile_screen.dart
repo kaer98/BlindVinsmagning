@@ -1,11 +1,7 @@
 import 'dart:convert';
 
-import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
-import 'package:appr/models/evaluation.dart';
-import 'package:appr/models/wine.dart';
 import 'package:appr/models/wine_tasting.dart';
-import 'package:appr/models/wset_eval.dart';
 import 'package:appr/screens/history_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

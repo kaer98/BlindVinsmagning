@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:appr/main.dart';
+import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/models/wine_tasting.dart';
 import 'package:appr/models/wset_eval.dart';
+import 'package:appr/screens/pre_tasting_screen.dart';
 import 'package:appr/screens/results_screen.dart';
 import 'package:appr/screens/wine_tasting_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,8 +37,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
           (element) => element.name == jsonMap["tastingInfo"]['visibility']),
       finished: jsonMap["tastingInfo"]['finished'],
       id: int.parse(id.toString()),
+      host: User(fullName:jsonMap["tastingInfo"]['host']['name'],UserId: jsonMap["tastingInfo"]['host']['id']),
       name: jsonMap["tastingInfo"]['tastingName'],
       date: DateTime.parse(jsonMap["tastingInfo"]['date']),
+      participents: (jsonMap["tastingInfo"]['participants'] as List).map((user) => User(fullName: user['fullname'],username: user["username"],UserId: user['UserId'])).toList(),
+      
       wines: (jsonMap["tastingInfo"]['wineList'] as List)
           .map((wine) => Wine.fromJson(wine))
           .toList(),
@@ -50,7 +55,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           builder: (context) => ResultScreen(wineTasting),
         ),
       ):Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => WineTastingScreen(wineTasting),
+        builder: (context) => PreTastingScreen(wineTasting),
       ));
    
   }
@@ -90,7 +95,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      title: Text(_futureWineTastings[index].name),
+                      title: Text("${_futureWineTastings[index].name} kode: ${_futureWineTastings[index].id}"),
                       subtitle: Text(
                         _futureWineTastings[index].date.toString(),
                       ),

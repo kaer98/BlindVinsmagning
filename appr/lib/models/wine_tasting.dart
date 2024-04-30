@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:appr/models/evaluation.dart';
 import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
@@ -17,6 +19,14 @@ class WineTasting {
   DateTime date;
   Wine? winner;
   bool finished;
+
+  List<Wine> getWines() {
+
+    List<Wine> wines1 = wines!.asMap().values.toList();
+    wines1.shuffle(Random(id));
+    return wines1;
+  }
+  
 
   WineTasting({
     required this.id,
