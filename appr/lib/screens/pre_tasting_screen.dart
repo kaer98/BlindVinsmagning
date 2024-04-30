@@ -31,7 +31,7 @@ class PreTastingScreen extends StatelessWidget {
             wineTasting.visibility == VisibilityEnum.Blind &&
                     wineTasting.host?.userId != appState.userId
                 ? const Text("This is a blind tasting")
-                : WinesInTasting(wineTasting),
+                : WinesInTasting(wineTasting, appState.userId!),
             const SizedBox(
               height: 20,
               width: 20,

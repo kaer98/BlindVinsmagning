@@ -2,9 +2,10 @@ import 'package:appr/models/wine_tasting.dart';
 import 'package:flutter/material.dart';
 
 class WinesInTasting extends StatelessWidget {
-  const WinesInTasting(this.wineTasting,{super.key});
+  const WinesInTasting(this.wineTasting,this.userId,{super.key});
 
   final WineTasting wineTasting;
+  final int userId;
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +29,8 @@ class WinesInTasting extends StatelessWidget {
                   return Card(
                     child: ListTile(
                       title: Text(wineTasting.wines![index].name),
-                      subtitle: wineTasting.visibility == VisibilityEnum.Open
-                          ? const Text("Open")
+                      subtitle: wineTasting.visibility == VisibilityEnum.SemiBlind&&wineTasting.host?.userId != userId
+                          ? const Text("SemiBlind Tasting")
                           : Text(
                               "in glass number: ${(index)+1}"),
                       onTap: () {},

@@ -74,8 +74,13 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
     if (isValid) {
       _formKey.currentState!.save();
 
-      for(int i = 0; i < _amountOfWines; i++){
-        _selectedWines.add(int.parse(_wineControllers[i.toString()]!.text.split("%").elementAt(1).split("\n").elementAt(1)));
+      for (int i = 0; i < _amountOfWines; i++) {
+        _selectedWines.add(int.parse(_wineControllers[i.toString()]!
+            .text
+            .split("%")
+            .elementAt(1)
+            .split("\n")
+            .elementAt(1)));
       }
       // for (var ctl in _wineControllers.values) {
       //   _selectedWines.add(int.parse(
@@ -174,10 +179,12 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                           _amountOfWines++;
                         });
                       },
-                      icon: const Icon(Icons.add),
+                      icon: Icon(
+                        Icons.add,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                     IconButton(
-                      
                       onPressed: () {
                         setState(() {
                           if (_amountOfWines > 1) {
@@ -185,7 +192,10 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                           }
                         });
                       },
-                      icon: const Icon(Icons.remove),
+                      icon: Icon(
+                        Icons.remove,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),

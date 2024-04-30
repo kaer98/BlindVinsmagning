@@ -77,20 +77,29 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Column(
           children: [
-            TextFormField(
-              decoration: const InputDecoration(labelText: "Username"),
-              onChanged: (value) => _username = value,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20,5,20,5),
+              child: TextFormField(
+                decoration: const InputDecoration(labelText: "Username"),
+                onChanged: (value) => _username = value,
+              ),
             ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: "Password"),
-              obscureText: true,
-              onChanged: (value) => _password = value,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: TextFormField(
+                decoration: const InputDecoration(labelText: "Password"),
+                obscureText: true,
+                onChanged: (value) => _password = value,
+              ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                saveForm(appState);
-              },
-              child: const Text("Login"),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                onPressed: () {
+                  saveForm(appState);
+                },
+                child: const Text("Login"),
+              ),
             ),
           ],
         ),

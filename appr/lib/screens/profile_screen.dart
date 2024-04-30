@@ -110,8 +110,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               IconButton(
                 onPressed: _precentDatePicker,
-                icon: const Icon(
+                icon:  Icon(
                   Icons.date_range,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
               ),
             ],
