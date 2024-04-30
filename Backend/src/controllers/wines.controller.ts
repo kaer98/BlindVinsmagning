@@ -50,11 +50,10 @@ export const createWines = async (request: Request, response: Response) => {
                 wineName: wines.name,
                 id: wines.id,
                 wineRegion: wines.region,
-           
             });
 
             // const newWine = newWineCreation[0];
-            response.status(201).json({ created: "yes"});
+            response.status(201).json({ created: "yes", wineId: newWineCreation[0].id});
 
 
     } catch (error) { //I tilfælde af server fejl.
