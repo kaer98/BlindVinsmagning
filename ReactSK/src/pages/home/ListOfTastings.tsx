@@ -1,23 +1,31 @@
-import React from 'react'
-import TastingCard from '../../components/tastingComponents/TastingCard'
+import React from 'react';
+import TastingCard from '../../components/tastingComponents/TastingCard';
+import useGetTastings from '../../hooks/useGetTastings';
 
+const ListOfTastings: React.FC = () => {
+  const { loading, tastings } = useGetTastings();
 
-const ListOfTastings = () => {
+  if (loading) {
+    // Display a loading state until the data is fetched
+    return <div>Loading...</div>;
+  }
+
+  if (!tastings || tastings.length === 0) {
+    // Handle the case where there's no data or it's empty
+    return <div>No tastings found</div>;
+  }
+
   return (
-<div className='flex flex-wrap justify-center items-start gap-8'>
-<TastingCard Title="Adils Smagning 102" Date="01-05-2024" />
-<TastingCard Title="Ost og Vin" Date="05-06-2024" />
-<TastingCard Title="Vinfest" Date="12-07-2024" />
-<TastingCard Title="Dansk Whisky" Date="20-08-2024" />
-<TastingCard Title="Gin Workshop" Date="15-09-2024" />
-<TastingCard Title="Tequila Aften" Date="10-10-2024" />
-<TastingCard Title="Rom Smagning" Date="30-11-2024" />
-<TastingCard Title="Champagne Nytår" Date="31-12-2024" />
-<TastingCard Title="Kaffe og Likør" Date="14-01-2025" />
+    <div className="flex flex-wrap justify-center items-start gap-8">
+      {tastings.map((tasting) => (
+        <TastingCard
+          key={tasting.id} // Ensure you use a unique key for each item in the list
+          Title={tasting.name} // Access the 'name' property
+          Date={tasting.date} // Access the 'date' property
+        />
+      ))}
+    </div>
+  );
+};
 
-</div>
-
-)
-}
-
-export default ListOfTastings
+export default ListOfTastings;
