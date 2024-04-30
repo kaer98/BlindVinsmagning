@@ -9,7 +9,7 @@ class WinesInTasting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [Text("Wines in Tasting:"),
+      children: [const Text("Wines in Tasting:"),
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -29,7 +29,7 @@ class WinesInTasting extends StatelessWidget {
                     child: ListTile(
                       title: Text(wineTasting.wines![index].name),
                       subtitle: wineTasting.visibility == VisibilityEnum.Open
-                          ? Text("Open")
+                          ? const Text("Open")
                           : Text(
                               "in glass number: ${(index)+1}"),
                       onTap: () {},

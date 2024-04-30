@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:appr/models/evaluation.dart';
 import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
 import 'package:appr/models/wset_eval.dart';
@@ -20,7 +19,7 @@ class WineTasting {
   Wine? winner;
   bool finished;
 
-  List<Wine> getWines() {
+  List<Wine> get getWines {
 
     List<Wine> wines1 = wines!.asMap().values.toList();
     wines1.shuffle(Random(id));

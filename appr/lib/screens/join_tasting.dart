@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:appr/data/dummydata.dart';
 import 'package:appr/main.dart';
 import 'package:appr/models/user.dart';
 import 'package:appr/models/wine.dart';
-import 'package:appr/models/wine_evaluation.dart';
 import 'package:appr/models/wine_tasting.dart';
 import 'package:appr/models/wset_eval.dart';
 import 'package:appr/screens/wine_tasting_screen.dart';
@@ -22,7 +20,7 @@ class JoinTasting extends StatefulWidget {
 class _JoinTastingState extends State<JoinTasting> {
   final _formKey = GlobalKey<FormState>();
 
-  var _tastingId;
+  String? _tastingId;
 
   void _joinTasting() async {
     final isValid = _formKey.currentState!.validate();
@@ -43,14 +41,14 @@ class _JoinTastingState extends State<JoinTasting> {
       WineTasting wineTasting = WineTasting(
         visibility: VisibilityEnum.values.firstWhere((element) => element.name == jsonMap["tastingInfo"]['visibility']),
         finished: jsonMap["tastingInfo"]['finished'],
-        id: int.parse(_tastingId),
+        id: int.parse(_tastingId!),
         name: jsonMap["tastingInfo"]['tastingName'],
-        host: User(UserId: jsonMap["tastingInfo"]['host']["id"]),
+        host: User(userId: jsonMap["tastingInfo"]['host']["id"]),
         date: DateTime.parse(jsonMap["tastingInfo"]['date']),
         wines: (jsonMap["tastingInfo"]['wineList'] as List).map((wine) => Wine.fromJson(wine)).toList(),
         wineEvaluation: (jsonMap["tastingInfo"]["evaluations"]as List).map((wineEval) => Wset.fromJson(wineEval)).toList(),
       );
-     
+      if (!mounted) return;
       
       Navigator.push(
         context,
@@ -80,7 +78,7 @@ class _JoinTastingState extends State<JoinTasting> {
                 onSaved: (newValue) => _tastingId = newValue,
                 validator: (value) => (value == null ||
                         value.isEmpty ||
-                        value.trim().length < 1 ||
+                        value.trim().isEmpty ||
                         value.trim().length > 5)
                     ? 'Please enter a tasting ID'
                     : null,

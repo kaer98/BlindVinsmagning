@@ -1,6 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:math';
 
 import 'package:appr/main.dart';
 import 'package:appr/screens/main_menu.dart';
@@ -94,6 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             } else {
             appstate.userId = json.decode(response.body)['id'];
             appstate.cookie = response.headers['set-cookie'];
+             if (!mounted) return;
             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
               return const MainMenu();
             }));

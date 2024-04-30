@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import 'dart:convert';
 
 class OverViewScreen extends StatefulWidget {
-  const OverViewScreen(this.TastingId, {super.key});
-  final int TastingId;
+  const OverViewScreen(this.tastingId, {super.key});
+  final int tastingId;
   @override
   State<OverViewScreen> createState() => _OverViewScreenState();
 }
@@ -22,7 +22,7 @@ class _OverViewScreenState extends State<OverViewScreen> {
   var _isWinesLoading = true;
   var _isTastingLoading = true;
 
-  void GetUsers() {
+  void _getUsers() {
     var appstate = context.read<MyAppState>();
     var url = Uri.parse("https://vin.jazper.dk/api/users");
     http.get(
@@ -35,20 +35,19 @@ class _OverViewScreenState extends State<OverViewScreen> {
         users1.add(User(
             fullName: user["fullname"],
             username: user["username"],
-            UserId: user["userid"]));
+            userId: user["userid"]));
       }
       setState(() {
         users = users1;
         _isUsersLoading = false;
       });
-      print(jsonMap);
     });
   }
 
-  void GetWines() {
+  void _getWines() {
     var appstate = context.read<MyAppState>();
     var url = Uri.parse("https://vin.jazper.dk/api/wines");
-    var response = http.get(
+    http.get(
       url,
       headers: {"Content-Type": "application/json", "Cookie": appstate.cookie!},
     ).then((response) {
@@ -65,10 +64,10 @@ class _OverViewScreenState extends State<OverViewScreen> {
     });
   }
 
-  void GetTastinginfo() async {
+  void _getTastingInfo() async {
     var appstate = context.read<MyAppState>();
     var url = Uri.parse(
-        "https://vin.jazper.dk/api/evaluations/tasting/${widget.TastingId}");
+        "https://vin.jazper.dk/api/evaluations/tasting/${widget.tastingId}");
 
     var response = await http.get(
       url,
@@ -79,14 +78,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
       _isTastingLoading = false;
       wset = jsonMap.map((e) => Wset.fromJson(e)).toList();
     });
-    print(response.body);
   }
 
   @override
   void initState() {
-    GetTastinginfo();
-    GetUsers();
-    GetWines();
+    _getTastingInfo();
+    _getUsers();
+    _getWines();
     super.initState();
   }
  @override
@@ -108,15 +106,13 @@ class _OverViewScreenState extends State<OverViewScreen> {
         itemCount: wset.length,
         itemBuilder: (context, index) => Card(
           child: ListTile(
-            title: Text(users
+            title: Text("${users
                     .firstWhere(
-                        (element) => element.UserId == wset[index].UserId)
-                    .fullName! +
-                " vin:" +
-                wines
+                        (element) => element.userId == wset[index].UserId)
+                    .fullName!} vin:${wines
                     .firstWhere((element) => element.id == wset[index].wineId)
-                    .name),
-            subtitle: Text(wset[index].completenessPercentage.toString() + "%"),
+                    .name}"),
+            subtitle: Text("${wset[index].completenessPercentage}%"),
           ),
         ),
       ),

@@ -35,9 +35,7 @@ enum NintensityEnum { Light, Medium, Pronounced }
 enum CQualityEnum { Poor, Acceptable, Good, VeryGood, Outstanding }
 
 class Wset {
-  @override
   String name = 'WSET level 2 Evaluation';
-  @override
   String? note;
   String? flavourcharacteristics;
   String? aromacharacteristics;
@@ -103,8 +101,6 @@ class Wset {
     NintensityEnum? nIntensity;
     CQualityEnum? cQuality;
     int? id;
-    int? wineId;
-    int? tastingId;
     int? UserId;
 
     if(json['userid'] != null){

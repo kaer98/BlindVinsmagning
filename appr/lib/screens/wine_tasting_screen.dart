@@ -51,7 +51,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             "note": e.value.note,
             "wineId": e.key.id,
           });
-         var response = await http.put(url,
+         await http.put(url,
           headers: {"Content-Type": "application/json",
           "Cookie": appstate.cookie!},
          body: body);
@@ -70,8 +70,6 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
         tasting.pFinish = e.value.pFinish;
         tasting.aColor = e.value.aColor;
         tasting.note = e.value.note;
-          print(body);
-          print(response.body);
        }
        
       
@@ -79,7 +77,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
 
   void makeWineList() {
     int i = 1;
-    for (var wine in widget.wineTasting.getWines()!) {
+    for (var wine in widget.wineTasting.getWines) {
       wineDropDownMenuItems.add(DropdownMenuItem(
         value: i,
         child: widget.wineTasting.visibility == VisibilityEnum.Open
@@ -121,7 +119,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
       var url = Uri.parse("https://vin.jazper.dk/api/evaluations");
       var appstate = context.read<MyAppState>();
       for(var wine in widget.wineTasting.wines!){
-        var response =http.post(url,
+        http.post(url,
           headers: {"Content-Type": "application/json",
           "Cookie": appstate.cookie!},
           body: json.encode({
@@ -176,11 +174,11 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             ],
           ),
           Text("antal vine: ${widget.wineTasting.wines!.length}"),
-          if(widget.wineTasting.host?.UserId == context.read<MyAppState>().userId)
+          if(widget.wineTasting.host?.userId == context.read<MyAppState>().userId)
           ElevatedButton(onPressed: (){Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return OverViewScreen(widget.wineTasting.id);
-                    }));}, child: Text("Overview")),
+                    }));}, child: const Text("Overview")),
           Flexible(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
