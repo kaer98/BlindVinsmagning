@@ -15,16 +15,16 @@ export const createWines = async (request: Request, response: Response) => {
             return response.status(400).json({ error: 'Ugyldige requests fra Request body.' });
         }
 
-        //Her ser man om vinen allerede eksisterer i databasen. 
-        const wineToFind = await db.query.wines.findFirst({
-            where: eq(wines.name, name),
-        });
+        // //Her ser man om vinen allerede eksisterer i databasen. 
+        // const wineToFind = await db.query.wines.findFirst({
+        //     where: eq(wines.name, name),
+        // });
 
 
-        //Hvis denne brugernavn og bruger eksisterer i databasen, må man ikke oprette sig under samme navn.
-        if (wineToFind) {
-            return response.status(400).json({ error: "Vin med dette navn eksisterer allerede" });
-        }
+        // //Hvis denne brugernavn og bruger eksisterer i databasen, må man ikke oprette sig under samme navn.
+        // if (wineToFind) {
+        //     return response.status(400).json({ error: "Vin med dette navn eksisterer allerede" });
+        // }
 
 
         //Den nye bruger oprettes i første omgang på serveren (som objekt)
@@ -50,11 +50,10 @@ export const createWines = async (request: Request, response: Response) => {
                 wineName: wines.name,
                 id: wines.id,
                 wineRegion: wines.region,
-           
             });
 
             // const newWine = newWineCreation[0];
-            response.status(201).json({ created: "yes"});
+            response.status(201).json({ created: "yes", wineId: newWineCreation[0].id});
 
 
     } catch (error) { //I tilfælde af server fejl.
