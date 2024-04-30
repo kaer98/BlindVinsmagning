@@ -79,7 +79,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
 
   void makeWineList() {
     int i = 1;
-    for (var wine in widget.wineTasting.wines!) {
+    for (var wine in widget.wineTasting.getWines()!) {
       wineDropDownMenuItems.add(DropdownMenuItem(
         value: i,
         child: widget.wineTasting.visibility == VisibilityEnum.Open
@@ -176,7 +176,7 @@ class _WineTastingScreenState extends State<WineTastingScreen> {
             ],
           ),
           Text("antal vine: ${widget.wineTasting.wines!.length}"),
-          if(widget.wineTasting.host!.UserId == context.read<MyAppState>().userId)
+          if(widget.wineTasting.host?.UserId == context.read<MyAppState>().userId)
           ElevatedButton(onPressed: (){Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
                       return OverViewScreen(widget.wineTasting.id);
