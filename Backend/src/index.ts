@@ -11,6 +11,7 @@ import checkEnvironmentVariables from './utils/checkEnvironmentVariables';
 import requestLogger from './middleware/requestLogger';
 import { eq } from 'drizzle-orm';
 import { tastingparticipants, users } from './drizzle/migrations/schema';
+import cors from 'cors';
 
 
 
@@ -22,14 +23,29 @@ const PORT = 3000; //PORT for Server
 
 //Middleware Funktioner
 app.use(express.json()); //Bruges til at parse JSON Payloads fra Request Body
-app.use(cookieParser()); // Bruges til at parse Cookies fra Request
-app.use((req, res, next) => { requestLogger(req, res,next) }); // Bruges til logging af requests med timestamp
 
+if (process.env.NODE_ENV === "production") {
+    app.use(cors({
+        origin: 'https://reactsk.jazper.dk/',
+        credentials: true, // Tillader cookies/credentials
+    }));
+
+} else {
+    app.use(cors({
+        origin: 'http://localhost:5173/',
+        credentials: true, // Tillader cookies/credentials
+    }));
+}
+app.use(cors({})); //CORS. Tillader alle (På nuværende tidspunkt)
+app.use(cookieParser()); // Bruges til at parse Cookies fra Request
+app.use((req, res, next) => { requestLogger(req, res, next) }); // Bruges til logging af requests med timestamp
+
+//Routes: Alle de forskellige Routes. Se dokumentation for mere information.
 app.use('/api/auth', authRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/wines', winesRoute);
 app.use('/api/tastings', tastingsRoute);
-app.use('/api/evaluations', evaluationsRoute );
+app.use('/api/evaluations', evaluationsRoute);
 
 
 

@@ -4,20 +4,15 @@ import App from './App.tsx'
 import './index.css'
 import TopBar from './components/TopBar.tsx'
 import BottomBar from './components/BottomBar.tsx'
+import { Provider } from 'react-redux';
+import { store } from './store'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <div className='flex flex-col h-screen'>
-      <TopBar />
-      <div className='flex-grow'>
-        <App />
-      </div>
-      <div>
-        <div className='mt-auto'>
-<BottomBar/>
-        </div>
-      </div>
-    </div>
+    <Provider store={store}>
 
-  </React.StrictMode>,
-)
+      <App />
+
+    </Provider>
+  </React.StrictMode>
+);

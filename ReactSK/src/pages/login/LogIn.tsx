@@ -1,4 +1,4 @@
-import PinForm from "../components/pagecomponents/joinpage/PinForm"
+import PinForm from "./PinForm"
 
 
 
