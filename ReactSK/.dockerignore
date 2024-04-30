@@ -1,8 +1,0 @@
-.env
-node_modules/*
-*.md
-package-lock.json
-yarn.lock
-Dockerfile*
-build
-bun.lockb
