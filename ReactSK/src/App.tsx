@@ -4,7 +4,7 @@ import './App.css'
 import Home from './pages/home/Home';
 import CreateTasting from './pages/createTasting/CreateTasting';
 import JoinSession from './pages/login/LogIn';
-import Signup from "./pages/signUp/Signup";
+import Signup from "./pages/signup/Signup";
 import TopBar from "./components/TopBar";
 import BottomBar from "./components/BottomBar";
 
