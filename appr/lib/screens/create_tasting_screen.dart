@@ -20,18 +20,17 @@ class CreateTastingScreen extends StatefulWidget {
 
 class _CreateTastingScreenState extends State<CreateTastingScreen> {
   int _amountOfWines = 1;
-   List<Wine>? _wineList;
-   bool _isLoading = true;
-   final _formKey = GlobalKey<FormState>();
-    var _name;
-  var _selectedWines = [];
+  List<Wine>? _wineList;
+  bool _isLoading = true;
+  final _formKey = GlobalKey<FormState>();
+  String? _name;
+  final _selectedWines = [];
   DateTime? _selectedDate;
   final wineController = TextEditingController();
-  Map<String, TextEditingController> _wineControllers = {};
-  var _visability;
+  final Map<String, TextEditingController> _wineControllers = {};
+  String? _visability;
 
-
-void getWines() async {
+  void getWines() async {
     var appState = context.read<MyAppState>();
     var url = Uri.parse("https://vin.jazper.dk/api/wines");
     var response = await http.get(url, headers: {"Cookie": appState.cookie!});
@@ -41,15 +40,13 @@ void getWines() async {
       for (var wine in jsonMap) {
         wines.add(Wine.fromJson(wine));
       }
-      
+
       setState(() {
         _isLoading = false;
         _wineList = wines;
       });
     }
   }
-
-
 
   void _openCreateWineOverLay() {
     showModalBottomSheet(
@@ -64,31 +61,31 @@ void getWines() async {
     );
   }
 
-
   void _createTasting() async {
     ScaffoldMessenger.of(context).clearSnackBars();
     final isValid = _formKey.currentState!.validate();
     var appstate = context.read<MyAppState>();
     if (isValid) {
-      
       _formKey.currentState!.save();
-      for(var ctl in _wineControllers.values) {
-        _selectedWines.add(int.parse(ctl.text.split("%").elementAt(1).split("\n").elementAt(1)));
-        }
-      
-     
+      for (var ctl in _wineControllers.values) {
+        _selectedWines.add(int.parse(
+            ctl.text.split("%").elementAt(1).split("\n").elementAt(1)));
+      }
+
       var url = Uri.parse("https://vin.jazper.dk/api/tastings");
-      var response = await http.post(url,
-          headers: {"Content-Type": "application/json",
-          "Cookie": appstate.cookie!},
+      await http.post(url,
+          headers: {
+            "Content-Type": "application/json",
+            "Cookie": appstate.cookie!
+          },
           body: json.encode({
             "name": _name,
             "visibility": _visability,
             "date": _selectedDate.toString(),
-            "wines":_selectedWines,
+            "wines": _selectedWines,
           }));
-      Navigator.pop(context);
-      print(response.body);
+      if (!mounted) return;
+      Navigator.of(context).pop();
     }
   }
 
@@ -124,7 +121,6 @@ void getWines() async {
   void initState() {
     super.initState();
     getWines();
-    
   }
 
   @override
@@ -153,14 +149,14 @@ void getWines() async {
                         value.trim().length > 50)
                     ? 'Please enter a title'
                     : null,
-                    onSaved: (newValue) => _name = newValue,
+                onSaved: (newValue) => _name = newValue,
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(150, 8, 150, 8),
               child: TextFormField(
                 decoration: const InputDecoration(labelText: "Antal vine"),
-                initialValue: "1",
+                //initialValue: "1",
                 keyboardType: TextInputType.number,
                 maxLength: 2,
                 maxLines: 1,
@@ -182,13 +178,10 @@ void getWines() async {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: ListPickerField(
-                      
                       label: "wine number ${index + 1}",
                       items: _wineList!.map((e) => e.toString()).toList(),
                       controller: _wineControllers.putIfAbsent(
                           index.toString(), () => TextEditingController()),
-        
-        
                     ),
                   );
                 },
@@ -207,7 +200,6 @@ void getWines() async {
                 items: _getDropDownMenuItems(["Blind", "Semiblind", "Open"]),
                 onChanged: (onChanged) {},
                 onSaved: (newValue) => _visability = newValue,
-
                 validator: (value) => (value == null ||
                         value.isEmpty ||
                         value.trim().length <= 1 ||
@@ -241,11 +233,8 @@ void getWines() async {
                 ),
                 IconButton(
                   onPressed: _precentDatePicker,
-                  icon: Icon(
-                    
-                    Icons.date_range,
-                    color: Theme.of(context).colorScheme.primary
-                  ),
+                  icon: Icon(Icons.date_range,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
               ],
             ),

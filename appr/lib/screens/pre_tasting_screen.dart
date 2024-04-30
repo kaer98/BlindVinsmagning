@@ -25,18 +25,18 @@ class PreTastingScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text("CODE: ${wineTasting.id}"),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             wineTasting.visibility == VisibilityEnum.Blind &&
-                    wineTasting.host?.UserId != appState.userId
-                ? Text("This is a blind tasting")
+                    wineTasting.host?.userId != appState.userId
+                ? const Text("This is a blind tasting")
                 : WinesInTasting(wineTasting),
-            SizedBox(
+            const SizedBox(
               height: 20,
               width: 20,
             ),
-            Text("Participating in this wine tasting:"),
+            const Text("Participating in this wine tasting:"),
             Container(
               decoration: BoxDecoration(
                 border: Border.all(
@@ -67,7 +67,7 @@ class PreTastingScreen extends StatelessWidget {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => WineTastingScreen(wineTasting)));
                 },
-                child: Text("Start Tasting")),
+                child: const Text("Start Tasting")),
           ],
         ),
       ),

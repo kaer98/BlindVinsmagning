@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:appr/main.dart';
 import 'package:appr/screens/main_menu.dart';
@@ -37,7 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
           "username": _username,
           "password": _password,
         }));
-    print(response.body);
 
     if (response.headers['set-cookie'] != null) {
       appState.cookie = response.headers['set-cookie']!;
@@ -48,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     if (appState.cookie != null) {
+       if (!mounted) return;
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
         return const MainMenu();
       }));
