@@ -48,8 +48,8 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
     }
   }
 
-  void _openCreateWineOverLay() {
-    showModalBottomSheet(
+  void _openCreateWineOverLay() async {
+    final result = await showModalBottomSheet(
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height,
         maxWidth: MediaQuery.of(context).size.width,
@@ -59,6 +59,12 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
       context: context,
       builder: (ctx) => const CreateWineScreen(),
     );
+
+    // Handle the result returned from CreateWineScreen
+    if (result != null) {
+      _wineList!.add(result as Wine);
+      // Do something with the result
+    }
   }
 
   void _createTasting() async {
@@ -67,10 +73,14 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
     var appstate = context.read<MyAppState>();
     if (isValid) {
       _formKey.currentState!.save();
-      for (var ctl in _wineControllers.values) {
-        _selectedWines.add(int.parse(
-            ctl.text.split("%").elementAt(1).split("\n").elementAt(1)));
+
+      for(int i = 0; i < _amountOfWines; i++){
+        _selectedWines.add(int.parse(_wineControllers[i.toString()]!.text.split("%").elementAt(1).split("\n").elementAt(1)));
       }
+      // for (var ctl in _wineControllers.values) {
+      //   _selectedWines.add(int.parse(
+      //       ctl.text.split("%").elementAt(1).split("\n").elementAt(1)));
+      // }
 
       var url = Uri.parse("https://vin.jazper.dk/api/tastings");
       await http.post(url,
@@ -152,25 +162,34 @@ class _CreateTastingScreenState extends State<CreateTastingScreen> {
                 onSaved: (newValue) => _name = newValue,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(150, 8, 150, 8),
-              child: TextFormField(
-                decoration: const InputDecoration(labelText: "Antal vine"),
-                //initialValue: "1",
-                keyboardType: TextInputType.number,
-                maxLength: 2,
-                maxLines: 1,
-                onChanged: (value) {
-                  if (value.isEmpty) {
-                    _amountOfWines = 0;
-                    return;
-                  }
-                  if (int.tryParse(value) != null) {
-                    _amountOfWines = int.parse(value);
-                    setState(() {});
-                  }
-                },
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Antal vine: $_amountOfWines"),
+                Column(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _amountOfWines++;
+                        });
+                      },
+                      icon: const Icon(Icons.add),
+                    ),
+                    IconButton(
+                      
+                      onPressed: () {
+                        setState(() {
+                          if (_amountOfWines > 1) {
+                            _amountOfWines--;
+                          }
+                        });
+                      },
+                      icon: const Icon(Icons.remove),
+                    ),
+                  ],
+                ),
+              ],
             ),
             Expanded(
               child: ListView.builder(
