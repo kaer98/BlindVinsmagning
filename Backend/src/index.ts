@@ -24,19 +24,13 @@ const PORT = 3000; //PORT for Server
 //Middleware Funktioner
 app.use(express.json()); //Bruges til at parse JSON Payloads fra Request Body
 
-if (process.env.NODE_ENV === "production") {
-    app.use(cors({
-        origin: 'https://reactsk.jazper.dk/',
-        credentials: true, // Tillader cookies/credentials
-    }));
-
-} else {
-    app.use(cors({
-        origin: 'http://localhost:5173/',
-        credentials: true, // Tillader cookies/credentials
-    }));
-}
-app.use(cors({})); //CORS. Tillader alle (På nuværende tidspunkt)
+app.use(cors({
+    origin: 'http://localhost:5173', // The exact origin from which you want to allow requests
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add other methods if needed
+    allowedHeaders: ['Content-Type', 'Authorization'] // Add other headers if needed
+  }));
+  
+  
 app.use(cookieParser()); // Bruges til at parse Cookies fra Request
 app.use((req, res, next) => { requestLogger(req, res, next) }); // Bruges til logging af requests med timestamp
 
