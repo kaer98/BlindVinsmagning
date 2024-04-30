@@ -45,6 +45,7 @@ class MainMenu extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return const CreateTastingScreen();
                   }));
+                  
                 },
                 child: const Text('Create Tasting'),
               ),
@@ -56,6 +57,7 @@ class MainMenu extends StatelessWidget {
                             MaterialPageRoute(builder: (context) {
                           return const ProfileScreen();
                         }));
+                        
                       },
                       child: const Text('Profile'),
                     )

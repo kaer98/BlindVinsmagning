@@ -46,7 +46,7 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
           price: _price,
           alcohol: _alcohol);
       var url = Uri.parse("https://vin.jazper.dk/api/wines");
-      await http.post(url,
+      var response = await http.post(url,
           headers: {
             "Content-Type": "application/json",
             "Cookie": appstate.cookie!
@@ -63,7 +63,11 @@ class _CreateWineScreenState extends State<CreateWineScreen> {
             "price": wine.price,
             "currency": wine.currency,
           }));
-      // Navigator.pop(context);
+          Map<String,dynamic> jsonMap = json.decode(response.body);
+          wine.id=jsonMap["wineId"];
+      if (!mounted) return;
+
+       Navigator.pop(context, wine);
     }
   }
 
