@@ -25,7 +25,7 @@ const PORT = 3000; //PORT for Server
 app.use(express.json()); //Bruges til at parse JSON Payloads fra Request Body
 
 app.use(cors({
-    origin: 'http://localhost:5173', // The exact origin from which you want to allow requests
+    origin: '*', // The exact origin from which you want to allow requests
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add other methods if needed
     allowedHeaders: ['Content-Type', 'Authorization'] // Add other headers if needed
   }));
