@@ -7,6 +7,6 @@ export default defineConfig({
     dbCredentials: {
         connectionString: process.env.DATABASE_URL as string
     },
-    verbose: false,
+    verbose: true,
     strict: true,
 });

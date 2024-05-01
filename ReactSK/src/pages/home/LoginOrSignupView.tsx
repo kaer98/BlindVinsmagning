@@ -4,7 +4,7 @@ export default function LoginOrSignupView() {
 
 
     return (
-        <div className="card  bg-neutral text-neutral-content">
+        <div className="card  bg-neutral text-neutral-content mt-20">
         <h1 className=" object-center text-white ">Opret en bruger eller log ind.</h1>
     
     <div className="flex justify-center space-x-10 ">

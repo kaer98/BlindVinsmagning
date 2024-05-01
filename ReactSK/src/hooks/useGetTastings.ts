@@ -1,19 +1,27 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+
+
 interface Tasting {
   id: number;
   name: string;
   visibility: string;
   date: string; 
-  hostId: number;
+  hostid: number;
   winnerId: number | null;
   finished: boolean;
+}
+
+interface Participants {
+
+//Participant info, måske skal der ændres i Backenden (API, Serveren) 
 }
 
 
 const useGetTastings = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [tastings, setTastings] = useState<Tasting[]>([]);
+  const [participants, setParticipants] = useState<Participants[]>([]);
 
   useEffect(() => {
     const getTastings = async () => {

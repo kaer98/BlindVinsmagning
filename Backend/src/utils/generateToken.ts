@@ -14,7 +14,7 @@ const generateTokenAndSetCookie = (userId : number, res : Response) => {
         maxAge: 15 * 24 *60 * 60 * 1000, //Millisekunder
         httpOnly: true, //Sikkerhed mod XSS angreb
         sameSite:"strict",
-        secure: devMode === true
+        secure: devMode !== true
         
     }); 
 };

@@ -19,17 +19,24 @@ const app = express();
 app.set('trust proxy', true) // Brug X-FORWARDED-FOR header til at hente IP'er pga. reverse proxy
 const PORT = 3000; //PORT for Server
 
+var originForSite = "";
 
+if (process.env.NODE_ENV == "production") {
+    originForSite = "http://localhost:5173/"
+}
+else {
+    originForSite = "https://reactsk.jazper.dk/"
+}
+
+const corsOptions = {
+    origin: originForSite, // Change this to match your frontend origin
+    credentials: true, // Allow cookies/credentials
+};
 
 //Middleware Funktioner
 app.use(express.json()); //Bruges til at parse JSON Payloads fra Request Body
+app.use(cors(corsOptions));
 
-app.use(cors({
-    origin: '*', // The exact origin from which you want to allow requests
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Add other methods if needed
-    allowedHeaders: ['Content-Type', 'Authorization'] // Add other headers if needed
-  }));
-  
   
 app.use(cookieParser()); // Bruges til at parse Cookies fra Request
 app.use((req, res, next) => { requestLogger(req, res, next) }); // Bruges til logging af requests med timestamp

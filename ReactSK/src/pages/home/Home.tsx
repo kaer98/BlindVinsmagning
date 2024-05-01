@@ -8,6 +8,7 @@ import { ProfileCard } from "../../components/users/ProfileCard";
 import UserForm from "../../components/users/UserForm";
 import Tasting from "../../components/tastingComponents/Tasting";
 import ListOfTastings from "./ListOfTastings";
+import CreateTasting from "../createTasting/CreateTasting";
 
 
 
@@ -39,7 +40,7 @@ function Home() {
         if (changeInfo == 'join') {
             setOperationText('Log ind eller Opret Bruger')
             outputInfo = <div className="">
-                <LoginOrSignupView />
+                <CreateTasting/>
             </div>
 
         }
@@ -71,8 +72,8 @@ function Home() {
             </section>
             <div className="m-10 flex flex-row items-center space-x-1 ">
 
-                <SimpleButton onSelect={() => changeSelect('join')}>Log Ind</SimpleButton>
-                <SimpleButton onSelect={() => changeSelect('opret')}>Smagninger</SimpleButton>
+                <SimpleButton onSelect={() => changeSelect('join')}>Opret Smagninger</SimpleButton>
+                <SimpleButton onSelect={() => changeSelect('opret')}>Se Smagninger</SimpleButton>
             </div>
             <h1 className="m-2 font-bold text-white">{operationText}</h1>
 
