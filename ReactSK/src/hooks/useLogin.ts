@@ -9,9 +9,9 @@ interface LoginCredentials {
 }
 
 interface LoginResult {
-    id: number;
-    fullname: string;
-    error: string;
+    id?: number;
+    fullname?: string;
+    error?: string;
 }
 
 export const useLogin = () => {
