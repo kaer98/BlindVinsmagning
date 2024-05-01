@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { useAuthContext } from '../context/AuthContext'
 import toast from 'react-hot-toast';
-import Cookies from 'js-cookie';
 
 const useLogout = () => {
     const [loading, setLoading] = useState(false)
     const { setAuthUser } = useAuthContext();
 
-    const jwtToken = Cookies.get("jwt");
 
     const logout = async () => {
         setLoading(true)
@@ -29,7 +27,6 @@ const useLogout = () => {
             setAuthUser(null);
         } catch (error) {
             toast.error(error.message);
-            console.log("COOKIE: ", jwtToken);
 
         } finally {
             setLoading(false);
