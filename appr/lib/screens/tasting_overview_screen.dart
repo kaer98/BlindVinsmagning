@@ -102,19 +102,27 @@ class _OverViewScreenState extends State<OverViewScreen> {
       appBar: AppBar(
         title: const Text("Tasting Overview"),
       ),
-      body: ListView.builder(
-        itemCount: wset.length,
-        itemBuilder: (context, index) => Card(
-          child: ListTile(
-            title: Text("${users
-                    .firstWhere(
-                        (element) => element.userId == wset[index].UserId)
-                    .fullName!} vin:${wines
-                    .firstWhere((element) => element.id == wset[index].wineId)
-                    .name}"),
-            subtitle: Text("${wset[index].completenessPercentage}%"),
+      body: Column(
+        children: [
+          Container(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: ListView.builder(
+              itemCount: wset.length,
+              itemBuilder: (context, index) => Card(
+                child: ListTile(
+                  title: Text("${users
+                          .firstWhere(
+                              (element) => element.userId == wset[index].UserId)
+                          .fullName!} vin:${wines
+                          .firstWhere((element) => element.id == wset[index].wineId)
+                          .name}"),
+                  subtitle: Text("${wset[index].completenessPercentage}%"),
+                ),
+              ),
+            ),
           ),
-        ),
+          ElevatedButton(onPressed: (){}, child: Text("Finish Tasting"))
+        ],
       ),
     );
   }

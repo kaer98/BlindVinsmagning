@@ -61,7 +61,8 @@ class MainMenu extends StatelessWidget {
                       },
                       child: const Text('Profile'),
                     )
-                  : const SizedBox(),
+                  : SizedBox(height: _spacing,),
+                  SizedBox(height: _spacing),
               ElevatedButton(
                 onPressed: () {
                   appState.userId = null;

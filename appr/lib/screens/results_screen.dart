@@ -17,7 +17,7 @@ class ResultScreen extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return Card(
             child: ListTile(
-              title: Text(wineTastings.wines!.where((element) => element.id == wineTastings.wineEvaluation![index].wineId).first.name),
+              title: wineTastings.finished?Text(wineTastings.wines!.where((element) => element.id == wineTastings.wineEvaluation![index].wineId).first.name):Text("Wine: ${(index+1).toString()}"),
               subtitle: Text("${wineTastings.wineEvaluation![index].stars} stars"),
               onTap: () => {Navigator.of(context).push(MaterialPageRoute(builder: (context) {
                 return WineTastingScreen(wineTastings);

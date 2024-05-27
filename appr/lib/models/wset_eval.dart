@@ -54,7 +54,7 @@ class Wset {
   int? wineId;
   int? tastingId;
   int? UserId;
-  get stars => switch (cQuality!) {
+  get stars => switch (cQuality??CQualityEnum.Poor) {
     CQualityEnum.Poor=> 1,
     CQualityEnum.Acceptable => 2,
     CQualityEnum.Good => 3,

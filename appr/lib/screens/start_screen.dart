@@ -1,5 +1,6 @@
 import 'package:appr/screens/login_screen.dart';
 import 'package:appr/screens/main_menu.dart';
+import 'package:appr/screens/register_anon_screen.dart';
 import 'package:appr/screens/register_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class StartScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const MainMenu();
+                        return const RegisterAnonScreen();
                       },
                     ),
                   );
